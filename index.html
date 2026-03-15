@@ -29,12 +29,12 @@
   }
 
   .site-hero-inner{
-    padding: 0 6px !important;
+    padding: 0 10px !important;
   }
 
   .site-hero-title{
-    font-size: 2.35rem !important;
-    line-height: 1.15 !important;
+    font-size: 2.2rem !important;
+    line-height: 1.12 !important;
   }
 
   .site-hero-buttons{
@@ -51,31 +51,68 @@
 @media (max-width: 640px){
   .site-header{
     position: static !important;
-    padding: 12px 12px !important;
+    padding: 10px 10px 14px !important;
+    gap: 10px !important;
   }
 
   .site-brand{
-    gap: 12px !important;
-    padding: 8px 10px !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 10px !important;
+    padding: 12px 12px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .site-brand img{
+    width: 88px !important;
+    height: 88px !important;
+    max-width: 88px !important;
+    max-height: 88px !important;
+    padding: 4px !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  .site-brand > div:last-child{
+    width: 100% !important;
+    text-align: center !important;
   }
 
   .site-nav{
-    gap: 10px !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     flex-wrap: wrap !important;
+    gap: 12px 18px !important;
+    padding: 0 4px !important;
+    margin: 0 auto !important;
   }
 
   .site-nav a{
-    font-size: 14px !important;
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .site-hero-inner{
+    padding: 0 14px !important;
   }
 
   .site-hero-title{
-    font-size: 1.85rem !important;
-    line-height: 1.18 !important;
+    font-size: 1.45rem !important;
+    line-height: 1.1 !important;
     margin-bottom: 14px !important;
   }
 
   .site-hero-inner p{
-    font-size: 1rem !important;
+    font-size: 0.98rem !important;
+    line-height: 1.55 !important;
   }
 
   .site-hero-buttons{
@@ -111,13 +148,9 @@
     box-sizing: border-box !important;
   }
 
-  section{
-    scroll-margin-top: 12px !important;
-  }
-
   h2{
-    font-size: 1.75rem !important;
-    line-height: 1.2 !important;
+    font-size: 1.6rem !important;
+    line-height: 1.18 !important;
   }
 
   footer{
@@ -127,13 +160,33 @@
 }
 
 @media (max-width: 420px){
-  .site-hero-title{
-    font-size: 1.6rem !important;
+  .site-header{
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
 
   .site-brand{
-    transform: scale(.96);
-    transform-origin: center;
+    padding: 10px !important;
+    border-radius: 16px !important;
+  }
+
+  .site-brand img{
+    width: 80px !important;
+    height: 80px !important;
+    max-width: 80px !important;
+    max-height: 80px !important;
+  }
+
+  .site-hero-title{
+    font-size: 1.3rem !important;
+  }
+
+  .site-nav{
+    gap: 10px 14px !important;
+  }
+
+  .site-nav a{
+    font-size: 14px !important;
   }
 }
 </style>
