@@ -5,6 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>safety-check-test-ltd</title>
+    <script>
+      (function () {
+        var redirectPath = sessionStorage.getItem("gh_redirect_path");
+        if (redirectPath) {
+          sessionStorage.removeItem("gh_redirect_path");
+          if (redirectPath !== location.pathname + location.search + location.hash) {
+            history.replaceState(null, "", redirectPath);
+          }
+        }
+      })();
+    </script>
     <script type="module" crossorigin src="/assets/index-B8B_Vh2B.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-nqMpL4T3.css">
   </head>
