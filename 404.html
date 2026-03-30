@@ -1,15 +1,25 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Redirecting...</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>safety-check-test-ltd</title>
     <script>
       (function () {
-        var path = location.pathname + location.search + location.hash;
-        sessionStorage.setItem("gh_redirect_path", path);
-        location.replace("/");
+        var redirectPath = sessionStorage.getItem("gh_redirect_path");
+        if (redirectPath) {
+          sessionStorage.removeItem("gh_redirect_path");
+          if (redirectPath !== location.pathname + location.search + location.hash) {
+            history.replaceState(null, "", redirectPath);
+          }
+        }
       })();
     </script>
+    <script type="module" crossorigin src="/assets/index-BaJ6YUAO.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-nqMpL4T3.css">
   </head>
-  <body></body>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
