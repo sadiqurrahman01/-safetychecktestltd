@@ -5,169 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>safety-check-test-ltd</title>
-    
-
-
-
-
-
-
-
-
-
-<script>
-(function () {
-  function makeLink(text, href, bg) {
-    const a = document.createElement("a");
-    a.textContent = text;
-    a.href = href;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.style.display = "inline-flex";
-    a.style.alignItems = "center";
-    a.style.justifyContent = "center";
-    a.style.padding = "10px 14px";
-    a.style.borderRadius = "10px";
-    a.style.textDecoration = "none";
-    a.style.fontWeight = "700";
-    a.style.fontSize = "14px";
-    a.style.background = bg;
-    a.style.color = "#fff";
-    a.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12)";
-    return a;
-  }
-
-  function readAdminUser() {
-    const keys = ["sct_admin_user", "adminUser", "sct_user"];
-    for (const key of keys) {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) continue;
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed === "object") return parsed;
-      } catch (e) {}
-    }
-    return null;
-  }
-
-  function readAdminToken() {
-    try {
-      return localStorage.getItem("sct_admin_token") || "";
-    } catch (e) {
-      return "";
-    }
-  }
-
-  function hasAllowedRole(user) {
-    const role = String(user && user.role || "").trim().toLowerCase();
-    return role === "master_admin" || role === "admin";
-  }
-
-  function isLoggedIntoAdmin() {
-    if (!location.hash.startsWith("#/admin")) return false;
-    const token = readAdminToken();
-    const user = readAdminUser();
-    if (!token || !user || !hasAllowedRole(user)) return false;
-
-    const bodyText = (document.body && document.body.innerText) || "";
-    return (
-      bodyText.includes("Master Admin Control Center") ||
-      bodyText.includes("Log Out") ||
-      bodyText.includes("master_admin") ||
-      bodyText.includes("Overview")
-    );
-  }
-
-  function findMountPoint() {
-    const selectors = ["main", "section", "div"];
-    for (const sel of selectors) {
-      const nodes = document.querySelectorAll(sel);
-      for (const node of nodes) {
-        const txt = (node.innerText || "").trim();
-        if (
-          txt.includes("Master Admin Control Center") ||
-          txt.includes("master_admin") ||
-          (txt.includes("Overview") && txt.includes("Quotes") && txt.includes("Settings"))
-        ) {
-          return node;
+    <script>
+      (function () {
+        var redirectPath = sessionStorage.getItem("gh_redirect_path");
+        if (redirectPath) {
+          sessionStorage.removeItem("gh_redirect_path");
+          if (redirectPath !== location.pathname + location.search + location.hash) {
+            history.replaceState(null, "", redirectPath);
+          }
         }
-      }
-    }
-    return null;
-  }
-
-  function removeExisting() {
-    const old = document.getElementById("sct-master-admin-shortcuts");
-    if (old) old.remove();
-  }
-
-  function render() {
-    removeExisting();
-
-    if (!isLoggedIntoAdmin()) return;
-
-    const mount = findMountPoint();
-    if (!mount) return;
-
-    const wrap = document.createElement("div");
-    wrap.id = "sct-master-admin-shortcuts";
-    wrap.style.display = "flex";
-    wrap.style.flexWrap = "wrap";
-    wrap.style.gap = "10px";
-    wrap.style.margin = "16px 0";
-    wrap.style.padding = "14px";
-    wrap.style.border = "1px solid #e5e7eb";
-    wrap.style.borderRadius = "14px";
-    wrap.style.background = "#f8fafc";
-
-    const title = document.createElement("div");
-    title.textContent = "Admin Shortcuts";
-    title.style.width = "100%";
-    title.style.fontWeight = "800";
-    title.style.fontSize = "15px";
-    title.style.color = "#0f172a";
-    title.style.marginBottom = "2px";
-    wrap.appendChild(title);
-
-    wrap.appendChild(
-      makeLink(
-        "Open Completion Panel",
-        "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now(),
-        "#0f62fe"
-      )
-    );
-
-    wrap.appendChild(
-      makeLink(
-        "Open Employees Panel",
-        "https://www.safetychecktestltd.co.uk/admin-employees/?t=" + Date.now(),
-        "#0f9f6e"
-      )
-    );
-
-    mount.insertBefore(wrap, mount.firstChild);
-  }
-
-  function boot() {
-    render();
-
-    let count = 0;
-    const timer = setInterval(function () {
-      render();
-      count += 1;
-      if (count > 25) clearInterval(timer);
-    }, 800);
-
-    window.addEventListener("hashchange", render);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-})();
-</script>
-
-</body>
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-D30Sxg19.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-nqMpL4T3.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
