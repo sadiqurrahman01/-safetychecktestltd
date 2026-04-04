@@ -5,145 +5,387 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Safety Check Test Ltd | Employee Portal</title>
   <style>
-    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f8fafc;color:#0f172a}
-    .hero{background:#020617;color:#fff;padding:48px 20px}
-    .wrap{max-width:1100px;margin:0 auto}
-    .hero h1{margin:0 0 12px;font-size:2.1rem}
-    .hero p{margin:0;color:#cbd5e1;max-width:760px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;padding:28px 20px;max-width:1100px;margin:0 auto}
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:22px;box-shadow:0 10px 24px rgba(15,23,42,.06)}
-    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-    .field label{font-weight:700}
-    input,textarea,select{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:12px 14px;font:inherit}
-    .btn{display:inline-block;border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f8fafc;color:#0f172a}
+    .hero{background:#020617;color:#fff;padding:40px 20px}
+    .wrap{max-width:1200px;margin:0 auto}
+    .hero h1{margin:0 0 10px;font-size:2rem}
+    .hero p{margin:0;color:#cbd5e1}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .btn{display:inline-block;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none}
     .btn-primary{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827}
     .btn-dark{background:#0f172a;color:#fff}
-    .msg{margin-bottom:14px;padding:13px 15px;border-radius:12px;font-weight:700}
+    .btn-light{background:#fff;color:#0f172a;border:1px solid #cbd5e1}
+    .shell{max-width:1200px;margin:0 auto;padding:24px 20px 40px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:20px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:22px;box-shadow:0 10px 24px rgba(15,23,42,.06)}
+    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .field label{font-weight:700;font-size:.95rem}
+    input,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:12px 14px;font:inherit}
+    textarea{min-height:100px;resize:vertical}
+    .msg{margin:0 0 14px;padding:13px 15px;border-radius:12px;font-weight:700}
     .ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
     .err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
-    .jobs{display:grid;gap:14px;margin-top:16px}
-    .job{border:1px solid #e2e8f0;border-radius:14px;padding:16px;background:#fff}
     .muted{color:#64748b}
-    .hidden{display:none}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+    .small{font-size:.92rem;color:#475569}
+    .profile{display:flex;gap:16px;align-items:flex-start}
+    .avatar{width:96px;height:96px;border-radius:18px;object-fit:cover;background:#e2e8f0;border:1px solid #cbd5e1}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+    .metaBox{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:12px}
+    .jobs{display:grid;gap:18px}
+    .jobHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .pill{display:inline-block;padding:7px 10px;border-radius:999px;font-size:.82rem;font-weight:800}
+    .assigned{background:#eff6ff;color:#1d4ed8}
+    .started{background:#fff7ed;color:#c2410c}
+    .completed{background:#ecfdf5;color:#047857}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .title{margin:0 0 8px}
+    .sectionTitle{margin:0 0 16px}
+    .helper{font-size:.84rem;color:#64748b}
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+      .split{grid-template-columns:1fr}
+      .meta{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
   <section class="hero">
     <div class="wrap">
       <h1>Employee Portal</h1>
-      <p>Employee login and assigned jobs dashboard.</p>
+      <p>Employee login, profile and assigned jobs dashboard.</p>
+      <div class="topbar">
+        <div id="heroStatus" class="small">Please log in.</div>
+        <button id="logoutTop" class="btn btn-light" style="display:none">Log Out</button>
+      </div>
     </div>
   </section>
 
-  <div class="grid">
-    <div class="card" id="loginCard">
-      <h2>Employee Login</h2>
-      <div id="loginMsg"></div>
-      <form id="loginForm">
-        <div class="field">
-          <label>Email</label>
-          <input id="email" type="email" required>
-        </div>
-        <div class="field">
-          <label>Password</label>
-          <input id="password" type="password" required>
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-      </form>
+  <div class="shell">
+    <div id="loginView" class="grid">
+      <div class="card" style="max-width:520px">
+        <h2 class="sectionTitle">Employee Login</h2>
+        <div id="loginMsg"></div>
+        <form id="loginForm">
+          <div class="field">
+            <label>Email</label>
+            <input id="email" type="email" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="password" type="password" autocomplete="current-password" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Log In</button>
+        </form>
+      </div>
     </div>
 
-    <div class="card hidden" id="dashCard">
-      <div class="topbar">
-        <div>
-          <h2 style="margin:0 0 6px">My Jobs</h2>
-          <div class="muted" id="employeeMeta"></div>
+    <div id="appView" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <h2 class="sectionTitle">My Profile</h2>
+          <div id="profileMsg"></div>
+          <div class="profile">
+            <img id="avatar" class="avatar" src="" alt="Profile photo">
+            <div>
+              <h3 id="profileName" class="title">Employee</h3>
+              <div id="profileEmail" class="small"></div>
+              <div id="profileTrades" class="small" style="margin-top:6px"></div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <div class="metaBox"><strong>Staff ID</strong><div id="staffId" class="small"></div></div>
+            <div class="metaBox"><strong>Profession</strong><div id="profession" class="small"></div></div>
+            <div class="metaBox"><strong>Department</strong><div id="department" class="small"></div></div>
+            <div class="metaBox"><strong>Phone</strong><div id="phone" class="small"></div></div>
+            <div class="metaBox"><strong>Emergency Contact</strong><div id="emergencyName" class="small"></div></div>
+            <div class="metaBox"><strong>Emergency Phone</strong><div id="emergencyPhone" class="small"></div></div>
+          </div>
+
+          <div style="margin-top:16px">
+            <strong>Notes</strong>
+            <div id="profileNotes" class="small" style="margin-top:6px"></div>
+          </div>
         </div>
-        <button class="btn btn-dark" id="logoutBtn" type="button">Log Out</button>
+
+        <div class="card">
+          <div class="jobHead">
+            <div>
+              <h2 class="sectionTitle" style="margin-bottom:6px">My Jobs</h2>
+              <div id="jobsSummary" class="small">Loading jobs...</div>
+            </div>
+            <div class="row">
+              <button id="refreshJobs" class="btn btn-dark" type="button">Refresh Jobs</button>
+              <button id="logoutBtn" class="btn btn-light" type="button">Log Out</button>
+            </div>
+          </div>
+          <div id="jobsMsg"></div>
+          <div id="jobsList" class="jobs"></div>
+        </div>
       </div>
-      <div id="jobsMsg"></div>
-      <div id="jobsWrap" class="jobs"></div>
     </div>
   </div>
 
   <script>
-    const API = "https://api.safetychecktestltd.co.uk";
-    const tokenKey = "sct_employee_token";
-    const loginCard = document.getElementById("loginCard");
-    const dashCard = document.getElementById("dashCard");
-    const loginMsg = document.getElementById("loginMsg");
-    const jobsMsg = document.getElementById("jobsMsg");
-    const jobsWrap = document.getElementById("jobsWrap");
-    const employeeMeta = document.getElementById("employeeMeta");
+    const API = 'https://api.safetychecktestltd.co.uk'.replace(/\/$/, '');
+    const TOKEN_KEY = 'sct_employee_token';
 
-    function msg(el, text, ok) {
-      el.innerHTML = text ? '<div class="msg ' + (ok ? 'ok' : 'err') + '">' + text + '</div>' : '';
+    const loginView = document.getElementById('loginView');
+    const appView = document.getElementById('appView');
+    const loginMsg = document.getElementById('loginMsg');
+    const jobsMsg = document.getElementById('jobsMsg');
+    const profileMsg = document.getElementById('profileMsg');
+    const jobsList = document.getElementById('jobsList');
+    const jobsSummary = document.getElementById('jobsSummary');
+    const heroStatus = document.getElementById('heroStatus');
+    const logoutTop = document.getElementById('logoutTop');
+
+    let employeeToken = localStorage.getItem(TOKEN_KEY) || '';
+    let currentEmployee = null;
+
+    function setMsg(el, text, type){
+      el.innerHTML = text ? '<div class="msg ' + type + '">' + text + '</div>' : '';
     }
-    function showDash(show) {
-      loginCard.classList.toggle("hidden", show);
-      dashCard.classList.toggle("hidden", !show);
+
+    function safe(v){
+      return String(v || '').replace(/[&<>"']/g, function(m){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
+      });
     }
-    async function loadMeAndJobs() {
-      const token = localStorage.getItem(tokenKey);
-      if (!token) return showDash(false);
-      try {
-        const meRes = await fetch(API + "/api/employee/me", { headers: { Authorization: "Bearer " + token } });
-        const meData = await meRes.json();
-        if (!meRes.ok || !meData.ok) throw new Error(meData.message || "Employee session invalid");
-        const jobsRes = await fetch(API + "/api/employee/jobs", { headers: { Authorization: "Bearer " + token } });
-        const jobsData = await jobsRes.json();
-        if (!jobsRes.ok || !jobsData.ok) throw new Error(jobsData.message || "Failed to load employee jobs");
-        employeeMeta.textContent = (meData.employee.fullName || "") + " • " + (meData.employee.email || "");
-        jobsWrap.innerHTML = "";
-        const jobs = Array.isArray(jobsData.jobs) ? jobsData.jobs : [];
-        if (!jobs.length) {
-          jobsWrap.innerHTML = '<div class="job"><strong>No assigned jobs yet.</strong></div>';
-        } else {
-          jobs.forEach(job => {
-            const div = document.createElement("div");
-            div.className = "job";
-            div.innerHTML =
-              '<div><strong>' + (job.title || job.jobType || "Job") + '</strong></div>' +
-              '<div class="muted" style="margin-top:6px">Status: ' + (job.status || "-") + '</div>' +
-              '<div style="margin-top:6px">Company: ' + (job.companyName || "-") + '</div>' +
-              '<div style="margin-top:6px">Description: ' + (job.description || "-") + '</div>';
-            jobsWrap.appendChild(div);
-          });
-        }
-        msg(jobsMsg, "Employee dashboard loaded.", true);
-        showDash(true);
-      } catch (err) {
-        localStorage.removeItem(tokenKey);
-        showDash(false);
-        msg(loginMsg, err.message || "Login required", false);
+
+    function statusPill(status){
+      const s = String(status || 'assigned').toLowerCase();
+      const cls = s === 'completed' ? 'completed' : s === 'started' ? 'started' : 'assigned';
+      return '<span class="pill ' + cls + '">' + safe(s) + '</span>';
+    }
+
+    function csvToArray(v){
+      return String(v || '')
+        .split(',')
+        .map(x => x.trim())
+        .filter(Boolean);
+    }
+
+    function renderProfile(employee){
+      currentEmployee = employee || null;
+      document.getElementById('avatar').src = employee.profileImageUrl || 'https://via.placeholder.com/96x96?text=EMP';
+      document.getElementById('profileName').textContent = employee.fullName || 'Employee';
+      document.getElementById('profileEmail').textContent = employee.email || '';
+      document.getElementById('profileTrades').textContent = (employee.trades || []).length ? 'Trades: ' + employee.trades.join(', ') : 'No trades listed';
+      document.getElementById('staffId').textContent = employee.staffId || '-';
+      document.getElementById('profession').textContent = employee.profession || '-';
+      document.getElementById('department').textContent = employee.department || '-';
+      document.getElementById('phone').textContent = employee.phone || '-';
+      document.getElementById('emergencyName').textContent = employee.emergencyContactName || '-';
+      document.getElementById('emergencyPhone').textContent = employee.emergencyContactPhone || '-';
+      document.getElementById('profileNotes').textContent = employee.notes || '-';
+      heroStatus.textContent = (employee.fullName || 'Employee') + ' • ' + (employee.email || '');
+    }
+
+    function renderJobs(jobs){
+      jobsList.innerHTML = '';
+      jobsSummary.textContent = jobs.length ? ('Assigned jobs: ' + jobs.length) : 'No assigned jobs yet.';
+      if (!jobs.length){
+        jobsList.innerHTML = '<div class="small">No assigned jobs yet.</div>';
+        return;
+      }
+
+      jobs.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const startPhotos = Array.isArray(job.startPhotos) ? job.startPhotos : [];
+        const completionPhotos = Array.isArray(job.completionPhotos) ? job.completionPhotos : [];
+        const certificates = Array.isArray(job.certificates) ? job.certificates : [];
+        const invoices = Array.isArray(job.invoices) ? job.invoices : [];
+
+        card.innerHTML = `
+          <div class="jobHead">
+            <div>
+              <h3 class="title">${safe(job.title || job.jobType || 'Job')}</h3>
+              <div class="small">${safe(job.companyName || '')}</div>
+            </div>
+            <div>${statusPill(job.employeeStatus || job.status || 'assigned')}</div>
+          </div>
+
+          <div class="split" style="margin-top:14px">
+            <div class="metaBox"><strong>Address</strong><div class="small">${safe([job.addressLine1, job.addressLine2, job.townCity, job.postcode].filter(Boolean).join(', ') || '-')}</div></div>
+            <div class="metaBox"><strong>Description</strong><div class="small">${safe(job.description || '-')}</div></div>
+          </div>
+
+          <div style="margin-top:16px" class="split">
+            <div>
+              <div class="field">
+                <label>Employee notes</label>
+                <textarea data-role="notes">${safe(job.employeeNotes || '')}</textarea>
+              </div>
+              <div class="field">
+                <label>Start photo URLs</label>
+                <textarea data-role="startPhotos" placeholder="Paste photo URLs separated by commas">${safe(startPhotos.join(', '))}</textarea>
+                <div class="helper">For now use image links. Real upload button can be added next.</div>
+              </div>
+              <button class="btn btn-primary" type="button" data-action="start" data-id="${safe(job._id)}">Mark Job Started</button>
+            </div>
+
+            <div>
+              <div class="field">
+                <label>Completion photo URLs</label>
+                <textarea data-role="completionPhotos" placeholder="Paste completion photo URLs separated by commas">${safe(completionPhotos.join(', '))}</textarea>
+              </div>
+              <button class="btn btn-dark" type="button" data-action="complete" data-id="${safe(job._id)}">Mark Job Completed</button>
+            </div>
+          </div>
+
+          <div class="split" style="margin-top:16px">
+            <div class="metaBox">
+              <strong>Certificates</strong>
+              <div class="small" style="margin-top:6px">${certificates.length ? certificates.map(x => '<div><a href="' + safe(x) + '" target="_blank" rel="noreferrer">' + safe(x) + '</a></div>').join('') : 'No certificates yet.'}</div>
+            </div>
+            <div class="metaBox">
+              <strong>Invoices</strong>
+              <div class="small" style="margin-top:6px">${invoices.length ? invoices.map(x => '<div><a href="' + safe(x) + '" target="_blank" rel="noreferrer">' + safe(x) + '</a></div>').join('') : 'No invoices yet.'}</div>
+            </div>
+          </div>
+        `;
+
+        const startBtn = card.querySelector('[data-action="start"]');
+        const completeBtn = card.querySelector('[data-action="complete"]');
+        const notesEl = card.querySelector('[data-role="notes"]');
+        const startPhotosEl = card.querySelector('[data-role="startPhotos"]');
+        const completionPhotosEl = card.querySelector('[data-role="completionPhotos"]');
+
+        startBtn.addEventListener('click', async () => {
+          setMsg(jobsMsg, '', 'ok');
+          try{
+            const res = await fetch(API + '/api/employee/jobs/' + job._id + '/start', {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + employeeToken
+              },
+              body: JSON.stringify({
+                employeeNotes: notesEl.value,
+                startPhotos: csvToArray(startPhotosEl.value)
+              })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to mark started');
+            setMsg(jobsMsg, 'Job marked as started.', 'ok');
+            await loadJobs();
+          }catch(err){
+            setMsg(jobsMsg, err.message || 'Failed to mark started', 'err');
+          }
+        });
+
+        completeBtn.addEventListener('click', async () => {
+          setMsg(jobsMsg, '', 'ok');
+          try{
+            const res = await fetch(API + '/api/employee/jobs/' + job._id + '/complete', {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + employeeToken
+              },
+              body: JSON.stringify({
+                employeeNotes: notesEl.value,
+                completionPhotos: csvToArray(completionPhotosEl.value)
+              })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to mark completed');
+            setMsg(jobsMsg, 'Job marked as completed.', 'ok');
+            await loadJobs();
+          }catch(err){
+            setMsg(jobsMsg, err.message || 'Failed to mark completed', 'err');
+          }
+        });
+
+        jobsList.appendChild(card);
+      });
+    }
+
+    async function loadMe(){
+      const res = await fetch(API + '/api/employee/me', {
+        headers: { 'Authorization': 'Bearer ' + employeeToken }
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to load employee profile');
+      renderProfile(data.employee || {});
+    }
+
+    async function loadJobs(){
+      const res = await fetch(API + '/api/employee/jobs', {
+        headers: { 'Authorization': 'Bearer ' + employeeToken }
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to load jobs');
+      renderJobs(data.jobs || []);
+    }
+
+    async function bootApp(){
+      loginView.style.display = 'none';
+      appView.style.display = 'block';
+      logoutTop.style.display = 'inline-block';
+      setMsg(profileMsg, '', 'ok');
+      setMsg(jobsMsg, '', 'ok');
+      try{
+        await loadMe();
+        await loadJobs();
+      }catch(err){
+        localStorage.removeItem(TOKEN_KEY);
+        employeeToken = '';
+        appView.style.display = 'none';
+        loginView.style.display = 'grid';
+        logoutTop.style.display = 'none';
+        heroStatus.textContent = 'Please log in.';
+        setMsg(loginMsg, err.message || 'Session expired. Please log in again.', 'err');
       }
     }
-    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+
+    function logout(){
+      localStorage.removeItem(TOKEN_KEY);
+      employeeToken = '';
+      currentEmployee = null;
+      appView.style.display = 'none';
+      loginView.style.display = 'grid';
+      logoutTop.style.display = 'none';
+      heroStatus.textContent = 'Please log in.';
+      setMsg(loginMsg, 'Logged out.', 'ok');
+      jobsList.innerHTML = '';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      msg(loginMsg, "", false);
-      try {
-        const res = await fetch(API + "/api/employee/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+      setMsg(loginMsg, '', 'ok');
+      try{
+        const res = await fetch(API + '/api/employee/login', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
           body: JSON.stringify({
-            email: document.getElementById("email").value.trim(),
-            password: document.getElementById("password").value
+            email: document.getElementById('email').value.trim(),
+            password: document.getElementById('password').value
           })
         });
         const data = await res.json();
-        if (!res.ok || !data.ok) throw new Error(data.message || "Employee login failed");
-        localStorage.setItem(tokenKey, data.token);
-        await loadMeAndJobs();
-      } catch (err) {
-        msg(loginMsg, err.message || "Employee login failed", false);
+        if (!res.ok || !data.ok) throw new Error(data.message || 'Invalid email or password');
+        employeeToken = data.token || '';
+        localStorage.setItem(TOKEN_KEY, employeeToken);
+        setMsg(loginMsg, 'Login successful.', 'ok');
+        await bootApp();
+      }catch(err){
+        setMsg(loginMsg, err.message || 'Login failed', 'err');
       }
     });
-    document.getElementById("logoutBtn").addEventListener("click", function () {
-      localStorage.removeItem(tokenKey);
-      showDash(false);
-      msg(loginMsg, "Logged out.", true);
-    });
-    loadMeAndJobs();
+
+    document.getElementById('refreshJobs').addEventListener('click', loadJobs);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    logoutTop.addEventListener('click', logout);
+
+    if (employeeToken) {
+      bootApp();
+    }
   </script>
 </body>
 </html>
