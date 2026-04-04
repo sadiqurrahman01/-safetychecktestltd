@@ -22,64 +22,7 @@
   <body>
     <div id="root"></div>
   
-<script>
-(function () {
-  function addCompletionShortcut() {
-    if (window.location.pathname !== "/admin" && window.location.pathname !== "/") return;
-    if (document.getElementById("sct-completion-shortcut")) return;
 
-    var wrap = document.createElement("div");
-    wrap.id = "sct-completion-shortcut";
-    wrap.style.position = "fixed";
-    wrap.style.right = "20px";
-    wrap.style.bottom = "20px";
-    wrap.style.zIndex = "99999";
-    wrap.style.display = "flex";
-    wrap.style.gap = "10px";
-    wrap.style.flexWrap = "wrap";
-
-    var openBtn = document.createElement("a");
-    openBtn.href = "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now();
-    openBtn.target = "_blank";
-    openBtn.rel = "noopener noreferrer";
-    openBtn.textContent = "Open Completion Panel";
-    openBtn.style.background = "#0f62fe";
-    openBtn.style.color = "#fff";
-    openBtn.style.padding = "12px 16px";
-    openBtn.style.borderRadius = "12px";
-    openBtn.style.textDecoration = "none";
-    openBtn.style.fontWeight = "700";
-    openBtn.style.boxShadow = "0 10px 30px rgba(0,0,0,.18)";
-    openBtn.style.fontFamily = "Arial, sans-serif";
-
-    var refreshBtn = document.createElement("button");
-    refreshBtn.type = "button";
-    refreshBtn.textContent = "Refresh Admin";
-    refreshBtn.style.background = "#111827";
-    refreshBtn.style.color = "#fff";
-    refreshBtn.style.border = "0";
-    refreshBtn.style.padding = "12px 16px";
-    refreshBtn.style.borderRadius = "12px";
-    refreshBtn.style.fontWeight = "700";
-    refreshBtn.style.cursor = "pointer";
-    refreshBtn.style.boxShadow = "0 10px 30px rgba(0,0,0,.18)";
-    refreshBtn.style.fontFamily = "Arial, sans-serif";
-    refreshBtn.onclick = function () {
-      window.location.href = "https://www.safetychecktestltd.co.uk/#/admin?t=" + Date.now();
-    };
-
-    wrap.appendChild(openBtn);
-    wrap.appendChild(refreshBtn);
-    document.body.appendChild(wrap);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", addCompletionShortcut);
-  } else {
-    addCompletionShortcut();
-  }
-})();
-</script>
 
 
 <script>
