@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Completion Panel | Safety Check Test</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#121a2b;
+      --muted:#8ea0c0;
+      --text:#eaf1ff;
+      --line:#22304d;
+      --accent:#3b82f6;
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --danger:#dc2626;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#0b1220,#111827);
+      color:var(--text);
+    }
+    .wrap{max-width:1280px;margin:0 auto;padding:24px}
+    .topbar{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+      margin-bottom:18px;flex-wrap:wrap
+    }
+    h1{margin:0;font-size:28px}
+    .sub{color:var(--muted);margin-top:6px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+    }
+    .toolbar{
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr auto auto;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    input,select,button,textarea{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0f172a;
+      color:var(--text);
+      outline:none;
+    }
+    button{cursor:pointer}
+    .btn{background:var(--accent);border:none}
+    .btn-secondary{background:#1f2937}
+    .btn-danger{background:var(--danger);border:none}
+    .btn-print{background:var(--ok);border:none}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}
+    .job h2{margin:0 0 8px 0;font-size:20px}
+    .pill{
+      display:inline-block;padding:6px 10px;border-radius:999px;
+      font-size:12px;font-weight:700;margin-right:8px
+    }
+    .pill-done{background:rgba(22,163,74,.18);color:#86efac;border:1px solid rgba(22,163,74,.35)}
+    .pill-prog{background:rgba(245,158,11,.18);color:#fde68a;border:1px solid rgba(245,158,11,.35)}
+    .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+    .meta .item{background:#0f172a;border:1px solid var(--line);padding:10px;border-radius:12px}
+    .label{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .value{font-size:14px;word-break:break-word}
+    .photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px}
+    .photos a{
+      display:block;padding:10px;border-radius:12px;background:#0f172a;
+      border:1px solid var(--line);color:#bfdbfe;text-decoration:none;word-break:break-all
+    }
+    .section-title{margin:16px 0 8px 0;font-size:14px;color:#bfdbfe}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .muted{color:var(--muted)}
+    .empty{padding:24px;text-align:center;color:var(--muted)}
+    .small{font-size:12px}
+    .status{margin:8px 0 0;color:#93c5fd}
+    @media print{
+      body{background:#fff;color:#000}
+      .toolbar,.topbar .row,.no-print{display:none !important}
+      .card{border:1px solid #ddd;box-shadow:none;background:#fff}
+      .wrap{max-width:none;padding:0}
+      .grid{display:block}
+      .job{margin-bottom:16px;break-inside:avoid}
+      a{color:#000;text-decoration:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Admin Completion Panel</h1>
+        <div class="sub">Completed and in-progress employee jobs, photos, notes, print and delete.</div>
+      </div>
+      <div class="row no-print">
+        <button class="btn-secondary" id="openAdmin">Open Admin</button>
+        <button class="btn" id="refreshBtn">Refresh</button>
+      </div>
+    </div>
+
+    <div class="card toolbar no-print">
+      <input id="searchInput" placeholder="Search by job ID, title, postcode, requester, employee..." />
+      <select id="statusFilter">
+        <option value="">All statuses</option>
+        <option value="completed">Completed</option>
+        <option value="in_progress">In Progress</option>
+        <option value="assigned">Assigned</option>
+      </select>
+      <select id="sortFilter">
+        <option value="updated_desc">Newest updated</option>
+        <option value="created_desc">Newest created</option>
+        <option value="jobid_asc">Job ID A-Z</option>
+      </select>
+      <button class="btn-secondary" id="printAllBtn">Print current view</button>
+      <button class="btn-secondary" id="logoutBtn">Clear admin token</button>
+    </div>
+
+    <div id="statusBox" class="status"></div>
+    <div id="jobsWrap" class="grid"></div>
+  </div>
+
+  <script>
+    const API = 'https://api.safetychecktestltd.co.uk';
+    const TOKEN_KEY = 'sct_admin_token';
+
+    const jobsWrap = document.getElementById('jobsWrap');
+    const statusBox = document.getElementById('statusBox');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const sortFilter = document.getElementById('sortFilter');
+
+    let allJobs = [];
+
+    function getToken(){
+      return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function setStatus(msg){
+      statusBox.textContent = msg || '';
+    }
+
+    function esc(v){
+      return String(v ?? '')
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'",'&#39;');
+    }
+
+    function fmtDate(v){
+      if(!v) return '-';
+      const d = new Date(v);
+      if(Number.isNaN(d.getTime())) return '-';
+      return d.toLocaleString();
+    }
+
+    function photoLinks(list){
+      if(!Array.isArray(list) || !list.length) return '<div class="muted small">None</div>';
+      return '<div class="photos">' + list.map((url,i) => (
+        '<a href="' + esc(url) + '" target="_blank" rel="noreferrer">Photo ' + (i+1) + '</a>'
+      )).join('') + '</div>';
+    }
+
+    function downloadLinks(list, label){
+      if(!Array.isArray(list) || !list.length) return '<div class="muted small">No ' + label.toLowerCase() + ' yet.</div>';
+      return '<div class="photos">' + list.map((url,i) => (
+        '<a href="' + esc(url) + '" target="_blank" rel="noreferrer">' + label + ' ' + (i+1) + '</a>'
+      )).join('') + '</div>';
+    }
+
+    function matches(job, q){
+      if(!q) return true;
+      const blob = [
+        job.jobId, job.jobPublicId, job.internalJobId, job.title, job.description,
+        job.postcode, job.siteAddress, job.requesterName, job.requesterEmail,
+        job.assignedEmployeeName, job.assignedEmployeeEmail, job.organisationName,
+        job.employeeNotes
+      ].join(' ').toLowerCase();
+      return blob.includes(q);
+    }
+
+    function sortJobs(items){
+      const v = sortFilter.value;
+      if(v === 'created_desc') return items.sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
+      if(v === 'jobid_asc') return items.sort((a,b) => String(a.jobId||'').localeCompare(String(b.jobId||'')));
+      return items.sort((a,b) => new Date(b.updatedAt||0) - new Date(a.updatedAt||0));
+    }
+
+    function render(){
+      const q = searchInput.value.trim().toLowerCase();
+      const sf = statusFilter.value;
+
+      let items = allJobs.filter(j => matches(j, q));
+      if(sf) items = items.filter(j => (j.status || '') === sf || (j.employeeStatus || '') === sf);
+      items = sortJobs(items);
+
+      if(!items.length){
+        jobsWrap.innerHTML = '<div class="card empty">No matching jobs found.</div>';
+        return;
+      }
+
+      jobsWrap.innerHTML = items.map(job => {
+        const isCompleted = job.status === 'completed' || job.employeeStatus === 'completed';
+        const pill = isCompleted
+          ? '<span class="pill pill-done">COMPLETED</span>'
+          : '<span class="pill pill-prog">' + esc(job.status || job.employeeStatus || 'unknown') + '</span>';
+
+        return `
+          <div class="card job" data-id="${esc(job._id)}">
+            <h2>${esc(job.title || 'Untitled Job')}</h2>
+            <div>${pill}<span class="muted small">Updated: ${esc(fmtDate(job.updatedAt))}</span></div>
+
+            <div class="meta">
+              <div class="item"><div class="label">Job ID</div><div class="value">${esc(job.jobId || '-')}</div></div>
+              <div class="item"><div class="label">Internal Job ID</div><div class="value">${esc(job.internalJobId || '-')}</div></div>
+              <div class="item"><div class="label">Public Job ID</div><div class="value">${esc(job.jobPublicId || '-')}</div></div>
+              <div class="item"><div class="label">Service</div><div class="value">${esc(job.serviceType || '-')}</div></div>
+              <div class="item"><div class="label">Organisation</div><div class="value">${esc(job.organisationName || '-')}</div></div>
+              <div class="item"><div class="label">Requester</div><div class="value">${esc(job.requesterName || '-')}<br>${esc(job.requesterEmail || '')}</div></div>
+              <div class="item"><div class="label">Employee</div><div class="value">${esc(job.assignedEmployeeName || '-')}<br>${esc(job.assignedEmployeeEmail || '')}</div></div>
+              <div class="item"><div class="label">Postcode</div><div class="value">${esc(job.postcode || '-')}</div></div>
+              <div class="item"><div class="label">Started At</div><div class="value">${esc(fmtDate(job.employeeStartedAt))}</div></div>
+              <div class="item"><div class="label">Completed At</div><div class="value">${esc(fmtDate(job.employeeCompletedAt))}</div></div>
+            </div>
+
+            <div class="section-title">Address</div>
+            <div class="muted">${esc(job.siteAddress || '-')}</div>
+
+            <div class="section-title">Description</div>
+            <div class="muted">${esc(job.description || '-')}</div>
+
+            <div class="section-title">Employee Notes</div>
+            <div class="muted">${esc(job.employeeNotes || '-')}</div>
+
+            <div class="section-title">Start Photos</div>
+            ${photoLinks(job.startPhotos)}
+
+            <div class="section-title">Completion Photos</div>
+            ${photoLinks(job.completionPhotos)}
+
+            <div class="section-title">Certificates</div>
+            ${downloadLinks(job.certificates, 'Certificate')}
+
+            <div class="section-title">Invoices</div>
+            ${downloadLinks(job.invoices, 'Invoice')}
+
+            <div class="actions no-print">
+              <button class="btn-print" onclick="window.printSingle('${esc(job._id)}')">Print</button>
+              <button class="btn-danger" onclick="window.deleteJob('${esc(job._id)}','${esc(job.jobId || '')}')">Delete Job</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadJobs(){
+      const token = getToken();
+      if(!token){
+        setStatus('No admin token found. Open the admin page first and log in.');
+        jobsWrap.innerHTML = '<div class="card empty">Admin token missing.</div>';
+        return;
+      }
+
+      setStatus('Loading jobs...');
+      try{
+        const res = await fetch(API + '/api/admin/portal-jobs', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if(!res.ok || !data.ok) throw new Error(data.message || 'Failed to load jobs');
+        allJobs = Array.isArray(data.jobs) ? data.jobs : [];
+        setStatus('Loaded ' + allJobs.length + ' job(s).');
+        render();
+      }catch(err){
+        setStatus(err.message || 'Failed to load jobs');
+        jobsWrap.innerHTML = '<div class="card empty">Could not load admin jobs.</div>';
+      }
+    }
+
+    window.printSingle = function(id){
+      const cards = Array.from(document.querySelectorAll('.job'));
+      cards.forEach(card => {
+        card.style.display = card.getAttribute('data-id') === id ? 'block' : 'none';
+      });
+      window.print();
+      cards.forEach(card => card.style.display = 'block');
+    };
+
+    window.deleteJob = async function(id, jobId){
+      const token = getToken();
+      if(!token){
+        alert('Admin token missing');
+        return;
+      }
+      if(!confirm('Delete job ' + jobId + '? This cannot be undone.')) return;
+
+      try{
+        const res = await fetch(API + '/api/admin/portal-jobs/' + encodeURIComponent(id), {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if(!res.ok || !data.ok) throw new Error(data.message || 'Delete failed');
+        allJobs = allJobs.filter(j => j._id !== id);
+        render();
+        setStatus('Deleted job ' + jobId);
+      }catch(err){
+        alert(err.message || 'Delete failed');
+      }
+    };
+
+    document.getElementById('refreshBtn').addEventListener('click', loadJobs);
+    document.getElementById('printAllBtn').addEventListener('click', () => window.print());
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem(TOKEN_KEY);
+      setStatus('Admin token cleared.');
+    });
+    document.getElementById('openAdmin').addEventListener('click', () => {
+      window.open('/admin/?t=' + Date.now(), '_blank');
+    });
+
+    searchInput.addEventListener('input', render);
+    statusFilter.addEventListener('change', render);
+    sortFilter.addEventListener('change', render);
+
+    loadJobs();
+  </script>
+</body>
+</html>
