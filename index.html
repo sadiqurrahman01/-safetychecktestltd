@@ -12,6 +12,9 @@
 
 
 
+
+
+
 <script>
 (function () {
   function makeLink(text, href, bg) {
@@ -34,54 +37,77 @@
     return a;
   }
 
-  function getAdminSession() {
+  function readAdminUser() {
+    const keys = ["sct_admin_user", "adminUser", "sct_user"];
+    for (const key of keys) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") return parsed;
+      } catch (e) {}
+    }
+    return null;
+  }
+
+  function readAdminToken() {
     try {
-      const token = localStorage.getItem("sct_admin_token") || "";
-      const rawUser =
-        localStorage.getItem("sct_admin_user") ||
-        localStorage.getItem("adminUser") ||
-        localStorage.getItem("sct_user") ||
-        "";
-      let user = null;
-      try { user = rawUser ? JSON.parse(rawUser) : null; } catch (_) {}
-      return { token, user };
-    } catch (_) {
-      return { token: "", user: null };
+      return localStorage.getItem("sct_admin_token") || "";
+    } catch (e) {
+      return "";
     }
   }
 
-  function allowedRole(user) {
+  function hasAllowedRole(user) {
     const role = String(user && user.role || "").trim().toLowerCase();
     return role === "master_admin" || role === "admin";
   }
 
-  function findAdminMount() {
-    const candidates = Array.from(document.querySelectorAll("h1,h2,h3,div,section"));
-    for (const el of candidates) {
-      const txt = (el.textContent || "").trim();
-      if (
-        txt.includes("Master Admin Control Center") ||
-        txt.includes("Safety Check Test Admin") ||
-        txt.includes("master_admin") ||
-        txt.includes("Overview")
-      ) {
-        return el.closest("div,section,main") || el.parentElement || el;
+  function isLoggedIntoAdmin() {
+    if (!location.hash.startsWith("#/admin")) return false;
+    const token = readAdminToken();
+    const user = readAdminUser();
+    if (!token || !user || !hasAllowedRole(user)) return false;
+
+    const bodyText = (document.body && document.body.innerText) || "";
+    return (
+      bodyText.includes("Master Admin Control Center") ||
+      bodyText.includes("Log Out") ||
+      bodyText.includes("master_admin") ||
+      bodyText.includes("Overview")
+    );
+  }
+
+  function findMountPoint() {
+    const selectors = ["main", "section", "div"];
+    for (const sel of selectors) {
+      const nodes = document.querySelectorAll(sel);
+      for (const node of nodes) {
+        const txt = (node.innerText || "").trim();
+        if (
+          txt.includes("Master Admin Control Center") ||
+          txt.includes("master_admin") ||
+          (txt.includes("Overview") && txt.includes("Quotes") && txt.includes("Settings"))
+        ) {
+          return node;
+        }
       }
     }
-    return document.body;
+    return null;
+  }
+
+  function removeExisting() {
+    const old = document.getElementById("sct-master-admin-shortcuts");
+    if (old) old.remove();
   }
 
   function render() {
-    const existing = document.getElementById("sct-master-admin-shortcuts");
-    if (existing) existing.remove();
+    removeExisting();
 
-    const session = getAdminSession();
-    if (!session.token || !allowedRole(session.user)) return;
+    if (!isLoggedIntoAdmin()) return;
 
-    if (!location.href.includes("#/admin")) return;
-
-    const host = findAdminMount();
-    if (!host) return;
+    const mount = findMountPoint();
+    if (!mount) return;
 
     const wrap = document.createElement("div");
     wrap.id = "sct-master-admin-shortcuts";
@@ -119,18 +145,19 @@
       )
     );
 
-    if (host.firstChild) host.insertBefore(wrap, host.firstChild);
-    else host.appendChild(wrap);
+    mount.insertBefore(wrap, mount.firstChild);
   }
 
   function boot() {
     render();
-    let tries = 0;
-    const timer = setInterval(() => {
+
+    let count = 0;
+    const timer = setInterval(function () {
       render();
-      tries += 1;
-      if (tries > 20) clearInterval(timer);
+      count += 1;
+      if (count > 25) clearInterval(timer);
     }, 800);
+
     window.addEventListener("hashchange", render);
   }
 
