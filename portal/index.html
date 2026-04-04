@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Safety Check Test Ltd | Portal</title>
+  <title>Safety Check Test Ltd | Client Portal</title>
   <style>
-    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f8fafc;color:#0f172a}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f8fafc;color:#0f172a}
     .hero{background:#020617;color:#fff;padding:48px 20px}
     .wrap{max-width:1100px;margin:0 auto}
     .hero h1{margin:0 0 12px;font-size:2.2rem}
     .hero p{margin:0;color:#cbd5e1;max-width:760px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;padding:28px 20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;padding:28px 20px;max-width:1100px;margin:0 auto}
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:22px;box-shadow:0 10px 24px rgba(15,23,42,.06)}
     .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
     .field label{font-weight:700}
@@ -18,9 +18,16 @@
     textarea{min-height:110px;resize:vertical}
     .btn{display:inline-block;border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer}
     .btn-primary{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827}
-    .msg{margin-bottom:14px;padding:13px 15px;border-radius:12px;font-weight:700}
+    .btn-dark{background:#0f172a;color:#fff}
+    .msg{margin:0 0 14px;padding:13px 15px;border-radius:12px;font-weight:700}
     .ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
     .err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .small{font-size:14px;color:#475569}
+    .topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+    .jobs{display:grid;gap:14px}
+    .job{border:1px solid #e2e8f0;border-radius:14px;padding:16px;background:#fff}
+    .hidden{display:none}
+    a{text-decoration:none}
   </style>
 </head>
 <body>
@@ -31,19 +38,13 @@
     </div>
   </section>
 
-  <div class="grid">
+  <div id="authView" class="grid">
     <div class="card">
       <h2>Portal Login</h2>
       <div id="loginMsg"></div>
       <form id="loginForm">
-        <div class="field">
-          <label>Email</label>
-          <input name="email" type="email" required>
-        </div>
-        <div class="field">
-          <label>Password</label>
-          <input name="password" type="password" required>
-        </div>
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" required></div>
+        <div class="field"><label>Password</label><input id="loginPassword" type="password" required></div>
         <button class="btn btn-primary" type="submit">Log In</button>
       </form>
     </div>
@@ -52,98 +53,193 @@
       <h2>Request Organisation Account</h2>
       <div id="requestMsg"></div>
       <form id="requestForm">
-        <div class="field">
-          <label>Organisation name</label>
-          <input name="organisationName" required>
+        <div class="field"><label>Organisation name</label><input id="orgName" required></div>
+        <div class="field"><label>Contact name</label><input id="contactName" required></div>
+        <div class="field"><label>Email</label><input id="contactEmail" type="email" required></div>
+        <div class="field"><label>Phone</label><input id="contactPhone"></div>
+        <div class="field"><label>Service type</label><input id="serviceType"></div>
+        <div class="field"><label>Site address</label><input id="siteAddress"></div>
+        <div class="field"><label>Postcode</label><input id="postcode"></div>
+        <div class="field"><label>Description</label><textarea id="description" required></textarea></div>
+        <button class="btn btn-dark" type="submit">Submit Request</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboardView" class="wrap hidden" style="padding:28px 20px 60px">
+    <div class="card">
+      <div class="topbar">
+        <div>
+          <h2 style="margin:0 0 6px">Portal Dashboard</h2>
+          <div id="meBox" class="small"></div>
         </div>
-        <div class="field">
-          <label>Contact name</label>
-          <input name="contactName" required>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btn-dark" href="#new-job">New Job</a>
+          <button id="logoutBtn" class="btn btn-primary" type="button">Logout</button>
         </div>
-        <div class="field">
-          <label>Email</label>
-          <input name="email" type="email" required>
+      </div>
+      <div id="dashboardMsg"></div>
+      <div class="jobs" id="jobsList"></div>
+    </div>
+
+    <div class="card" id="new-job" style="margin-top:20px">
+      <h2>Submit New Job</h2>
+      <div id="jobMsg"></div>
+      <form id="jobForm">
+        <div class="field"><label>Contact name</label><input id="jobContactName"></div>
+        <div class="field"><label>Email</label><input id="jobEmail" type="email"></div>
+        <div class="field"><label>Phone</label><input id="jobPhone"></div>
+        <div class="field"><label>Service type</label><input id="jobServiceType" required></div>
+        <div class="field"><label>Site address</label><input id="jobSiteAddress"></div>
+        <div class="field"><label>Postcode</label><input id="jobPostcode"></div>
+        <div class="field"><label>Priority</label>
+          <select id="jobPriority">
+            <option>Normal</option>
+            <option>Urgent</option>
+            <option>Emergency</option>
+          </select>
         </div>
-        <div class="field">
-          <label>Phone</label>
-          <input name="phone">
-        </div>
-        <div class="field">
-          <label>Service type</label>
-          <input name="serviceType">
-        </div>
-        <div class="field">
-          <label>Site address</label>
-          <input name="siteAddress">
-        </div>
-        <div class="field">
-          <label>Postcode</label>
-          <input name="postcode">
-        </div>
-        <div class="field">
-          <label>Description</label>
-          <textarea name="description" required></textarea>
-        </div>
-        <button class="btn btn-primary" type="submit">Submit Request</button>
+        <div class="field"><label>Description</label><textarea id="jobDescription" required></textarea></div>
+        <button class="btn btn-primary" type="submit">Submit Job</button>
       </form>
     </div>
   </div>
 
   <script>
     const API = "https://api.safetychecktestltd.co.uk/api/portal";
+    const tokenKey = "sct_portal_token";
 
-    function showMsg(id, kind, text) {
-      document.getElementById(id).innerHTML = text ? '<div class="msg ' + kind + '">' + text + '</div>' : '';
+    function msg(el, text, ok) {
+      el.innerHTML = text ? '<div class="msg ' + (ok ? 'ok' : 'err') + '">' + text + '</div>' : '';
     }
 
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      showMsg("loginMsg","ok","Checking portal login...");
-      const fd = new FormData(e.target);
+    function logout() {
+      localStorage.removeItem(tokenKey);
+      document.getElementById('authView').classList.remove('hidden');
+      document.getElementById('dashboardView').classList.add('hidden');
+    }
+
+    async function api(path, options = {}) {
+      const token = localStorage.getItem(tokenKey);
+      const headers = options.headers || {};
+      if (token) headers.Authorization = 'Bearer ' + token;
+      const res = await fetch(API + path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) throw new Error(data.message || 'Request failed');
+      return data;
+    }
+
+    function renderJobs(jobs) {
+      const box = document.getElementById('jobsList');
+      if (!jobs || !jobs.length) {
+        box.innerHTML = '<div class="job">No portal jobs yet.</div>';
+        return;
+      }
+      box.innerHTML = jobs.map(j => `
+        <div class="job">
+          <div><strong>${j.reference || 'No ref'}</strong></div>
+          <div><strong>Status:</strong> ${j.status || '-'}</div>
+          <div><strong>Service:</strong> ${j.serviceType || '-'}</div>
+          <div><strong>Address:</strong> ${j.siteAddress || '-'}</div>
+          <div><strong>Postcode:</strong> ${j.postcode || '-'}</div>
+          <div><strong>Description:</strong> ${j.description || '-'}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadDashboard() {
       try {
-        const res = await fetch(API + "/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const me = await api('/me');
+        const jobs = await api('/jobs');
+        document.getElementById('meBox').textContent =
+          (me.user?.fullName || '') + ' | ' +
+          (me.user?.organisation?.name || '') + ' | ' +
+          (me.user?.email || '');
+        renderJobs(jobs.jobs || []);
+        document.getElementById('authView').classList.add('hidden');
+        document.getElementById('dashboardView').classList.remove('hidden');
+        msg(document.getElementById('dashboardMsg'), '', true);
+      } catch (err) {
+        logout();
+      }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const box = document.getElementById('loginMsg');
+      msg(box, '', true);
+      try {
+        const data = await api('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: String(fd.get("email") || "").trim(),
-            password: String(fd.get("password") || "")
+            email: document.getElementById('loginEmail').value.trim(),
+            password: document.getElementById('loginPassword').value
           })
         });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data.ok) throw new Error(data.message || "Portal login failed");
-        showMsg("loginMsg","ok","Portal login API is working. Logged in as " + (data.user?.email || "user") + ".");
+        localStorage.setItem(tokenKey, data.token);
+        await loadDashboard();
       } catch (err) {
-        showMsg("loginMsg","err",err.message || "Portal login failed");
+        msg(box, err.message, false);
       }
     });
 
-    document.getElementById("requestForm").addEventListener("submit", async (e) => {
+    document.getElementById('requestForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      showMsg("requestMsg","ok","Submitting request...");
-      const fd = new FormData(e.target);
+      const box = document.getElementById('requestMsg');
+      msg(box, '', true);
       try {
-        const res = await fetch(API + "/request-access", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const data = await api('/request-access', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            organisationName: String(fd.get("organisationName") || "").trim(),
-            contactName: String(fd.get("contactName") || "").trim(),
-            email: String(fd.get("email") || "").trim(),
-            phone: String(fd.get("phone") || "").trim(),
-            serviceType: String(fd.get("serviceType") || "").trim(),
-            siteAddress: String(fd.get("siteAddress") || "").trim(),
-            postcode: String(fd.get("postcode") || "").trim(),
-            description: String(fd.get("description") || "").trim()
+            organisationName: document.getElementById('orgName').value.trim(),
+            contactName: document.getElementById('contactName').value.trim(),
+            email: document.getElementById('contactEmail').value.trim(),
+            phone: document.getElementById('contactPhone').value.trim(),
+            serviceType: document.getElementById('serviceType').value.trim(),
+            siteAddress: document.getElementById('siteAddress').value.trim(),
+            postcode: document.getElementById('postcode').value.trim(),
+            description: document.getElementById('description').value.trim()
           })
         });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data.ok) throw new Error(data.message || "Request failed");
-        showMsg("requestMsg","ok","Request submitted. Reference: " + (data.reference || "created"));
+        msg(box, 'Request submitted successfully. Reference: ' + (data.reference || 'created'), true);
         e.target.reset();
       } catch (err) {
-        showMsg("requestMsg","err",err.message || "Request failed");
+        msg(box, err.message, false);
       }
     });
+
+    document.getElementById('jobForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const box = document.getElementById('jobMsg');
+      msg(box, '', true);
+      try {
+        await api('/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contactName: document.getElementById('jobContactName').value.trim(),
+            email: document.getElementById('jobEmail').value.trim(),
+            phone: document.getElementById('jobPhone').value.trim(),
+            serviceType: document.getElementById('jobServiceType').value.trim(),
+            siteAddress: document.getElementById('jobSiteAddress').value.trim(),
+            postcode: document.getElementById('jobPostcode').value.trim(),
+            priority: document.getElementById('jobPriority').value,
+            description: document.getElementById('jobDescription').value.trim()
+          })
+        });
+        msg(box, 'Job submitted successfully.', true);
+        e.target.reset();
+        await loadDashboard();
+      } catch (err) {
+        msg(box, err.message, false);
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    if (localStorage.getItem(tokenKey)) loadDashboard();
   </script>
 </body>
 </html>

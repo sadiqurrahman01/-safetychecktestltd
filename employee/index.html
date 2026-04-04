@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Safety Check Test Ltd | Employee Portal</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f8fafc;color:#0f172a}
+    .wrap{max-width:980px;margin:0 auto;padding:28px 20px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:22px;box-shadow:0 10px 24px rgba(15,23,42,.06);margin-bottom:20px}
+    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .field label{font-weight:700}
+    input,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:12px 14px;font:inherit}
+    .btn{display:inline-block;border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#111827}
+    .btn-dark{background:#0f172a;color:#fff}
+    .msg{margin:0 0 14px;padding:13px 15px;border-radius:12px;font-weight:700}
+    .ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+    .err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .job{border:1px solid #e2e8f0;border-radius:14px;padding:16px;margin-top:14px}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="loginView" class="card">
+      <h1>Employee Login</h1>
+      <div id="loginMsg"></div>
+      <form id="loginForm">
+        <div class="field"><label>Email</label><input id="email" type="email" required></div>
+        <div class="field"><label>Password</label><input id="password" type="password" required></div>
+        <button class="btn" type="submit">Log In</button>
+      </form>
+    </div>
+
+    <div id="dashboardView" class="hidden">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+          <div>
+            <h1 style="margin:0 0 8px">Employee Dashboard</h1>
+            <div id="meBox"></div>
+          </div>
+          <button id="logoutBtn" class="btn-dark btn" type="button">Logout</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>My Jobs</h2>
+        <div id="jobsMsg"></div>
+        <div id="jobsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = "https://api.safetychecktestltd.co.uk/api/employee";
+    const tokenKey = "sct_employee_token";
+
+    function msg(el, text, ok) {
+      el.innerHTML = text ? '<div class="msg ' + (ok ? 'ok' : 'err') + '">' + text + '</div>' : '';
+    }
+
+    async function api(path, options = {}) {
+      const token = localStorage.getItem(tokenKey);
+      const headers = options.headers || {};
+      if (token) headers.Authorization = 'Bearer ' + token;
+      const res = await fetch(API + path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) throw new Error(data.message || 'Request failed');
+      return data;
+    }
+
+    function logout() {
+      localStorage.removeItem(tokenKey);
+      document.getElementById('loginView').classList.remove('hidden');
+      document.getElementById('dashboardView').classList.add('hidden');
+    }
+
+    function renderJobs(jobs) {
+      const box = document.getElementById('jobsList');
+      if (!jobs || !jobs.length) {
+        box.innerHTML = '<div class="job">No assigned jobs yet.</div>';
+        return;
+      }
+      box.innerHTML = jobs.map(j => `
+        <div class="job">
+          <div><strong>${j.reference || 'No ref'}</strong></div>
+          <div><strong>Status:</strong> ${j.status || '-'}</div>
+          <div><strong>Title:</strong> ${j.title || j.jobType || '-'}</div>
+          <div><strong>Address:</strong> ${j.addressLine1 || ''} ${j.townCity || ''} ${j.postcode || ''}</div>
+          <div><strong>Description:</strong> ${j.description || '-'}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadDashboard() {
+      try {
+        const me = await api('/me');
+        const jobs = await api('/jobs');
+        document.getElementById('meBox').textContent =
+          (me.employee?.fullName || '') + ' | ' + (me.employee?.email || '');
+        renderJobs(jobs.jobs || []);
+        document.getElementById('loginView').classList.add('hidden');
+        document.getElementById('dashboardView').classList.remove('hidden');
+      } catch (err) {
+        logout();
+      }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const box = document.getElementById('loginMsg');
+      msg(box, '', true);
+      try {
+        const data = await api('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('email').value.trim(),
+            password: document.getElementById('password').value
+          })
+        });
+        localStorage.setItem(tokenKey, data.token);
+        await loadDashboard();
+      } catch (err) {
+        msg(box, err.message, false);
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    if (localStorage.getItem(tokenKey)) loadDashboard();
+  </script>
+</body>
+</html>
