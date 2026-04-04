@@ -128,5 +128,95 @@
 })();
 </script>
 
+
+<script>
+(function () {
+  function makeLink(text, href, bg) {
+    const a = document.createElement("a");
+    a.textContent = text;
+    a.href = href;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.display = "inline-flex";
+    a.style.alignItems = "center";
+    a.style.justifyContent = "center";
+    a.style.padding = "10px 14px";
+    a.style.borderRadius = "10px";
+    a.style.textDecoration = "none";
+    a.style.fontWeight = "700";
+    a.style.fontSize = "14px";
+    a.style.background = bg;
+    a.style.color = "#fff";
+    a.style.boxShadow = "0 6px 18px rgba(15,23,42,0.12)";
+    a.style.border = "1px solid rgba(255,255,255,0.08)";
+    return a;
+  }
+
+  function isAdminRoute() {
+    return (window.location.hash || "").startsWith("#/admin");
+  }
+
+  function addAdminPanelButtons() {
+    if (!isAdminRoute()) return;
+    if (document.getElementById("sct-master-admin-shortcuts")) return;
+
+    const buttons = Array.from(document.querySelectorAll("button"));
+    const logoutBtn = buttons.find(btn => (btn.textContent || "").trim() === "Log Out");
+    if (!logoutBtn) return;
+
+    const host = logoutBtn.parentElement || logoutBtn.closest("div");
+    if (!host) return;
+
+    const wrap = document.createElement("div");
+    wrap.id = "sct-master-admin-shortcuts";
+    wrap.style.display = "flex";
+    wrap.style.flexWrap = "wrap";
+    wrap.style.gap = "10px";
+    wrap.style.marginTop = "12px";
+    wrap.style.width = "100%";
+
+    wrap.appendChild(
+      makeLink(
+        "Open Completion Panel",
+        "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now(),
+        "#0f62fe"
+      )
+    );
+
+    wrap.appendChild(
+      makeLink(
+        "Open Employees Panel",
+        "https://www.safetychecktestltd.co.uk/admin-employees/?t=" + Date.now(),
+        "#0f9f6e"
+      )
+    );
+
+    host.appendChild(wrap);
+  }
+
+  function boot() {
+    addAdminPanelButtons();
+
+    const observer = new MutationObserver(() => {
+      addAdminPanelButtons();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    window.addEventListener("hashchange", () => {
+      setTimeout(addAdminPanelButtons, 150);
+    });
+
+    setInterval(addAdminPanelButtons, 1200);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
 </body>
 </html>
