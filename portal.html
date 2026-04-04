@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safety Check Test Ltd Portal</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#ffffff;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --accent:#f59e0b;
+      --accent2:#fbbf24;
+      --text:#0f172a;
+      --danger:#991b1b;
+      --dangerbg:#fef2f2;
+      --ok:#065f46;
+      --okbg:#ecfdf5;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#f8fafc;
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:32px 20px 56px;
+    }
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .brand img{
+      width:72px;
+      height:72px;
+      object-fit:contain;
+      display:block;
+    }
+    .brand h1{
+      margin:0;
+      font-size:1.4rem;
+    }
+    .brand p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .back{
+      text-decoration:none;
+      color:#fff;
+      background:var(--bg);
+      padding:12px 16px;
+      border-radius:12px;
+      font-weight:700;
+    }
+    .hero{
+      background:linear-gradient(135deg, rgba(2,6,23,.96), rgba(15,23,42,.90));
+      color:#fff;
+      border-radius:24px;
+      padding:28px;
+      margin-bottom:22px;
+    }
+    .hero h2{
+      margin:0 0 8px;
+      font-size:2rem;
+    }
+    .hero p{
+      margin:0;
+      color:#cbd5e1;
+      max-width:760px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:24px;
+      box-shadow:0 12px 30px rgba(15,23,42,.06);
+    }
+    h3{
+      margin:0 0 10px;
+      font-size:1.25rem;
+    }
+    .muted{
+      color:var(--muted);
+      margin:0 0 18px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:14px;
+    }
+    label{
+      font-weight:700;
+      font-size:.95rem;
+    }
+    input, textarea, select{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:16px;
+      background:#fff;
+      color:#0f172a;
+      font-family:Arial,sans-serif;
+    }
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+    button{
+      border:none;
+      border-radius:12px;
+      padding:14px 18px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#111827;
+    }
+    .full{
+      width:100%;
+    }
+    .msg{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:12px;
+      font-weight:700;
+      display:none;
+      white-space:pre-wrap;
+    }
+    .msg.show{display:block}
+    .msg.error{
+      background:var(--dangerbg);
+      color:var(--danger);
+      border:1px solid #fecaca;
+    }
+    .msg.ok{
+      background:var(--okbg);
+      color:var(--ok);
+      border:1px solid #a7f3d0;
+    }
+    .dash{
+      display:none;
+      margin-top:24px;
+    }
+    .dash.show{display:block}
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .stat{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+    }
+    .stat .k{
+      color:var(--muted);
+      font-size:.9rem;
+      margin-bottom:6px;
+    }
+    .stat .v{
+      font-size:1.5rem;
+      font-weight:800;
+    }
+    .job{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      margin-bottom:14px;
+    }
+    .job h4{
+      margin:0 0 8px;
+      font-size:1.05rem;
+    }
+    .job p{
+      margin:6px 0;
+      color:#334155;
+    }
+    .inline{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .ghost{
+      background:#fff;
+      color:#0f172a;
+      border:1px solid #cbd5e1;
+    }
+    .small{
+      font-size:.92rem;
+      color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="/imagesct.jpeg" alt="Safety Check Test Ltd">
+        <div>
+          <h1>Safety Check Test Ltd Portal</h1>
+          <p>Councils, business clients, partners and organisations</p>
+        </div>
+      </div>
+      <a class="back" href="/">Back to Website</a>
+    </div>
+
+    <div class="hero">
+      <h2>Portal Access</h2>
+      <p>Use the portal to log in, view submitted jobs, and raise new portal job requests. New organisations can request access below.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card" id="login-card">
+        <h3>Portal Login</h3>
+        <p class="muted">For existing council, business, partner and organisation portal users.</p>
+
+        <form id="login-form">
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" required>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" required>
+          </div>
+          <button class="full" type="submit">Log In</button>
+        </form>
+
+        <div id="login-msg" class="msg"></div>
+      </div>
+
+      <div class="card" id="request-card">
+        <h3>Request Organisation Account</h3>
+        <p class="muted">If your organisation needs access, submit a request and the team will review it.</p>
+
+        <form id="request-form">
+          <div class="field">
+            <label for="org-name">Organisation Name</label>
+            <input id="org-name" name="organisationName" required>
+          </div>
+          <div class="field">
+            <label for="contact-name">Contact Name</label>
+            <input id="contact-name" name="contactName" required>
+          </div>
+          <div class="field">
+            <label for="request-email">Email</label>
+            <input id="request-email" name="email" type="email" required>
+          </div>
+          <div class="field">
+            <label for="request-phone">Phone</label>
+            <input id="request-phone" name="phone">
+          </div>
+          <div class="field">
+            <label for="request-service">Service Type</label>
+            <input id="request-service" name="serviceType" placeholder="General Portal Request">
+          </div>
+          <div class="field">
+            <label for="request-postcode">Postcode</label>
+            <input id="request-postcode" name="postcode">
+          </div>
+          <div class="field">
+            <label for="request-address">Site Address</label>
+            <input id="request-address" name="siteAddress">
+          </div>
+          <div class="field">
+            <label for="request-priority">Priority</label>
+            <select id="request-priority" name="priority">
+              <option value="Normal">Normal</option>
+              <option value="Urgent">Urgent</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="request-description">What access or support do you need?</label>
+            <textarea id="request-description" name="description" required></textarea>
+          </div>
+          <button class="full" type="submit">Submit Request</button>
+        </form>
+
+        <div id="request-msg" class="msg"></div>
+      </div>
+    </div>
+
+    <div id="portal-dash" class="dash">
+      <div class="card" style="margin-bottom:18px;">
+        <div class="top" style="margin-bottom:0;">
+          <div>
+            <h3 style="margin-bottom:6px;">Portal Dashboard</h3>
+            <div id="me-line" class="small"></div>
+          </div>
+          <div class="actions">
+            <button id="refresh-jobs" class="ghost" type="button">Refresh Jobs</button>
+            <button id="logout-btn" class="ghost" type="button">Log Out</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="k">Portal Jobs</div>
+          <div class="v" id="jobs-count">0</div>
+        </div>
+        <div class="stat">
+          <div class="k">Organisation</div>
+          <div class="v" id="org-name-stat" style="font-size:1rem;"></div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Submit New Portal Job</h3>
+          <p class="muted">Create a job request directly from the portal.</p>
+
+          <form id="job-form">
+            <div class="inline">
+              <div class="field">
+                <label for="job-contact">Contact Name</label>
+                <input id="job-contact" name="contactName">
+              </div>
+              <div class="field">
+                <label for="job-email">Email</label>
+                <input id="job-email" name="email" type="email">
+              </div>
+              <div class="field">
+                <label for="job-phone">Phone</label>
+                <input id="job-phone" name="phone">
+              </div>
+              <div class="field">
+                <label for="job-service">Service Type</label>
+                <input id="job-service" name="serviceType" required>
+              </div>
+              <div class="field">
+                <label for="job-postcode">Postcode</label>
+                <input id="job-postcode" name="postcode">
+              </div>
+              <div class="field">
+                <label for="job-priority">Priority</label>
+                <select id="job-priority" name="priority">
+                  <option value="Normal">Normal</option>
+                  <option value="Urgent">Urgent</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="job-address">Site Address</label>
+              <input id="job-address" name="siteAddress">
+            </div>
+            <div class="field">
+              <label for="job-description">Description</label>
+              <textarea id="job-description" name="description" required></textarea>
+            </div>
+            <button class="full" type="submit">Submit Portal Job</button>
+          </form>
+
+          <div id="job-msg" class="msg"></div>
+        </div>
+
+        <div class="card">
+          <h3>Submitted Jobs</h3>
+          <p class="muted">Latest jobs for your organisation.</p>
+          <div id="jobs-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = "https://api.safetychecktestltd.co.uk/api/portal";
+    const TOKEN_KEY = "sct_portal_token";
+
+    const loginForm = document.getElementById("login-form");
+    const requestForm = document.getElementById("request-form");
+    const jobForm = document.getElementById("job-form");
+
+    const loginMsg = document.getElementById("login-msg");
+    const requestMsg = document.getElementById("request-msg");
+    const jobMsg = document.getElementById("job-msg");
+
+    const dash = document.getElementById("portal-dash");
+    const meLine = document.getElementById("me-line");
+    const jobsCount = document.getElementById("jobs-count");
+    const orgNameStat = document.getElementById("org-name-stat");
+    const jobsList = document.getElementById("jobs-list");
+
+    const refreshJobsBtn = document.getElementById("refresh-jobs");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    function setMsg(el, text, type) {
+      el.className = "msg show " + (type || "ok");
+      el.textContent = text;
+    }
+
+    function clearMsg(el) {
+      el.className = "msg";
+      el.textContent = "";
+    }
+
+    function getToken() {
+      return localStorage.getItem(TOKEN_KEY) || "";
+    }
+
+    function setToken(token) {
+      localStorage.setItem(TOKEN_KEY, token);
+    }
+
+    function clearToken() {
+      localStorage.removeItem(TOKEN_KEY);
+    }
+
+    async function api(path, options) {
+      const res = await fetch(API + path, options || {});
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (e) {}
+      if (!res.ok || !data.ok) {
+        throw new Error((data && data.message) || "Request failed");
+      }
+      return data;
+    }
+
+    function renderJobs(jobs) {
+      jobsList.innerHTML = "";
+      jobsCount.textContent = String(jobs.length);
+
+      if (!jobs.length) {
+        jobsList.innerHTML = '<div class="small">No portal jobs yet.</div>';
+        return;
+      }
+
+      jobs.forEach(function(job) {
+        const div = document.createElement("div");
+        div.className = "job";
+        div.innerHTML =
+          "<h4>" + (job.reference || "No reference") + " — " + (job.serviceType || "General Job") + "</h4>" +
+          "<p><strong>Status:</strong> " + (job.status || "-") + "</p>" +
+          "<p><strong>Contact:</strong> " + (job.contactName || "-") + " | " + (job.email || "-") + "</p>" +
+          "<p><strong>Postcode:</strong> " + (job.postcode || "-") + "</p>" +
+          "<p><strong>Priority:</strong> " + (job.priority || "-") + "</p>" +
+          "<p><strong>Description:</strong> " + (job.description || "-") + "</p>";
+        jobsList.appendChild(div);
+      });
+    }
+
+    async function loadPortal() {
+      const token = getToken();
+      if (!token) return;
+
+      try {
+        const me = await api("/me", {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
+
+        dash.classList.add("show");
+        meLine.textContent =
+          me.user.fullName + " (" + me.user.email + ") — " +
+          me.user.organisation.name + " [" + me.user.organisation.type + "]";
+        orgNameStat.textContent = me.user.organisation.name || "-";
+
+        document.getElementById("job-contact").value = me.user.fullName || "";
+        document.getElementById("job-email").value = me.user.email || "";
+
+        const jobs = await api("/jobs", {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
+
+        renderJobs(jobs.jobs || []);
+      } catch (err) {
+        clearToken();
+        dash.classList.remove("show");
+      }
+    }
+
+    loginForm.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      clearMsg(loginMsg);
+
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      try {
+        const data = await api("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        setToken(data.token);
+        setMsg(loginMsg, "Portal login successful.", "ok");
+        await loadPortal();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      } catch (err) {
+        setMsg(loginMsg, err.message || "Portal login failed", "error");
+      }
+    });
+
+    requestForm.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      clearMsg(requestMsg);
+
+      const payload = {
+        organisationName: document.getElementById("org-name").value.trim(),
+        contactName: document.getElementById("contact-name").value.trim(),
+        email: document.getElementById("request-email").value.trim(),
+        phone: document.getElementById("request-phone").value.trim(),
+        serviceType: document.getElementById("request-service").value.trim(),
+        postcode: document.getElementById("request-postcode").value.trim(),
+        siteAddress: document.getElementById("request-address").value.trim(),
+        priority: document.getElementById("request-priority").value,
+        description: document.getElementById("request-description").value.trim()
+      };
+
+      try {
+        const data = await api("/request-access", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        setMsg(
+          requestMsg,
+          "Portal request submitted successfully.\nReference: " + (data.reference || "-"),
+          "ok"
+        );
+        requestForm.reset();
+      } catch (err) {
+        setMsg(requestMsg, err.message || "Failed to submit request", "error");
+      }
+    });
+
+    jobForm.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      clearMsg(jobMsg);
+
+      const token = getToken();
+      if (!token) {
+        setMsg(jobMsg, "Please log in first.", "error");
+        return;
+      }
+
+      const payload = {
+        contactName: document.getElementById("job-contact").value.trim(),
+        email: document.getElementById("job-email").value.trim(),
+        phone: document.getElementById("job-phone").value.trim(),
+        serviceType: document.getElementById("job-service").value.trim(),
+        postcode: document.getElementById("job-postcode").value.trim(),
+        priority: document.getElementById("job-priority").value,
+        siteAddress: document.getElementById("job-address").value.trim(),
+        description: document.getElementById("job-description").value.trim()
+      };
+
+      try {
+        await api("/jobs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify(payload)
+        });
+
+        setMsg(jobMsg, "Portal job submitted successfully.", "ok");
+        jobForm.reset();
+        await loadPortal();
+      } catch (err) {
+        setMsg(jobMsg, err.message || "Failed to submit portal job", "error");
+      }
+    });
+
+    refreshJobsBtn.addEventListener("click", async function() {
+      clearMsg(jobMsg);
+      await loadPortal();
+    });
+
+    logoutBtn.addEventListener("click", function() {
+      clearToken();
+      dash.classList.remove("show");
+      setMsg(loginMsg, "Logged out.", "ok");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    if (window.location.hash === "#request-access") {
+      setTimeout(function() {
+        document.getElementById("request-card").scrollIntoView({ behavior: "smooth" });
+      }, 150);
+    }
+
+    loadPortal();
+  </script>
+</body>
+</html>
