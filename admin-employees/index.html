@@ -503,5 +503,42 @@
 })();
 </script>
 
+
+<script id="sct-panel-audit-employees">
+(function () {
+  function getAdminToken() {
+    return (
+      localStorage.getItem("sct_admin_token") ||
+      localStorage.getItem("adminToken") ||
+      ""
+    );
+  }
+
+  async function logPanelOpen() {
+    var token = getAdminToken();
+    if (!token) return;
+
+    try {
+      await fetch("https://api.safetychecktestltd.co.uk/api/admin/audits/panel-open", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ panel: "employees" })
+      });
+    } catch (err) {
+      console.warn("panel audit log failed", err);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", logPanelOpen, { once: true });
+  } else {
+    logPanelOpen();
+  }
+})();
+</script>
+
 </body>
 </html>
