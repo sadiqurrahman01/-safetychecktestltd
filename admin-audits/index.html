@@ -1,63 +1,56 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Audit Logs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Check Test Audits</title>
   <style>
     :root{
-      --bg:#f8fafc;--card:#ffffff;--text:#0f172a;--muted:#475569;--line:#e2e8f0;
-      --blue:#2563eb;--green:#059669;--purple:#7c3aed;--red:#dc2626;--dark:#0f172a;
+      --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0; --text:#0f172a; --muted:#64748b;
+      --blue:#2563eb; --green:#059669; --purple:#7c3aed; --red:#dc2626; --amber:#f59e0b;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:1280px;margin:0 auto;padding:24px}
-    .top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
-    .title{font-size:30px;font-weight:800;margin:0 0 6px}
-    .sub{color:var(--muted);font-size:14px}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .title{font-size:2rem;font-weight:800;margin:0 0 6px}
+    .small{color:var(--muted);font-size:.95rem}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn,.input,.select{
+      height:42px;border-radius:12px;font-size:.95rem
+    }
     .btn{
-      border:1px solid var(--line);background:#fff;color:var(--text);padding:10px 14px;border-radius:12px;
-      font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px
+      border:1px solid var(--line);background:#fff;color:var(--text);padding:0 14px;
+      font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center
     }
-    .btn:hover{filter:brightness(.98)}
-    .btn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
-    .btn.green{background:var(--green);border-color:var(--green);color:#fff}
-    .btn.purple{background:var(--purple);border-color:var(--purple);color:#fff}
-    .btn.red{background:var(--red);border-color:var(--red);color:#fff}
-    .btn.dark{background:var(--dark);border-color:var(--dark);color:#fff}
-    .btn:disabled{opacity:.55;cursor:not-allowed}
-    .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:18px}
-    .filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px}
-    .field{display:flex;flex-direction:column;gap:6px}
-    .label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+    .btn-blue{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn-green{background:var(--green);border-color:var(--green);color:#fff}
+    .btn-purple{background:var(--purple);border-color:var(--purple);color:#fff}
+    .btn-red{background:var(--red);border-color:var(--red);color:#fff}
+    .toolbar,.card{
+      background:var(--card);border:1px solid var(--line);border-radius:18px;
+      box-shadow:0 12px 30px rgba(15,23,42,.06)
+    }
+    .toolbar{padding:16px;margin-bottom:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .card{padding:18px}
     .input,.select{
-      width:100%;height:44px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;padding:0 12px;font-size:15px;color:var(--text)
+      width:100%;border:1px solid #cbd5e1;background:#fff;color:var(--text);padding:0 12px
     }
-    .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-    .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
-    .stat .k{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
-    .stat .v{font-size:28px;font-weight:800;margin-top:6px}
-    .msg{padding:12px 14px;border-radius:12px;font-weight:700;margin-bottom:16px}
-    .msg.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
-    .msg.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
-    .msg.info{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+    .label{font-size:.9rem;font-weight:700;margin-bottom:6px;display:block}
+    .msg{padding:14px 16px;border-radius:12px;font-weight:700;margin-bottom:14px}
+    .ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+    .err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+    .stat .k{color:var(--muted);font-size:.9rem;margin-bottom:8px}
+    .stat .v{font-size:1.5rem;font-weight:800}
     .list{display:grid;gap:14px}
-    .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
-    .cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-    .action{font-size:20px;font-weight:800}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-size:12px;font-weight:800}
-    .metaGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
-    .box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px}
-    .box strong{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
-    pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
-    .toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
-    .small{font-size:13px;color:var(--muted)}
-    .empty{padding:28px;border:1px dashed #cbd5e1;border-radius:16px;text-align:center;color:var(--muted);background:#fff}
-    .check{width:18px;height:18px}
-    @media (max-width:900px){
-      .filters,.stats,.metaGrid{grid-template-columns:1fr}
-    }
+    .audit{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+    .audit-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f5f3ff;color:#6d28d9;font-weight:800;font-size:.78rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .box{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px}
+    pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:.86rem;color:#334155}
   </style>
 </head>
 <body>
@@ -65,634 +58,300 @@
     <div class="top">
       <div>
         <h1 class="title">Audit Logs</h1>
-        <div class="sub" id="who">Checking session...</div>
+        <div class="small" id="who">Checking session...</div>
       </div>
       <div class="row">
-        <a class="btn" href="/#/admin">Back to Master Admin</a>
-        <button class="btn" id="selectAllBtn" type="button">Select All Visible</button>
-        <button class="btn red" id="deleteSelectedBtn" type="button" disabled>Delete Selected (0)</button>
-        <button class="btn red" id="deleteFilteredBtn" type="button" disabled>Delete Filtered (0)</button>
-        <button class="btn" id="exportBtn" type="button">Export JSON</button>
-        <button class="btn" id="refreshBtn" type="button">Refresh</button>
-        <button class="btn" id="logoutBtn" type="button">Log Out</button>
+        <a class="btn btn-purple" href="https://www.safetychecktestltd.co.uk/#/admin">Back to Master Admin</a>
+        <button class="btn btn-green" id="exportJson">Export JSON</button>
+        <button class="btn btn-blue" id="refreshBtn">Refresh</button>
+        <button class="btn" id="logoutBtn">Log Out</button>
       </div>
     </div>
 
     <div id="message"></div>
 
-    <div class="panel">
-      <div class="filters">
-        <div class="field">
-          <label class="label" for="search">Search</label>
-          <input class="input" id="search" placeholder="action, message, target, user, email, audit id" />
-        </div>
-        <div class="field">
-          <label class="label" for="action">Action</label>
-          <select class="select" id="action">
-            <option value="all">All</option>
-          </select>
-        </div>
-        <div class="field">
-          <label class="label" for="role">Role</label>
-          <select class="select" id="role">
-            <option value="all">All</option>
-          </select>
-        </div>
-        <div class="field">
-          <label class="label" for="sort">Sort</label>
-          <select class="select" id="sort">
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-          </select>
-        </div>
+    <div class="toolbar">
+      <div>
+        <label class="label">Search</label>
+        <input class="input" id="search" placeholder="action, message, target, user, email" />
+      </div>
+      <div>
+        <label class="label">Action</label>
+        <input class="input" id="actionFilter" placeholder="e.g. portal_job_created" />
+      </div>
+      <div>
+        <label class="label">Role</label>
+        <select class="select" id="roleFilter">
+          <option value="all">all</option>
+          <option value="master_admin">master_admin</option>
+          <option value="admin">admin</option>
+          <option value="partner">partner</option>
+          <option value="council">council</option>
+        </select>
+      </div>
+      <div>
+        <label class="label">Sort</label>
+        <select class="select" id="sortOrder">
+          <option value="newest">newest first</option>
+          <option value="oldest">oldest first</option>
+        </select>
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat"><div class="k">Filtered Logs</div><div class="v" id="statFiltered">0</div></div>
-      <div class="stat"><div class="k">Create Actions</div><div class="v" id="statCreate">0</div></div>
-      <div class="stat"><div class="k">Update Actions</div><div class="v" id="statUpdate">0</div></div>
-      <div class="stat"><div class="k">Delete Actions</div><div class="v" id="statDelete">0</div></div>
-      <div class="stat"><div class="k">Selected</div><div class="v" id="statSelected">0</div></div>
-    </div>
-
-    <div class="panel">
-      <div class="toolbar">
-        <div class="row">
-          <button class="btn" id="quickLogin" type="button">Login Logs</button>
-          <button class="btn" id="quickEmployee" type="button">Employee Logs</button>
-          <button class="btn" id="quickPortal" type="button">Portal Job Logs</button>
-          <button class="btn" id="quickReset" type="button">Password Reset Logs</button>
-          <button class="btn" id="quickClear" type="button">Clear Quick Filter</button>
-        </div>
-        <div class="small" id="summary">Ready.</div>
-      </div>
-      <div class="list" id="list"></div>
-    </div>
+    <div class="stats" id="stats"></div>
+    <div class="list" id="list"></div>
   </div>
 
   <script>
-    (function(){
-      var API_BASE = 'https://api.safetychecktestltd.co.uk';
-      var TOKEN_KEY = 'sct_admin_token';
-      var token = localStorage.getItem(TOKEN_KEY) || '';
-      var me = null;
-      var audits = [];
-      var filtered = [];
-      var selected = new Set();
+    (function () {
+      var API = "https://api.safetychecktestltd.co.uk";
+      var token =
+        localStorage.getItem("sct_admin_token") ||
+        localStorage.getItem("adminToken") ||
+        "";
 
-      var who = document.getElementById('who');
-      var messageEl = document.getElementById('message');
-      var listEl = document.getElementById('list');
-      var summaryEl = document.getElementById('summary');
-      var searchEl = document.getElementById('search');
-      var actionEl = document.getElementById('action');
-      var roleEl = document.getElementById('role');
-      var sortEl = document.getElementById('sort');
-      var datePresetEl = document.getElementById('datePreset');
-      var dateFromEl = document.getElementById('dateFrom');
-      var dateToEl = document.getElementById('dateTo');
-      var selectAllBtn = document.getElementById('selectAllBtn');
-      var deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
-      var deleteFilteredBtn = document.getElementById('deleteFilteredBtn');
-      var exportBtn = document.getElementById('exportBtn');
-      var refreshBtn = document.getElementById('refreshBtn');
-      var logoutBtn = document.getElementById('logoutBtn');
-      var quickLogin = document.getElementById('quickLogin');
-      var quickEmployee = document.getElementById('quickEmployee');
-      var quickPortal = document.getElementById('quickPortal');
-      var quickReset = document.getElementById('quickReset');
-      var quickClear = document.getElementById('quickClear');
+      var state = {
+        admin: null,
+        audits: [],
+        filtered: []
+      };
 
-      function msg(text, kind){
-        messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + escapeHtml(text) + '</div>' : '';
+      var messageEl = document.getElementById("message");
+      var whoEl = document.getElementById("who");
+      var statsEl = document.getElementById("stats");
+      var listEl = document.getElementById("list");
+      var searchEl = document.getElementById("search");
+      var actionEl = document.getElementById("actionFilter");
+      var roleEl = document.getElementById("roleFilter");
+      var sortEl = document.getElementById("sortOrder");
+
+      function msg(text, kind) {
+        messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + text + '</div>' : '';
       }
 
-      function syncBulkDeleteButton(){
-        var bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
-        if (!bulkDeleteBtn) return;
-        bulkDeleteBtn.disabled = selectedAuditIds.size === 0;
-        bulkDeleteBtn.textContent = selectedAuditIds.size ? ('Delete Selected (' + selectedAuditIds.size + ')') : 'Delete Selected';
+      function escapeHtml(v) {
+        return String(v == null ? "" : v)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
       }
 
-      function escapeHtml(value){
-        return String(value == null ? '' : value)
-          .replace(/&/g,'&amp;')
-          .replace(/</g,'&lt;')
-          .replace(/>/g,'&gt;')
-          .replace(/"/g,'&quot;')
-          .replace(/'/g,'&#39;');
+      function logout() {
+        localStorage.removeItem("sct_admin_token");
+        localStorage.removeItem("adminToken");
+        window.location.href = "https://www.safetychecktestltd.co.uk/#/admin";
       }
 
-      function logout(){
-        localStorage.removeItem(TOKEN_KEY);
-        window.location.href = '/#/admin?t=' + Date.now();
-      }
-
-      async function apiGet(paths){
-        var lastErr = 'Failed to load audits';
-        for (var i = 0; i < paths.length; i++){
-          try{
-            var res = await fetch(API_BASE + paths[i], { headers: { Authorization: 'Bearer ' + token } });
-            var raw = await res.text();
-            var data = {};
-            try { data = raw ? JSON.parse(raw) : {}; } catch (e) {
-              lastErr = raw && raw.trim().startsWith('<') ? ('Endpoint returned HTML: ' + paths[i]) : 'Invalid JSON from ' + paths[i];
-              continue;
-            }
-            if (!res.ok || !data.ok) {
-              lastErr = (data && data.message) || ('Failed on ' + paths[i]);
-              continue;
-            }
-            return data;
-          }catch(e){
-            lastErr = e.message || 'Request failed';
+      async function apiGet(paths) {
+        var lastErr = "Request failed";
+        for (var i = 0; i < paths.length; i++) {
+          try {
+            var res = await fetch(API + paths[i], {
+              headers: { Authorization: "Bearer " + token }
+            });
+            var txt = await res.text();
+            var data = txt ? JSON.parse(txt) : {};
+            if (res.ok && data && (data.ok !== false)) return { path: paths[i], data: data };
+            lastErr = (data && data.message) || ("Failed on " + paths[i]);
+          } catch (e) {
+            lastErr = e.message || "Request failed";
           }
         }
         throw new Error(lastErr);
       }
 
-      async function apiDelete(id){
-        var res = await fetch(API_BASE + '/api/admin/audits/' + encodeURIComponent(id), {
-          method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + token }
-        });
-        var raw = await res.text();
-        var data = {};
-        try { data = raw ? JSON.parse(raw) : {}; } catch (e) {
-          throw new Error(raw && raw.trim().startsWith('<') ? 'Delete endpoint returned HTML instead of JSON' : 'Failed to delete audit');
-        }
-        if (!res.ok || !data.ok) throw new Error((data && data.message) || 'Failed to delete audit');
-        return data;
-      }
-
-      async function loadMe(){
-        var res = await fetch(API_BASE + '/api/admin/me', { headers: { Authorization: 'Bearer ' + token } });
-        var data = await res.json().catch(function(){ return {}; });
-        if (!res.ok || !data.ok) throw new Error((data && data.message) || 'Session invalid');
-        me = data.admin || null;
-        who.textContent = (me && me.email ? me.email : 'Admin') + (me && me.role ? ' · ' + me.role : '');
-      }
-
-      function normalize(data){
-        var arr = [];
-        if (Array.isArray(data.audits)) arr = data.audits;
-        else if (Array.isArray(data.logs)) arr = data.logs;
-        else if (Array.isArray(data.items)) arr = data.items;
-        else if (Array.isArray(data.data)) arr = data.data;
-        else if (Array.isArray(data.results)) arr = data.results;
-        return arr.map(function(x){
-          return {
-            _id: x._id || x.id || '',
-            action: x.action || '-',
-            role: x.role || x.userRole || x.adminRole || '-',
-            userEmail: x.userEmail || x.email || x.adminEmail || '-',
-            userId: x.userId || x.adminId || '-',
-            targetType: x.targetType || '-',
-            targetId: x.targetId || '-',
-            message: x.message || '-',
-            metadata: x.metadata || {},
-            createdAt: x.createdAt || x.timestamp || null
-          };
-        });
-      }
-
-      function fillSelect(el, values){
-        var current = el.value || 'all';
-        el.innerHTML = '<option value="all">All</option>' + values.map(function(v){
-          return '<option value="' + escapeHtml(v) + '">' + escapeHtml(v) + '</option>';
-        }).join('');
-        if ([].slice.call(el.options).some(function(o){ return o.value === current; })) el.value = current;
-      }
-
-      function syncButtons(){
-        var visibleIds = filtered.map(function(x){ return x._id; }).filter(Boolean);
-        var selectedVisible = visibleIds.filter(function(id){ return selected.has(id); });
-        document.getElementById('statSelected').textContent = String(selected.size);
-        deleteSelectedBtn.disabled = !selected.size || !(me && me.role === 'master_admin');
-        deleteFilteredBtn.disabled = !filtered.length || !(me && me.role === 'master_admin');
-        deleteSelectedBtn.textContent = 'Delete Selected (' + selected.size + ')';
-        deleteFilteredBtn.textContent = 'Delete Filtered (' + filtered.length + ')';
-        selectAllBtn.textContent = selectedVisible.length === visibleIds.length && visibleIds.length ? 'Unselect All Visible' : 'Select All Visible';
-      }
-
-      function renderStats(){
-        document.getElementById('statFiltered').textContent = String(filtered.length);
-        document.getElementById('statCreate').textContent = String(filtered.filter(function(x){ return /create/i.test(x.action); }).length);
-        document.getElementById('statUpdate').textContent = String(filtered.filter(function(x){ return /update/i.test(x.action); }).length);
-        document.getElementById('statDelete').textContent = String(filtered.filter(function(x){ return /delete/i.test(x.action); }).length);
-      }
-
-      
-      function startOfDay(d){
-        var x = new Date(d);
-        x.setHours(0,0,0,0);
-        return x;
-      }
-
-      function endOfDay(d){
-        var x = new Date(d);
-        x.setHours(23,59,59,999);
-        return x;
-      }
-
-      function applyDatePreset(){
-        if (!datePresetEl) return;
-        var now = new Date();
-        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        if (datePresetEl.value === 'today') {
-          dateFromEl.value = today.toISOString().slice(0,10);
-          dateToEl.value = today.toISOString().slice(0,10);
-        } else if (datePresetEl.value === '7d') {
-          var from = new Date(today);
-          from.setDate(from.getDate() - 6);
-          dateFromEl.value = from.toISOString().slice(0,10);
-          dateToEl.value = today.toISOString().slice(0,10);
-        } else if (datePresetEl.value === '30d') {
-          var from30 = new Date(today);
-          from30.setDate(from30.getDate() - 29);
-          dateFromEl.value = from30.toISOString().slice(0,10);
-          dateToEl.value = today.toISOString().slice(0,10);
-        } else if (datePresetEl.value === '') {
-          dateFromEl.value = '';
-          dateToEl.value = '';
-        }
-      }
-
-      function getFilteredItems(){
-        var q = (searchEl.value || '').trim().toLowerCase();
-        var action = actionEl.value || '';
-        var role = roleEl.value || '';
-        var sort = sortEl.value || 'newest';
-        var from = dateFromEl && dateFromEl.value ? startOfDay(new Date(dateFromEl.value)) : null;
-        var to = dateToEl && dateToEl.value ? endOfDay(new Date(dateToEl.value)) : null;
-
-        var out = items.filter(function(x){
-          var hay = [
-            x.action, x.message, x.targetType, x.targetId,
-            x.targetEmail, x.userEmail, x.userRole
-          ].join(' ').toLowerCase();
-
-          if (q && hay.indexOf(q) === -1) return false;
-          if (action && String(x.action || '') !== action) return false;
-          if (role && String(x.userRole || '') !== role) return false;
-
-          var created = x.createdAt ? new Date(x.createdAt) : null;
-          if (from && (!created || created < from)) return false;
-          if (to && (!created || created > to)) return false;
-
-          return true;
-        });
-
-        out.sort(function(a,b){
-          var ad = new Date(a.createdAt || 0).getTime();
-          var bd = new Date(b.createdAt || 0).getTime();
-          return sort === 'oldest' ? ad - bd : bd - ad;
-        });
-
-        return out;
-      }
-
-      async function deleteFiltered(){
-        try {
-          var filtered = getFilteredItems();
-          if (!filtered.length) {
-            msg('No filtered audit logs to delete', 'err');
-            return;
-          }
-          if (!confirm('Delete ' + filtered.length + ' filtered audit log(s)?')) return;
-
-          var failed = [];
-          for (var i = 0; i < filtered.length; i++) {
-            var x = filtered[i];
-            try {
-              var res = await fetch(API_BASE + '/api/admin/audits/' + encodeURIComponent(x._id), {
-                method: 'DELETE',
-                headers: { Authorization: 'Bearer ' + token }
-              });
-              var data = await res.json().catch(function(){ return {}; });
-              if (!res.ok || !data.ok) failed.push(x._id);
-            } catch (e) {
-              failed.push(x._id);
-            }
-          }
-
-          if (failed.length) {
-            msg('Deleted ' + (filtered.length - failed.length) + ' audit(s). Failed: ' + failed.length, 'err');
-          } else {
-            msg('Deleted ' + filtered.length + ' filtered audit log(s)', 'ok');
-          }
-          await refresh();
-        } catch (e) {
-          msg(e.message || 'Failed to delete filtered audits', 'err');
-        }
-      }
-
-function isProtectedAudit(x){
-        return PROTECTED_ACTIONS.has(String((x && x.action) || '').trim());
-      }
-
-      async function deleteSelected(){
-        var ids = Array.from(selectedAuditIds);
-        if (!ids.length) return;
-
-        var filtered = getFilteredAudits();
-        var protectedSelected = filtered.filter(function(x){ return selectedAuditIds.has(String(x._id || '')) && isProtectedAudit(x); });
-        if (protectedSelected.length) {
-          msg('Protected security logs cannot be bulk deleted.', 'err');
-          return;
-        }
-
-        if (!confirm('Delete ' + ids.length + ' selected audit log(s)? This cannot be undone.')) return;
-
-        var ok = 0, failed = 0, lastErr = '';
-        for (var i = 0; i < ids.length; i++) {
+      async function apiDelete(paths) {
+        var lastErr = "Delete failed";
+        for (var i = 0; i < paths.length; i++) {
           try {
-            var res = await fetch(API_BASE + '/api/admin/audits/' + encodeURIComponent(ids[i]), {
-              method: 'DELETE',
-              headers: { Authorization: 'Bearer ' + token }
+            var res = await fetch(API + paths[i], {
+              method: "DELETE",
+              headers: { Authorization: "Bearer " + token }
             });
-            var data = await res.json().catch(function(){ return {}; });
-            if (!res.ok || !data.ok) {
-              failed++;
-              lastErr = (data && data.message) || ('Failed on ' + ids[i]);
-            } else {
-              ok++;
-              selectedAuditIds.delete(ids[i]);
-            }
+            var txt = await res.text();
+            var data = txt ? JSON.parse(txt) : {};
+            if (res.ok && data && (data.ok !== false)) return data;
+            lastErr = (data && data.message) || ("Failed on " + paths[i]);
           } catch (e) {
-            failed++;
-            lastErr = e.message || 'Request failed';
+            lastErr = e.message || "Delete failed";
           }
         }
-
-        syncBulkDeleteButton();
-        await loadAudits();
-        if (failed) msg('Deleted ' + ok + ' audit(s). ' + failed + ' failed. ' + lastErr, 'err');
-        else msg('Deleted ' + ok + ' audit(s) successfully.', 'ok');
+        throw new Error(lastErr);
       }
 
-      function getFilteredAudits(){
-        var q = (searchEl.value || '').trim().toLowerCase();
-        var action = actionEl.value || '';
-        var role = roleEl.value || '';
-        var sort = sortEl.value || 'newest';
+      async function loadMe() {
+        var res = await fetch(API + "/api/admin/me", {
+          headers: { Authorization: "Bearer " + token }
+        });
+        var txt = await res.text();
+        var data = txt ? JSON.parse(txt) : {};
+        if (!res.ok || !data.ok) throw new Error((data && data.message) || "Session invalid");
+        state.admin = data.admin || null;
+        whoEl.textContent = (state.admin && state.admin.email ? state.admin.email : "Admin") +
+          (state.admin && state.admin.role ? " · " + state.admin.role : "");
+        if (!state.admin || (state.admin.role !== "master_admin" && state.admin.role !== "admin")) {
+          throw new Error("This audits page is only for admin or master admin");
+        }
+      }
 
-        var items = getFilteredAudits().filter(function(x){ return true; });
+      async function loadAudits() {
+        var result = await apiGet([
+          "/api/admin/audit-logs",
+          "/api/admin/audits"
+        ]);
+        var data = result.data || {};
+        state.audits = data.auditLogs || data.audits || data.logs || [];
+      }
+
+      function applyFilters() {
+        var q = (searchEl.value || "").trim().toLowerCase();
+        var actionQ = (actionEl.value || "").trim().toLowerCase();
+        var roleQ = roleEl.value || "all";
+        var sortQ = sortEl.value || "newest";
+
+        var arr = state.audits.filter(function (x) {
           var hay = [
             x.action, x.message, x.targetType, x.targetId,
-            x.userEmail, x.userRole, x.userId, x._id
-          ].join(' ').toLowerCase();
+            x.adminEmail, x.userEmail, x.email,
+            x.adminRole, x.userRole, x.role
+          ].join(" ").toLowerCase();
 
-          var okQ = !q || hay.indexOf(q) !== -1;
-          var okAction = !action || String(x.action || '') === action;
-          var okRole = !role || String(x.userRole || '') === role;
-          return okQ && okAction && okRole;
+          var roleVal = String(x.adminRole || x.userRole || x.role || "").toLowerCase();
+          var actionVal = String(x.action || "").toLowerCase();
+
+          if (q && hay.indexOf(q) === -1) return false;
+          if (actionQ && actionVal.indexOf(actionQ) === -1) return false;
+          if (roleQ !== "all" && roleVal !== roleQ) return false;
+          return true;
         });
 
-        items.sort(function(a,b){
-          var aa = new Date(a.createdAt || 0).getTime();
-          var bb = new Date(b.createdAt || 0).getTime();
-          return sort === 'oldest' ? aa - bb : bb - aa;
+        arr.sort(function (a, b) {
+          var ta = new Date(a.createdAt || a.timestamp || 0).getTime();
+          var tb = new Date(b.createdAt || b.timestamp || 0).getTime();
+          return sortQ === "oldest" ? ta - tb : tb - ta;
         });
 
-        return items;
+        state.filtered = arr;
       }
 
-      function renderAll(){
-        var q = (searchEl.value || '').trim().toLowerCase();
-        var act = actionEl.value || 'all';
-        var role = roleEl.value || 'all';
-        var sort = sortEl.value || 'newest';
+      function renderStats() {
+        var total = state.filtered.length;
+        var deletes = state.filtered.filter(function (x) { return String(x.action || "").toLowerCase().indexOf("delete") !== -1; }).length;
+        var creates = state.filtered.filter(function (x) { return String(x.action || "").toLowerCase().indexOf("create") !== -1; }).length;
+        var updates = state.filtered.filter(function (x) { return String(x.action || "").toLowerCase().indexOf("update") !== -1 || String(x.action || "").toLowerCase().indexOf("patch") !== -1; }).length;
 
-        filtered = audits.filter(function(x){
-          var hay = [
-            x._id, x.action, x.role, x.userEmail, x.userId, x.targetType, x.targetId, x.message,
-            JSON.stringify(x.metadata || {})
-          ].join(' ').toLowerCase();
-          if (q && hay.indexOf(q) === -1) return false;
-          if (act !== 'all' && x.action !== act) return false;
-          if (role !== 'all' && x.role !== role) return false;
-          return true;
-        }).sort(function(a,b){
-          var aa = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-          var bb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-          return sort === 'oldest' ? aa - bb : bb - aa;
-        });
+        statsEl.innerHTML =
+          '<div class="stat"><div class="k">Filtered Logs</div><div class="v">' + total + '</div></div>' +
+          '<div class="stat"><div class="k">Create Actions</div><div class="v">' + creates + '</div></div>' +
+          '<div class="stat"><div class="k">Update Actions</div><div class="v">' + updates + '</div></div>' +
+          '<div class="stat"><div class="k">Delete Actions</div><div class="v">' + deletes + '</div></div>';
+      }
 
-        renderStats();
-        syncButtons();
-        summaryEl.textContent = filtered.length + ' audit log(s) shown.';
-
-        if (!filtered.length){
-          listEl.innerHTML = '<div class="empty">No audit logs match your current filters.</div>';
+      function renderList() {
+        if (!state.filtered.length) {
+          listEl.innerHTML = '<div class="card"><div class="small">No audit logs found.</div></div>';
           return;
         }
 
-        listEl.innerHTML = filtered.map(function(x){
-          var checked = selected.has(x._id) ? ' checked' : '';
-          var when = x.createdAt ? new Date(x.createdAt).toLocaleString() : '-';
-          var canDelete = me && me.role === 'master_admin';
-          return ''
-            + '<div class="card">'
-            +   '<div class="cardTop">'
-            +     '<div>'
-            +       '<div class="row" style="margin-bottom:8px">'
-            +         (canDelete ? '<input class="check js-check" type="checkbox" data-id="' + escapeHtml(x._id) + '"' + checked + ' />' : '')
-            +         '<div class="action">' + escapeHtml(x.action || '-') + '</div>'
-            +       '</div>'
-            +       '<div class="small">' + escapeHtml(when) + '</div>'
-            +     '</div>'
-            +     '<div class="row">'
-            +       '<span class="pill">' + escapeHtml(x.role || '-') + '</span>'
-            +       (canDelete ? '<button class="btn red js-delete" type="button" data-id="' + escapeHtml(x._id) + '">Delete Audit</button>' : '')
-            +     '</div>'
-            +   '</div>'
-            +   '<div class="metaGrid">'
-            +     '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || '-') + '</pre></div>'
-            +     '<div class="box"><strong>User</strong><pre>' + escapeHtml(x.userEmail || '-') + '</pre></div>'
-            +     '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || '-') + ' / ' + (x.targetId || '-')) + '</pre></div>'
-            +     '<div class="box"><strong>Role</strong><pre>' + escapeHtml(x.role || '-') + '</pre></div>'
-            +     '<div class="box"><strong>Action</strong><pre>' + escapeHtml(x.action || '-') + '</pre></div>'
-            +     '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || '-') + '</pre></div>'
-            +     '<div class="box" style="grid-column:1/-1"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(x.metadata || {}, null, 2)) + '</pre></div>'
-            +   '</div>'
-            + '</div>';
-        }).join('');
+        listEl.innerHTML = state.filtered.map(function (x) {
+          var id = x._id || x.id || "";
+          var role = x.adminRole || x.userRole || x.role || "-";
+          var email = x.adminEmail || x.userEmail || x.email || "-";
+          var created = x.createdAt || x.timestamp || "";
+          var meta = x.metadata || x.meta || {};
+          var canDelete = state.admin && state.admin.role === "master_admin" && id;
 
-        [].slice.call(document.querySelectorAll('.js-check')).forEach(function(el){
-          el.addEventListener('change', function(){
-            var id = el.getAttribute('data-id');
-            if (!id) return;
-            if (el.checked) selected.add(id); else selected.delete(id);
-            syncButtons();
-          });
-        });
+          return '' +
+            '<div class="audit">' +
+              '<div class="audit-top">' +
+                '<div>' +
+                  '<h3 style="margin:0 0 6px;font-size:1.05rem;">' + escapeHtml(x.action || "audit_log") + '</h3>' +
+                  '<div class="small">' + escapeHtml(created ? new Date(created).toLocaleString() : "-") + '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                  '<span class="pill">' + escapeHtml(role) + '</span>' +
+                  (canDelete ? '<button class="btn btn-red" data-del="' + escapeHtml(id) + '">Delete Audit</button>' : '') +
+                '</div>' +
+              '</div>' +
+              '<div class="grid">' +
+                '<div class="box"><strong>User</strong><pre>' + escapeHtml(email) + '</pre></div>' +
+                '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || "-") + " / " + (x.targetId || "-")) + '</pre></div>' +
+                '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>' +
+                '<div class="box"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(meta, null, 2) || "{}") + '</pre></div>' +
+              '</div>' +
+            '</div>';
+        }).join("");
 
-        [].slice.call(document.querySelectorAll('.js-delete')).forEach(function(el){
-          el.addEventListener('click', async function(){
-            var id = el.getAttribute('data-id');
+        Array.from(document.querySelectorAll("[data-del]")).forEach(function (btn) {
+          btn.addEventListener("click", async function () {
+            var id = btn.getAttribute("data-del");
             if (!id) return;
-            if (!confirm('Delete this audit log?\n\nAudit ID:\n' + id)) return;
-            el.disabled = true;
-            el.textContent = 'Deleting...';
-            try{
-              await apiDelete(id);
-              selected.delete(id);
-              msg('Audit deleted successfully.', 'ok');
+            if (!window.confirm("Delete this audit log? Only master admin should do this.")) return;
+            try {
+              btn.disabled = true;
+              btn.textContent = "Deleting...";
+              await apiDelete([
+                "/api/admin/audit-logs/" + encodeURIComponent(id),
+                "/api/admin/audits/" + encodeURIComponent(id)
+              ]);
+              msg("Audit deleted successfully", "ok");
               await refresh();
-            }catch(e){
-              el.disabled = false;
-              el.textContent = 'Delete Audit';
-              msg(e.message || 'Failed to delete audit', 'err');
+            } catch (e) {
+              btn.disabled = false;
+              btn.textContent = "Delete Audit";
+              msg(e.message || "Failed to delete audit", "err");
             }
           });
         });
       }
 
-      async function refresh(){
-        msg('Refreshing audits...', 'info');
-        try{
+      function renderAll() {
+        applyFilters();
+        renderStats();
+        renderList();
+      }
+
+      async function refresh() {
+        msg("");
+        try {
           await loadMe();
-          var data = await apiGet([
-            '/api/admin/audit-logs',
-            '/api/admin/audits',
-            '/api/admin/logs/audits',
-            '/api/admin/audit/logs'
-          ]);
-          audits = normalize(data);
-          fillSelect(actionEl, Array.from(new Set(audits.map(function(x){ return x.action; }).filter(Boolean))).sort());
-          fillSelect(roleEl, Array.from(new Set(audits.map(function(x){ return x.role; }).filter(Boolean))).sort());
+          await loadAudits();
           renderAll();
-          msg('');
-        }catch(e){
-          listEl.innerHTML = '';
-          msg(e.message || 'Failed to load audits', 'err');
-          if (String(e.message || '').toLowerCase().indexOf('session') !== -1 || String(e.message || '').toLowerCase().indexOf('token') !== -1){
-            setTimeout(logout, 1200);
+        } catch (e) {
+          msg(e.message || "Failed to load audits", "err");
+          if (String(e.message || "").toLowerCase().indexOf("session") !== -1) {
+            setTimeout(function () {
+              window.location.href = "https://www.safetychecktestltd.co.uk/#/admin";
+            }, 1200);
           }
         }
       }
 
-      async function deleteIds(ids){
-        var ok = 0, fail = 0, lastErr = '';
-        for (var i = 0; i < ids.length; i++){
-          try{
-            await apiDelete(ids[i]);
-            selected.delete(ids[i]);
-            ok++;
-          }catch(e){
-            fail++;
-            lastErr = e.message || 'Delete failed';
-          }
-        }
-        if (fail) msg('Deleted ' + ok + ' audit log(s). ' + fail + ' failed. ' + lastErr, fail && ok ? 'info' : 'err');
-        else msg('Deleted ' + ok + ' audit log(s) successfully.', 'ok');
-        await refresh();
-      }
-
-      selectAllBtn.addEventListener('click', function(){
-        var ids = filtered.map(function(x){ return x._id; }).filter(Boolean);
-        var allSelected = ids.length && ids.every(function(id){ return selected.has(id); });
-        if (allSelected) ids.forEach(function(id){ selected.delete(id); });
-        else ids.forEach(function(id){ selected.add(id); });
-        renderAll();
-      });
-
-      deleteSelectedBtn.addEventListener('click', async function(){
-        if (!(me && me.role === 'master_admin')) return msg('Only master admin can delete audits.', 'err');
-        var ids = Array.from(selected);
-        if (!ids.length) return;
-        if (!confirm('Delete ' + ids.length + ' selected audit log(s)?')) return;
-        deleteSelectedBtn.disabled = true;
-        deleteSelectedBtn.textContent = 'Deleting...';
-        try { await deleteIds(ids); } finally { syncButtons(); }
-      });
-
-      deleteFilteredBtn.addEventListener('click', async function(){
-        if (!(me && me.role === 'master_admin')) return msg('Only master admin can delete audits.', 'err');
-        var ids = filtered.map(function(x){ return x._id; }).filter(Boolean);
-        if (!ids.length) return;
-        if (!confirm('Delete ALL ' + ids.length + ' currently filtered audit log(s)?')) return;
-        deleteFilteredBtn.disabled = true;
-        deleteFilteredBtn.textContent = 'Deleting...';
-        try { await deleteIds(ids); } finally { syncButtons(); }
-      });
-
-      exportBtn.addEventListener('click', function(){
-        var blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), count: filtered.length, audits: filtered }, null, 2)], { type: 'application/json' });
+      document.getElementById("refreshBtn").addEventListener("click", refresh);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+      document.getElementById("exportJson").addEventListener("click", function () {
+        var blob = new Blob([JSON.stringify({
+          exportedAt: new Date().toISOString(),
+          count: state.filtered.length,
+          audits: state.filtered
+        }, null, 2)], { type: "application/json" });
         var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
+        var a = document.createElement("a");
         a.href = url;
-        a.download = 'safety-check-test-audits-' + new Date().toISOString().slice(0,10) + '.json';
+        a.download = "safety-check-test-audits-" + new Date().toISOString().slice(0,10) + ".json";
         document.body.appendChild(a);
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
       });
 
-      var selectFilteredBtn = document.getElementById('selectFilteredBtn');
-      var bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
-
-      if (selectFilteredBtn) {
-        selectFilteredBtn.addEventListener('click', function(){
-          var items = getFilteredAudits();
-          var added = 0;
-          items.forEach(function(x){
-            var id = String((x && x._id) || '');
-            if (!id || isProtectedAudit(x)) return;
-            if (!selectedAuditIds.has(id)) {
-              selectedAuditIds.add(id);
-              added++;
-            }
-          });
-          syncBulkDeleteButton();
-          renderAll();
-          msg(added ? ('Selected ' + added + ' filtered audit(s).') : 'No selectable filtered audits found.', 'ok');
-        });
-      }
-
-      if (bulkDeleteBtn) {
-        bulkDeleteBtn.addEventListener('click', deleteSelected);
-      }
-
-      refreshBtn.addEventListener('click', refresh);
-      logoutBtn.addEventListener('click', logout);
-
-      if (quickLogin) quickLogin.addEventListener('click', function(){
-        searchEl.value = 'admin_login';
-        renderAll();
+      [searchEl, actionEl, roleEl, sortEl].forEach(function (el) {
+        el.addEventListener("input", renderAll);
+        el.addEventListener("change", renderAll);
       });
 
-      if (quickEmployee) quickEmployee.addEventListener('click', function(){
-        searchEl.value = 'employee_';
-        renderAll();
-      });
-
-      if (quickPortal) quickPortal.addEventListener('click', function(){
-        searchEl.value = 'portal_job';
-        renderAll();
-      });
-
-      if (quickReset) quickReset.addEventListener('click', function(){
-        searchEl.value = 'password_reset';
-        renderAll();
-      });
-
-      if (quickClear) quickClear.addEventListener('click', function(){
-        searchEl.value = '';
-        actionEl.value = 'all';
-        roleEl.value = 'all';
-        sortEl.value = 'newest';
-        renderAll();
-      });
-
-      [searchEl, actionEl, roleEl, sortEl].forEach(function(el){
-        el.addEventListener('input', renderAll);
-        el.addEventListener('change', renderAll);
-      });
-
-      syncBulkDeleteButton();
       refresh();
     })();
   </script>
