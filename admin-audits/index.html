@@ -105,6 +105,14 @@
       <button class="btn" id="viewModeExpanded" type="button">Expanded View</button>
     </div>
 
+    <div class="row" id="auditPresetRow" style="gap:8px;flex-wrap:wrap;margin:0 0 14px;">
+      <button class="btn" id="presetTodayLogins" type="button">Today Logins</button>
+      <button class="btn" id="presetWeekEmployees" type="button">This Week Employees</button>
+      <button class="btn" id="presetPortal" type="button">Portal Jobs</button>
+      <button class="btn" id="presetPassword" type="button">Password Resets</button>
+      <button class="btn" id="presetClear" type="button">Clear Presets</button>
+    </div>
+
     <div class="stats" id="stats"></div>
     <div class="list" id="list"></div>
   </div>
@@ -144,6 +152,16 @@
         renderList();
       }
 
+
+      window.copyAuditId = async function(id) {
+        try {
+          if (!id) return;
+          await navigator.clipboard.writeText(String(id));
+          msg("Audit ID copied: " + id, "ok");
+        } catch (e) {
+          msg("Could not copy audit ID", "err");
+        }
+      };
 
       window.copyAuditJson = async function(id) {
         try {
@@ -523,19 +541,23 @@
         setAuditViewMode("expanded");
       });
 
-      document.getElementById("presetTodayLogins").addEventListener("click", function () {
+      var presetTodayLogins = document.getElementById("presetTodayLogins");
+      if (presetTodayLogins) presetTodayLogins.addEventListener("click", function () {
         applyAuditPreset("todayLogins");
       });
 
-      document.getElementById("presetWeekEmployees").addEventListener("click", function () {
+      var presetWeekEmployees = document.getElementById("presetWeekEmployees");
+      if (presetWeekEmployees) presetWeekEmployees.addEventListener("click", function () {
         applyAuditPreset("weekEmployees");
       });
 
-      document.getElementById("presetPortal").addEventListener("click", function () {
+      var presetPortal = document.getElementById("presetPortal");
+      if (presetPortal) presetPortal.addEventListener("click", function () {
         applyAuditPreset("portal");
       });
 
-      document.getElementById("presetPassword").addEventListener("click", function () {
+      var presetPassword = document.getElementById("presetPassword");
+      if (presetPassword) presetPassword.addEventListener("click", function () {
         applyAuditPreset("password");
       });
 
