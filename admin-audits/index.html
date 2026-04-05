@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Check Test - Audits</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f8fafc;color:#0f172a}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06)}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 14px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-weight:700;text-decoration:none;cursor:pointer}
+    .btn-primary{background:#0f172a;border-color:#0f172a;color:#fff}
+    .btn-danger{background:#991b1b;border-color:#991b1b;color:#fff}
+    .muted{color:#64748b}
+    .error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:12px;padding:14px 16px;margin:14px 0;font-weight:700}
+    .success{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:12px;padding:14px 16px;margin:14px 0;font-weight:700}
+    table{width:100%;border-collapse:collapse;margin-top:16px;background:#fff}
+    th,td{padding:12px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:top;font-size:14px}
+    th{background:#f8fafc}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div>
+          <h1 style="margin:0 0 8px;">Audit Logs</h1>
+          <div class="muted" id="who">Checking session...</div>
+        </div>
+        <div class="toolbar">
+          <a class="btn" href="/#/admin">Back to Master Admin</a>
+          <button class="btn" id="refreshBtn">Refresh</button>
+          <button class="btn btn-danger" id="deleteBtn" style="display:none;">Delete All Audits</button>
+        </div>
+      </div>
+
+      <div id="msg"></div>
+      <div id="tableWrap" class="muted">Loading audits...</div>
+    </div>
+  </div>
+
+  <script>
+    (async function () {
+      const apiBase = "https://api.safetychecktestltd.co.uk";
+      const token = localStorage.getItem("sct_admin_token") || localStorage.getItem("adminToken") || "";
+      const msg = document.getElementById("msg");
+      const tableWrap = document.getElementById("tableWrap");
+      const who = document.getElementById("who");
+      const deleteBtn = document.getElementById("deleteBtn");
+      const refreshBtn = document.getElementById("refreshBtn");
+
+      function show(type, text) {
+        msg.className = type;
+        msg.textContent = text;
+      }
+
+      function escapeHtml(v) {
+        return String(v == null ? "" : v)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      if (!token) {
+        show("error", "No admin session found. Please log in again.");
+        tableWrap.textContent = "";
+        return;
+      }
+
+      let me = null;
+
+      async function loadMe() {
+        const res = await fetch(apiBase + "/api/admin/me", {
+          headers: { Authorization: "Bearer " + token }
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.message || "Failed to verify admin session");
+        return data.admin || null;
+      }
+
+      async function loadAudits() {
+        tableWrap.textContent = "Loading audits...";
+        const res = await fetch(apiBase + "/api/admin/audit-logs", {
+          headers: { Authorization: "Bearer " + token }
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.message || "Failed to load audit logs");
+
+        const rows = Array.isArray(data.auditLogs) ? data.auditLogs : Array.isArray(data.logs) ? data.logs : [];
+        if (!rows.length) {
+          tableWrap.innerHTML = '<div class="muted">No audit logs found.</div>';
+          return;
+        }
+
+        tableWrap.innerHTML =
+          '<table><thead><tr><th>Date</th><th>Action</th><th>User</th><th>Target</th><th>Message</th></tr></thead><tbody>' +
+          rows.map(function (row) {
+            return '<tr>' +
+              '<td>' + escapeHtml(row.createdAt ? new Date(row.createdAt).toLocaleString() : '-') + '</td>' +
+              '<td>' + escapeHtml(row.action || '-') + '</td>' +
+              '<td>' + escapeHtml((row.adminEmail || row.userEmail || row.email || '-') + ((row.adminRole || row.role) ? ' · ' + (row.adminRole || row.role) : '')) + '</td>' +
+              '<td>' + escapeHtml((row.targetType || '-') + (row.targetId ? ' / ' + row.targetId : '')) + '</td>' +
+              '<td>' + escapeHtml(row.message || '-') + '</td>' +
+            '</tr>';
+          }).join('') +
+          '</tbody></table>';
+      }
+
+      try {
+        me = await loadMe();
+        who.textContent = (me?.email || "Admin") + (me?.role ? " · " + me.role : "");
+
+        if (me?.role === "master_admin") {
+          deleteBtn.style.display = "inline-flex";
+        }
+
+        await loadAudits();
+
+        refreshBtn.addEventListener("click", async function () {
+          msg.className = "";
+          msg.textContent = "";
+          await loadAudits();
+        });
+
+        deleteBtn.addEventListener("click", async function () {
+          if (!confirm("Delete all audit logs? Only master admin should do this.")) return;
+          try {
+            const res = await fetch(apiBase + "/api/admin/audit-logs", {
+              method: "DELETE",
+              headers: { Authorization: "Bearer " + token }
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) throw new Error(data.message || "Failed to delete audits");
+            show("success", "Audit logs deleted.");
+            await loadAudits();
+          } catch (err) {
+            show("error", err.message || "Failed to delete audits");
+          }
+        });
+      } catch (err) {
+        show("error", err.message || "Failed to open audit page");
+        tableWrap.textContent = "";
+      }
+    })();
+  </script>
+</body>
+</html>
