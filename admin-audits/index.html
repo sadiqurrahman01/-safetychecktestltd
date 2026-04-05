@@ -144,6 +144,23 @@
         renderList();
       }
 
+
+      window.copyAuditJson = async function(id) {
+        try {
+          var item = ((state && state.audits) || []).find(function(x){
+            return String((x && (x._id || x.id)) || "") === String(id || "");
+          });
+          if (!item) {
+            msg("Audit JSON not found", "err");
+            return;
+          }
+          await navigator.clipboard.writeText(JSON.stringify(item, null, 2));
+          msg("Audit JSON copied.", "ok");
+        } catch (e) {
+          msg("Could not copy audit JSON", "err");
+        }
+      };
+
       function msg(text, kind) {
         messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + text + '</div>' : '';
       }
@@ -442,7 +459,7 @@
                 : ('<div class="grid">' +
                     '<div class="box"><strong>User</strong><pre>' + escapeHtml(email) + '</pre></div>' +
                     '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || "-") + " / " + (x.targetId || "-")) + '</pre></div>' +
-                    '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || "-") + '</pre><button class="btn" type="button" onclick="window.copyAuditId(\'' + escapeHtml(x._id || '') + '\')">Copy ID</button></div>' +
+                    '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || "-") + '</pre><button class="btn" type="button" onclick="window.copyAuditId(\'' + escapeHtml(x._id || '') + '\')">Copy ID</button><button class="btn" type="button" onclick="window.copyAuditJson(\'' + escapeHtml(x._id || '') + '\')">Copy JSON</button></div>' +
                     '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>' +
                     '<div class="box"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(meta, null, 2) || "{}") + '</pre></div>' +
                   '</div>')) +
