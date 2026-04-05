@@ -278,6 +278,7 @@
               '<div class="grid">' +
                 '<div class="box"><strong>User</strong><pre>' + escapeHtml(email) + '</pre></div>' +
                 '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || "-") + " / " + (x.targetId || "-")) + '</pre></div>' +
+                '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || "-") + '</pre></div>' +
                 '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>' +
                 '<div class="box"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(meta, null, 2) || "{}") + '</pre></div>' +
               '</div>' +
