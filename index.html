@@ -109,5 +109,103 @@
 })();
 </script>
 
+
+<script>
+(function () {
+  function addMasterAdminButtons() {
+    const hash = window.location.hash || "";
+    if (!hash.startsWith("#/admin")) return;
+
+    const token =
+      localStorage.getItem("sct_admin_token") ||
+      localStorage.getItem("adminToken") ||
+      "";
+
+    const role =
+      localStorage.getItem("sct_admin_role") ||
+      localStorage.getItem("adminRole") ||
+      "";
+
+    if (!token) return;
+    if (!/master_admin|admin/i.test(role)) return;
+    if (document.getElementById("sct-master-admin-shortcuts")) return;
+
+    const buttons = Array.from(document.querySelectorAll("button"));
+    const refreshBtn = buttons.find(b => (b.textContent || "").trim() === "Refresh");
+    const logoutBtn = buttons.find(b => (b.textContent || "").trim() === "Log Out");
+
+    const anchor = logoutBtn || refreshBtn;
+    if (!anchor) return;
+
+    const row = anchor.parentElement;
+    if (!row) return;
+
+    const wrap = document.createElement("div");
+    wrap.id = "sct-master-admin-shortcuts";
+    wrap.style.display = "flex";
+    wrap.style.flexWrap = "wrap";
+    wrap.style.gap = "10px";
+    wrap.style.marginTop = "12px";
+    wrap.style.marginBottom = "16px";
+    wrap.style.width = "100%";
+
+    function makeLink(label, href, bg) {
+      const a = document.createElement("a");
+      a.href = href;
+      a.textContent = label;
+      a.style.display = "inline-flex";
+      a.style.alignItems = "center";
+      a.style.justifyContent = "center";
+      a.style.padding = "10px 14px";
+      a.style.borderRadius = "10px";
+      a.style.fontWeight = "700";
+      a.style.textDecoration = "none";
+      a.style.background = bg;
+      a.style.color = "#ffffff";
+      a.style.boxShadow = "0 1px 3px rgba(0,0,0,0.12)";
+      return a;
+    }
+
+    wrap.appendChild(
+      makeLink(
+        "Open Completion Panel",
+        "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now(),
+        "#2563eb"
+      )
+    );
+
+    wrap.appendChild(
+      makeLink(
+        "Open Employees Panel",
+        "https://www.safetychecktestltd.co.uk/admin-employees/?t=" + Date.now(),
+        "#059669"
+      )
+    );
+
+    if (row.nextSibling) {
+      row.parentNode.insertBefore(wrap, row.nextSibling);
+    } else {
+      row.parentNode.appendChild(wrap);
+    }
+  }
+
+  function boot() {
+    addMasterAdminButtons();
+    setTimeout(addMasterAdminButtons, 500);
+    setTimeout(addMasterAdminButtons, 1200);
+    setTimeout(addMasterAdminButtons, 2200);
+  }
+
+  window.addEventListener("hashchange", boot);
+  window.addEventListener("load", boot);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
 </body>
 </html>
