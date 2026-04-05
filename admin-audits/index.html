@@ -118,6 +118,13 @@
 
     <div class="panel">
       <div class="toolbar">
+        <div class="row">
+          <button class="btn" id="quickLogin" type="button">Login Logs</button>
+          <button class="btn" id="quickEmployee" type="button">Employee Logs</button>
+          <button class="btn" id="quickPortal" type="button">Portal Job Logs</button>
+          <button class="btn" id="quickReset" type="button">Password Reset Logs</button>
+          <button class="btn" id="quickClear" type="button">Clear Quick Filter</button>
+        </div>
         <div class="small" id="summary">Ready.</div>
       </div>
       <div class="list" id="list"></div>
@@ -148,6 +155,11 @@
       var exportBtn = document.getElementById('exportBtn');
       var refreshBtn = document.getElementById('refreshBtn');
       var logoutBtn = document.getElementById('logoutBtn');
+      var quickLogin = document.getElementById('quickLogin');
+      var quickEmployee = document.getElementById('quickEmployee');
+      var quickPortal = document.getElementById('quickPortal');
+      var quickReset = document.getElementById('quickReset');
+      var quickClear = document.getElementById('quickClear');
 
       function msg(text, kind){
         messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + escapeHtml(text) + '</div>' : '';
@@ -435,6 +447,35 @@
 
       refreshBtn.addEventListener('click', refresh);
       logoutBtn.addEventListener('click', logout);
+
+      if (quickLogin) quickLogin.addEventListener('click', function(){
+        searchEl.value = 'admin_login';
+        renderAll();
+      });
+
+      if (quickEmployee) quickEmployee.addEventListener('click', function(){
+        searchEl.value = 'employee_';
+        renderAll();
+      });
+
+      if (quickPortal) quickPortal.addEventListener('click', function(){
+        searchEl.value = 'portal_job';
+        renderAll();
+      });
+
+      if (quickReset) quickReset.addEventListener('click', function(){
+        searchEl.value = 'password_reset';
+        renderAll();
+      });
+
+      if (quickClear) quickClear.addEventListener('click', function(){
+        searchEl.value = '';
+        actionEl.value = 'all';
+        roleEl.value = 'all';
+        sortEl.value = 'newest';
+        renderAll();
+      });
+
       [searchEl, actionEl, roleEl, sortEl].forEach(function(el){
         el.addEventListener('input', renderAll);
         el.addEventListener('change', renderAll);
