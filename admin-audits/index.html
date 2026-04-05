@@ -100,6 +100,11 @@
       </div>
     </div>
 
+    <div class="row" id="auditViewRow" style="gap:8px;flex-wrap:wrap;margin:0 0 14px;">
+      <button class="btn" id="viewModeCompact" type="button">Compact View</button>
+      <button class="btn" id="viewModeExpanded" type="button">Expanded View</button>
+    </div>
+
     <div class="stats" id="stats"></div>
     <div class="list" id="list"></div>
   </div>
@@ -117,6 +122,7 @@
         audits: [],
         filtered: []
       };
+      var auditViewMode = localStorage.getItem("sct_audit_view_mode") || "expanded";
 
       var messageEl = document.getElementById("message");
       var whoEl = document.getElementById("who");
@@ -126,6 +132,17 @@
       var actionEl = document.getElementById("actionFilter");
       var roleEl = document.getElementById("roleFilter");
       var sortEl = document.getElementById("sortOrder");
+
+
+      function setAuditViewMode(mode) {
+        auditViewMode = mode === "compact" ? "compact" : "expanded";
+        try { localStorage.setItem("sct_audit_view_mode", auditViewMode); } catch (e) {}
+        var compactBtn = document.getElementById("viewModeCompact");
+        var expandedBtn = document.getElementById("viewModeExpanded");
+        if (compactBtn) compactBtn.style.opacity = auditViewMode === "compact" ? "1" : ".7";
+        if (expandedBtn) expandedBtn.style.opacity = auditViewMode === "expanded" ? "1" : ".7";
+        renderList();
+      }
 
       function msg(text, kind) {
         messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + text + '</div>' : '';
@@ -415,13 +432,20 @@
                   (canDelete ? '<button class="btn btn-red" data-del="' + escapeHtml(id) + '">Delete Audit</button>' : '') +
                 '</div>' +
               '</div>' +
-              '<div class="grid">' +
-                '<div class="box"><strong>User</strong><pre>' + escapeHtml(email) + '</pre></div>' +
-                '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || "-") + " / " + (x.targetId || "-")) + '</pre></div>' +
-                '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || "-") + '</pre><button class="btn" type="button" onclick="window.copyAuditId(\'' + escapeHtml(x._id || '') + '\')">Copy ID</button></div>' +
-                '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>' +
-                '<div class="box"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(meta, null, 2) || "{}") + '</pre></div>' +
-              '</div>' +
+              (auditViewMode === "compact"
+                ? ('<div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px;">' +
+                    '<span class="pill">' + escapeHtml(email) + '</span>' +
+                    '<span class="pill">' + escapeHtml((x.targetType || "-")) + '</span>' +
+                    '<span class="pill">' + escapeHtml(x._id || "-") + '</span>' +
+                   '</div>' +
+                   '<div class="box" style="margin-top:12px;"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>')
+                : ('<div class="grid">' +
+                    '<div class="box"><strong>User</strong><pre>' + escapeHtml(email) + '</pre></div>' +
+                    '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || "-") + " / " + (x.targetId || "-")) + '</pre></div>' +
+                    '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || "-") + '</pre><button class="btn" type="button" onclick="window.copyAuditId(\'' + escapeHtml(x._id || '') + '\')">Copy ID</button></div>' +
+                    '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>' +
+                    '<div class="box"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(meta, null, 2) || "{}") + '</pre></div>' +
+                  '</div>')) +
             '</div>';
         }).join("");
 
@@ -438,7 +462,8 @@
                 "/api/admin/audits/" + encodeURIComponent(id)
               ]);
               msg("Audit deleted successfully", "ok");
-              await refresh();
+              setAuditViewMode(auditViewMode);
+      await refresh();
             } catch (e) {
               btn.disabled = false;
               btn.textContent = "Delete Audit";
@@ -472,6 +497,14 @@
 
       document.getElementById("refreshBtn").addEventListener("click", refresh);
       document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      document.getElementById("viewModeCompact").addEventListener("click", function () {
+        setAuditViewMode("compact");
+      });
+
+      document.getElementById("viewModeExpanded").addEventListener("click", function () {
+        setAuditViewMode("expanded");
+      });
 
       document.getElementById("presetTodayLogins").addEventListener("click", function () {
         applyAuditPreset("todayLogins");
