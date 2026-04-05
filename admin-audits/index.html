@@ -168,6 +168,13 @@
         messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + escapeHtml(text) + '</div>' : '';
       }
 
+      function syncBulkDeleteButton(){
+        var bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+        if (!bulkDeleteBtn) return;
+        bulkDeleteBtn.disabled = selectedAuditIds.size === 0;
+        bulkDeleteBtn.textContent = selectedAuditIds.size ? ('Delete Selected (' + selectedAuditIds.size + ')') : 'Delete Selected';
+      }
+
       function escapeHtml(value){
         return String(value == null ? '' : value)
           .replace(/&/g,'&amp;')
@@ -381,7 +388,78 @@
         }
       }
 
-function renderAll(){
+function isProtectedAudit(x){
+        return PROTECTED_ACTIONS.has(String((x && x.action) || '').trim());
+      }
+
+      async function deleteSelected(){
+        var ids = Array.from(selectedAuditIds);
+        if (!ids.length) return;
+
+        var filtered = getFilteredAudits();
+        var protectedSelected = filtered.filter(function(x){ return selectedAuditIds.has(String(x._id || '')) && isProtectedAudit(x); });
+        if (protectedSelected.length) {
+          msg('Protected security logs cannot be bulk deleted.', 'err');
+          return;
+        }
+
+        if (!confirm('Delete ' + ids.length + ' selected audit log(s)? This cannot be undone.')) return;
+
+        var ok = 0, failed = 0, lastErr = '';
+        for (var i = 0; i < ids.length; i++) {
+          try {
+            var res = await fetch(API_BASE + '/api/admin/audits/' + encodeURIComponent(ids[i]), {
+              method: 'DELETE',
+              headers: { Authorization: 'Bearer ' + token }
+            });
+            var data = await res.json().catch(function(){ return {}; });
+            if (!res.ok || !data.ok) {
+              failed++;
+              lastErr = (data && data.message) || ('Failed on ' + ids[i]);
+            } else {
+              ok++;
+              selectedAuditIds.delete(ids[i]);
+            }
+          } catch (e) {
+            failed++;
+            lastErr = e.message || 'Request failed';
+          }
+        }
+
+        syncBulkDeleteButton();
+        await loadAudits();
+        if (failed) msg('Deleted ' + ok + ' audit(s). ' + failed + ' failed. ' + lastErr, 'err');
+        else msg('Deleted ' + ok + ' audit(s) successfully.', 'ok');
+      }
+
+      function getFilteredAudits(){
+        var q = (searchEl.value || '').trim().toLowerCase();
+        var action = actionEl.value || '';
+        var role = roleEl.value || '';
+        var sort = sortEl.value || 'newest';
+
+        var items = getFilteredAudits().filter(function(x){ return true; });
+          var hay = [
+            x.action, x.message, x.targetType, x.targetId,
+            x.userEmail, x.userRole, x.userId, x._id
+          ].join(' ').toLowerCase();
+
+          var okQ = !q || hay.indexOf(q) !== -1;
+          var okAction = !action || String(x.action || '') === action;
+          var okRole = !role || String(x.userRole || '') === role;
+          return okQ && okAction && okRole;
+        });
+
+        items.sort(function(a,b){
+          var aa = new Date(a.createdAt || 0).getTime();
+          var bb = new Date(b.createdAt || 0).getTime();
+          return sort === 'oldest' ? aa - bb : bb - aa;
+        });
+
+        return items;
+      }
+
+      function renderAll(){
         var q = (searchEl.value || '').trim().toLowerCase();
         var act = actionEl.value || 'all';
         var role = roleEl.value || 'all';
@@ -553,6 +631,31 @@ function renderAll(){
         URL.revokeObjectURL(url);
       });
 
+      var selectFilteredBtn = document.getElementById('selectFilteredBtn');
+      var bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+
+      if (selectFilteredBtn) {
+        selectFilteredBtn.addEventListener('click', function(){
+          var items = getFilteredAudits();
+          var added = 0;
+          items.forEach(function(x){
+            var id = String((x && x._id) || '');
+            if (!id || isProtectedAudit(x)) return;
+            if (!selectedAuditIds.has(id)) {
+              selectedAuditIds.add(id);
+              added++;
+            }
+          });
+          syncBulkDeleteButton();
+          renderAll();
+          msg(added ? ('Selected ' + added + ' filtered audit(s).') : 'No selectable filtered audits found.', 'ok');
+        });
+      }
+
+      if (bulkDeleteBtn) {
+        bulkDeleteBtn.addEventListener('click', deleteSelected);
+      }
+
       refreshBtn.addEventListener('click', refresh);
       logoutBtn.addEventListener('click', logout);
 
@@ -589,6 +692,7 @@ function renderAll(){
         el.addEventListener('change', renderAll);
       });
 
+      syncBulkDeleteButton();
       refresh();
     })();
   </script>
