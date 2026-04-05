@@ -438,5 +438,70 @@
       alert(err.message || 'Failed to load admin employees panel');
     });
   </script>
+
+<script>
+(function () {
+  function getAdminToken() {
+    try {
+      return localStorage.getItem("sct_admin_token") || localStorage.getItem("adminToken") || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function parseJwt(token) {
+    try {
+      var part = token.split(".")[1];
+      if (!part) return null;
+      part = part.replace(/-/g, "+").replace(/_/g, "/");
+      while (part.length % 4) part += "=";
+      return JSON.parse(atob(part));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function redirectToAdmin() {
+    window.location.href = "https://www.safetychecktestltd.co.uk/#/admin?t=" + Date.now();
+  }
+
+  var token = getAdminToken();
+  if (!token) {
+    alert("Please log in to the Master Admin Control Center first.");
+    redirectToAdmin();
+    return;
+  }
+
+  var payload = parseJwt(token);
+  var role = payload && (payload.role || payload.type || "");
+  if (role && role !== "admin" && role !== "master_admin") {
+    alert("Access denied.");
+    redirectToAdmin();
+    return;
+  }
+
+  window.__SCT_ADMIN_TOKEN__ = token;
+
+  var origFetch = window.fetch;
+  window.fetch = function(input, init) {
+    init = init || {};
+    init.headers = init.headers || {};
+    if (init.headers instanceof Headers) {
+      if (!init.headers.has("Authorization")) {
+        init.headers.set("Authorization", "Bearer " + window.__SCT_ADMIN_TOKEN__);
+      }
+    } else if (!init.headers.Authorization && !init.headers.authorization) {
+      init.headers.Authorization = "Bearer " + window.__SCT_ADMIN_TOKEN__;
+    }
+    return origFetch(input, init).then(function(res) {
+      if (res.status === 401 || res.status === 403) {
+        redirectToAdmin();
+      }
+      return res;
+    });
+  };
+})();
+</script>
+
 </body>
 </html>
