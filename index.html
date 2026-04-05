@@ -21,5 +21,93 @@
   </head>
   <body>
     <div id="root"></div>
-  </body>
+  
+<script>
+(function () {
+  function addAdminShortcuts() {
+    if (window.location.hash && !window.location.hash.startsWith("#/admin")) return;
+
+    const adminEmail = localStorage.getItem("sct_admin_email") || "";
+    const adminRole = localStorage.getItem("sct_admin_role") || "";
+    const adminToken = localStorage.getItem("sct_admin_token") || "";
+
+    if (!adminToken) return;
+    if (!/master_admin|admin/i.test(adminRole)) return;
+
+    const logoutButtons = Array.from(document.querySelectorAll("button"))
+      .filter(btn => (btn.textContent || "").trim() === "Log Out");
+
+    if (!logoutButtons.length) return;
+    if (document.getElementById("sct-master-admin-shortcuts")) return;
+
+    const anchor = logoutButtons[0].parentElement || logoutButtons[0];
+    const wrap = document.createElement("div");
+    wrap.id = "sct-master-admin-shortcuts";
+    wrap.style.margin = "12px 0 18px";
+    wrap.style.padding = "14px";
+    wrap.style.border = "1px solid #dbeafe";
+    wrap.style.borderRadius = "14px";
+    wrap.style.background = "#f8fbff";
+    wrap.style.display = "flex";
+    wrap.style.flexWrap = "wrap";
+    wrap.style.gap = "10px";
+    wrap.style.alignItems = "center";
+
+    const title = document.createElement("div");
+    title.textContent = "Admin Shortcuts";
+    title.style.fontWeight = "700";
+    title.style.marginRight = "6px";
+    title.style.color = "#0f172a";
+    wrap.appendChild(title);
+
+    function makeBtn(label, href, bg) {
+      const a = document.createElement("a");
+      a.href = href;
+      a.textContent = label;
+      a.style.textDecoration = "none";
+      a.style.padding = "10px 14px";
+      a.style.borderRadius = "10px";
+      a.style.background = bg;
+      a.style.color = "#fff";
+      a.style.fontWeight = "700";
+      a.style.display = "inline-block";
+      return a;
+    }
+
+    wrap.appendChild(
+      makeBtn(
+        "Open Completion Panel",
+        "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now(),
+        "#2563eb"
+      )
+    );
+
+    wrap.appendChild(
+      makeBtn(
+        "Open Employees Panel",
+        "https://www.safetychecktestltd.co.uk/admin-employees/?t=" + Date.now(),
+        "#059669"
+      )
+    );
+
+    anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
+  }
+
+  function boot() {
+    addAdminShortcuts();
+    setTimeout(addAdminShortcuts, 700);
+    setTimeout(addAdminShortcuts, 1500);
+    setTimeout(addAdminShortcuts, 2500);
+  }
+
+  window.addEventListener("hashchange", boot);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
+</body>
 </html>
