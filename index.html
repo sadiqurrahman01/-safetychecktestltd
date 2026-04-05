@@ -21,94 +21,122 @@
   </head>
   <body>
     <div id="root"></div>
-  
-<script>
-(function () {
-  function addShortcuts() {
-    if ((window.location.hash || "").indexOf("#/admin") !== 0) return;
 
-    var token =
-      localStorage.getItem("sct_admin_token") ||
-      localStorage.getItem("adminToken") ||
-      "";
+    <script>
+      (function () {
+        function hasAdminSession() {
+          return !!(
+            localStorage.getItem("sct_admin_token") ||
+            localStorage.getItem("adminToken")
+          );
+        }
 
-    if (!token) return;
+        function inAdminArea() {
+          return (window.location.hash || "").indexOf("#/admin") === 0;
+        }
 
-    if (document.getElementById("sct-master-admin-shortcuts")) return;
+        function findOverviewTab() {
+          return Array.from(document.querySelectorAll("button, a")).find(function (el) {
+            return (el.textContent || "").trim() === "Overview";
+          });
+        }
 
-    var buttons = Array.from(document.querySelectorAll("button"));
-    var refreshBtn = buttons.find(function (b) {
-      return (b.textContent || "").trim() === "Refresh";
-    });
-    var logoutBtn = buttons.find(function (b) {
-      return (b.textContent || "").trim() === "Log Out";
-    });
+        function findHeaderBar() {
+          var logout = Array.from(document.querySelectorAll("button")).find(function (el) {
+            return (el.textContent || "").trim() === "Log Out";
+          });
+          if (logout && logout.parentElement) return logout.parentElement;
+          return null;
+        }
 
-    var anchor = logoutBtn || refreshBtn;
-    if (!anchor || !anchor.parentElement) return;
+        function makeLink(label, href, bg) {
+          var a = document.createElement("a");
+          a.href = href;
+          a.textContent = label;
+          a.style.display = "inline-flex";
+          a.style.alignItems = "center";
+          a.style.justifyContent = "center";
+          a.style.padding = "10px 14px";
+          a.style.borderRadius = "10px";
+          a.style.fontWeight = "700";
+          a.style.textDecoration = "none";
+          a.style.color = "#fff";
+          a.style.background = bg;
+          a.style.boxSizing = "border-box";
+          return a;
+        }
 
-    var wrap = document.createElement("div");
-    wrap.id = "sct-master-admin-shortcuts";
-    wrap.style.display = "flex";
-    wrap.style.flexWrap = "wrap";
-    wrap.style.gap = "10px";
-    wrap.style.marginTop = "12px";
-    wrap.style.width = "100%";
+        function removeShortcuts() {
+          var old = document.getElementById("sct-master-admin-shortcuts");
+          if (old) old.remove();
+        }
 
-    function makeLink(label, href, bg) {
-      var a = document.createElement("a");
-      a.href = href;
-      a.textContent = label;
-      a.style.display = "inline-flex";
-      a.style.alignItems = "center";
-      a.style.justifyContent = "center";
-      a.style.padding = "10px 14px";
-      a.style.borderRadius = "10px";
-      a.style.fontWeight = "700";
-      a.style.textDecoration = "none";
-      a.style.color = "#fff";
-      a.style.background = bg;
-      return a;
-    }
+        function injectShortcuts() {
+          if (!inAdminArea() || !hasAdminSession()) {
+            removeShortcuts();
+            return;
+          }
 
-    wrap.appendChild(
-      makeLink(
-        "Open Completion Panel",
-        "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now(),
-        "#2563eb"
-      )
-    );
+          if (document.getElementById("sct-master-admin-shortcuts")) return;
 
-    wrap.appendChild(
-      makeLink(
-        "Open Employees Panel",
-        "https://www.safetychecktestltd.co.uk/admin-employees/?t=" + Date.now(),
-        "#059669"
-      )
-    );
+          var headerBar = findHeaderBar();
+          var overviewTab = findOverviewTab();
 
-    anchor.parentElement.appendChild(wrap);
-  }
+          if (!headerBar || !overviewTab) return;
 
-  function boot() {
-    addShortcuts();
-    setTimeout(addShortcuts, 500);
-    setTimeout(addShortcuts, 1200);
-    setTimeout(addShortcuts, 2200);
-  }
+          var wrap = document.createElement("div");
+          wrap.id = "sct-master-admin-shortcuts";
+          wrap.style.display = "flex";
+          wrap.style.flexWrap = "wrap";
+          wrap.style.gap = "10px";
+          wrap.style.margin = "14px 0 18px 0";
 
-  window.addEventListener("load", boot);
-  window.addEventListener("hashchange", boot);
+          wrap.appendChild(
+            makeLink(
+              "Open Completion Panel",
+              "https://www.safetychecktestltd.co.uk/admin-completion/?t=" + Date.now(),
+              "#2563eb"
+            )
+          );
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-})();
-</script>
+          wrap.appendChild(
+            makeLink(
+              "Open Employees Panel",
+              "https://www.safetychecktestltd.co.uk/admin-employees/?t=" + Date.now(),
+              "#059669"
+            )
+          );
 
+          var target = overviewTab.closest("div");
+          if (target && target.parentElement) {
+            target.parentElement.insertBefore(wrap, target.nextSibling);
+            return;
+          }
+
+          if (headerBar.parentElement) {
+            headerBar.parentElement.insertBefore(wrap, headerBar.nextSibling);
+          }
+        }
+
+        function boot() {
+          injectShortcuts();
+          setTimeout(injectShortcuts, 400);
+          setTimeout(injectShortcuts, 1000);
+          setTimeout(injectShortcuts, 1800);
+        }
+
+        window.addEventListener("load", boot);
+        window.addEventListener("hashchange", function () {
+          removeShortcuts();
+          boot();
+        });
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", boot);
+        } else {
+          boot();
+        }
+      })();
+    </script>
   </body>
-</html>
-
 </html>
