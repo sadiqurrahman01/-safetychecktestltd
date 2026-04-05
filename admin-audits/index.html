@@ -196,6 +196,33 @@
         }
       }
 
+      async function loadAuditsPage(reset) {
+        if (reset) {
+          serverSkip = 0;
+          serverHasMore = true;
+          logs = [];
+        }
+
+        var url = API_BASE + '/api/admin/audits?limit=' + encodeURIComponent(String(serverPageSize)) + '&skip=' + encodeURIComponent(String(serverSkip));
+        var res = await fetch(url, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        var data = await res.json().catch(function(){ return {}; });
+        if (!res.ok || !data.ok) throw new Error((data && data.message) || 'Failed to load audits');
+
+        var batch = Array.isArray(data.logs) ? data.logs : [];
+        logs = reset ? batch : logs.concat(batch);
+        serverSkip = logs.length;
+        serverHasMore = !!data.hasMore;
+
+        if (loadMoreBtn) {
+          loadMoreBtn.style.display = serverHasMore ? 'inline-flex' : 'none';
+          loadMoreBtn.textContent = serverHasMore ? 'Load More' : 'All Loaded';
+        }
+
+        renderAll(false);
+      }
+
       async function loadAudits() {
         var result = await apiGet([
           "/api/admin/audit-logs",
@@ -353,7 +380,7 @@
         el.addEventListener("change", renderAll);
       });
 
-      refresh();
+      loadAuditsPage(true);
     })();
   </script>
 </body>
