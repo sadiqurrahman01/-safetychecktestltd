@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Portal Access Requests | Safety Check Test</title>
+  <title>Portal Requests | Safety Check Test</title>
   <style>
     body { font-family: Arial, sans-serif; background:#f8fafc; color:#0f172a; margin:0; padding:24px; }
     .wrap { max-width:1100px; margin:0 auto; }
@@ -25,7 +25,7 @@
   <div class="wrap">
     <div class="top">
       <div>
-        <h1 style="margin:0;">Portal Access Requests</h1>
+        <h1 style="margin:0;">Portal Requests</h1>
         <div class="muted">Separate queue for portal onboarding requests.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -85,7 +85,7 @@
     function render(items) {
       const el = document.getElementById('list');
       if (!items.length) {
-        el.innerHTML = '<div class="empty">No portal access requests found.</div>';
+        el.innerHTML = '<div class="empty">No portal requests found.</div>';
         return;
       }
 
@@ -142,10 +142,10 @@
           String(job.serviceType || '').trim().toLowerCase() === 'portal access'
         );
 
-        setStatus('Loaded ' + requests.length + ' portal access request(s).');
+        setStatus('Loaded ' + requests.length + ' portal request(s).');
         render(requests);
       } catch (err) {
-        showError(err.message || 'Failed to load portal access requests');
+        showError(err.message || 'Failed to load portal requests');
         setStatus('Load failed');
       }
     }
