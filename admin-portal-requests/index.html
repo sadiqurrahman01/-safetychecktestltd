@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Portal Access Requests | Safety Check Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f8fafc; color:#0f172a; margin:0; padding:24px; }
+    .wrap { max-width:1100px; margin:0 auto; }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:18px; margin-bottom:16px; }
+    .top { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .btn { border:0; border-radius:10px; padding:10px 14px; background:#0f172a; color:#fff; cursor:pointer; text-decoration:none; display:inline-block; }
+    .btn-light { background:#fff; color:#0f172a; border:1px solid #cbd5e1; }
+    .btn-danger { background:#991b1b; color:#fff; }
+    .muted { color:#64748b; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:12px; }
+    .label { font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:.04em; }
+    .value { font-weight:600; margin-top:4px; white-space:pre-wrap; word-break:break-word; }
+    .status { margin:12px 0 18px; color:#0f172a; font-weight:600; }
+    .empty { background:#ecfeff; border:1px solid #a5f3fc; color:#155e75; border-radius:12px; padding:14px; }
+    .error { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:12px; padding:14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1 style="margin:0;">Portal Access Requests</h1>
+        <div class="muted">Separate queue for portal onboarding requests.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-light" href="/admin-completion/">Back to Admin Completion</a>
+        <button class="btn" onclick="loadRequests()">Refresh</button>
+      </div>
+    </div>
+
+    <div id="status" class="status">Loading...</div>
+    <div id="error" class="error" style="display:none;"></div>
+    <div id="list"></div>
+  </div>
+
+  <script>
+    const API = 'https://api.safetychecktestltd.co.uk';
+    const token =
+      localStorage.getItem('adminToken') ||
+      localStorage.getItem('token') ||
+      sessionStorage.getItem('adminToken') ||
+      sessionStorage.getItem('token');
+
+    function esc(v) {
+      return String(v == null ? '' : v)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function setStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function showError(msg) {
+      const box = document.getElementById('error');
+      box.style.display = 'block';
+      box.textContent = msg;
+    }
+
+    async function deleteJob(id, ref) {
+      if (!token) return alert('Admin token missing. Log in to admin first.');
+      if (!confirm('Delete portal access request ' + ref + '?')) return;
+      try {
+        const res = await fetch(API + '/api/admin/portal-jobs/' + encodeURIComponent(id), {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || 'Delete failed');
+        await loadRequests();
+      } catch (err) {
+        alert(err.message || 'Delete failed');
+      }
+    }
+
+    function render(items) {
+      const el = document.getElementById('list');
+      if (!items.length) {
+        el.innerHTML = '<div class="empty">No portal access requests found.</div>';
+        return;
+      }
+
+      el.innerHTML = items.map(job => `
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">${esc(job.organisationName || 'Portal Access Request')}</div>
+              <div class="muted">Reference: ${esc(job.reference || '-')} | Updated: ${esc(new Date(job.updatedAt || job.createdAt || Date.now()).toLocaleString())}</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-light" onclick="window.print()">Print</button>
+              <button class="btn-danger btn" onclick="deleteJob('${esc(job._id)}','${esc(job.reference || '')}')">Delete</button>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div><div class="label">Service</div><div class="value">${esc(job.serviceType || '-')}</div></div>
+            <div><div class="label">Organisation</div><div class="value">${esc(job.organisationName || '-')}</div></div>
+            <div><div class="label">Contact</div><div class="value">${esc(job.contactName || '-')}</div></div>
+            <div><div class="label">Email</div><div class="value">${esc(job.email || '-')}</div></div>
+            <div><div class="label">Phone</div><div class="value">${esc(job.phone || '-')}</div></div>
+            <div><div class="label">Postcode</div><div class="value">${esc(job.postcode || '-')}</div></div>
+            <div><div class="label">Address</div><div class="value">${esc(job.siteAddress || '-')}</div></div>
+            <div><div class="label">Source</div><div class="value">${esc(job.source || '-')}</div></div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <div class="label">Description</div>
+            <div class="value">${esc(job.description || '-')}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function loadRequests() {
+      document.getElementById('error').style.display = 'none';
+      if (!token) {
+        showError('Admin token missing. Open admin first and log in, then reload this page.');
+        setStatus('Not loaded');
+        return;
+      }
+
+      try {
+        const res = await fetch(API + '/api/admin/portal-jobs', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to load portal jobs');
+
+        const jobs = Array.isArray(data.jobs) ? data.jobs : [];
+        const requests = jobs.filter(job =>
+          String(job.source || '') === 'portal_request_access' ||
+          String(job.serviceType || '').trim().toLowerCase() === 'portal access'
+        );
+
+        setStatus('Loaded ' + requests.length + ' portal access request(s).');
+        render(requests);
+      } catch (err) {
+        showError(err.message || 'Failed to load portal access requests');
+        setStatus('Load failed');
+      }
+    }
+
+    loadRequests();
+  </script>
+</body>
+</html>

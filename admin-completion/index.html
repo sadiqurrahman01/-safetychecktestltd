@@ -277,7 +277,18 @@
         const data = await res.json();
         if(!res.ok || !data.ok) throw new Error(data.message || 'Failed to load jobs');
         allJobs = Array.isArray(data.jobs) ? data.jobs : [];
-        setStatus('Loaded ' + allJobs.length + ' job(s).');
+        const portalAccessRequests = allJobs.filter(job =>
+  String(job.source || '') === 'portal_request_access' ||
+  String(job.serviceType || '').trim().toLowerCase() === 'portal access'
+);
+const visibleJobs = allJobs.filter(job =>
+  !(String(job.source || '') === 'portal_request_access' ||
+    String(job.serviceType || '').trim().toLowerCase() === 'portal access')
+);
+setStatus(
+  'Loaded ' + visibleJobs.length + ' job(s).' +
+  (portalAccessRequests.length ? ' Hidden portal access requests: ' + portalAccessRequests.length + '.' : '')
+);
         render();
       }catch(err){
         setStatus(err.message || 'Failed to load jobs');
