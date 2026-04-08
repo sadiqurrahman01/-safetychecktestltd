@@ -1,0 +1,5 @@
+.admin-fix-backups/
+tmp-admin-check/
+*.bak
+*.bak-*
+*.syntaxfix-*
