@@ -118,6 +118,31 @@
   </div>
 
   <script>
+    function getAdminToken() {
+      try {
+        const qs = new URLSearchParams(window.location.search);
+        const urlToken = qs.get('token') || '';
+        if (urlToken) {
+          localStorage.setItem('sct_admin_token', urlToken);
+          sessionStorage.setItem('sct_admin_token', urlToken);
+          localStorage.setItem('adminToken', urlToken);
+          sessionStorage.setItem('adminToken', urlToken);
+        }
+      } catch (e) {}
+      return (
+        localStorage.getItem('sct_admin_token') ||
+        sessionStorage.getItem('sct_admin_token') ||
+        localStorage.getItem('adminToken') ||
+        sessionStorage.getItem('adminToken') ||
+        localStorage.getItem('token') ||
+        sessionStorage.getItem('token') ||
+        ''
+      );
+    }
+
+    const token = getAdminToken();
+    window.__SCT_ADMIN_TOKEN__ = token;
+
     (function () {
       var API = "https://api.safetychecktestltd.co.uk";
       var token =
