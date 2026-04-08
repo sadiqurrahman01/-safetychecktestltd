@@ -135,7 +135,6 @@
       );
     }
 
-
     function esc(v) {
       return String(v == null ? '' : v)
         .replace(/&/g, '&amp;')
@@ -281,23 +280,10 @@
       document.getElementById('error').style.display = 'none';
 
       const liveToken = readAdminToken();
-      setDebug({
-        href: location.href,
-        hasLiveToken: !!liveToken,
-        hasSct: !!localStorage.getItem('sct_admin_token') || !!sessionStorage.getItem('sct_admin_token'),
-        hasAdminToken: !!localStorage.getItem('adminToken') || !!sessionStorage.getItem('adminToken'),
-        hasToken: !!localStorage.getItem('token') || !!sessionStorage.getItem('token'),
-        phase: 'before-fetch'
-      });
 
       if (!liveToken) {
         showError('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
         setStatus('Not loaded');
-        setDebug({
-          href: location.href,
-          hasLiveToken: !!liveToken,
-          phase: 'no-token'
-        });
         return;
       }
 
@@ -312,7 +298,6 @@
           String(job.source || '') === 'portal_request_access' ||
           String(job.serviceType || '').trim().toLowerCase() === 'portal access'
         );
-
 
         if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to load portal jobs');
 
