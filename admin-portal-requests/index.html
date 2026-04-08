@@ -103,6 +103,21 @@
 
   <script>
     const API = 'https://api.safetychecktestltd.co.uk';
+
+      (function bootstrapTokenFromUrl() {
+        try {
+          const urlToken = new URLSearchParams(window.location.search).get('token') || '';
+          if (!urlToken) return;
+          localStorage.setItem('sct_admin_token', urlToken);
+          sessionStorage.setItem('sct_admin_token', urlToken);
+          localStorage.setItem('adminToken', urlToken);
+          sessionStorage.setItem('adminToken', urlToken);
+          localStorage.setItem('token', urlToken);
+          sessionStorage.setItem('token', urlToken);
+        } catch (e) {
+          console.warn('portal token bootstrap failed', e);
+        }
+      })();
     const token =
       window.__SCT_ADMIN_TOKEN__ ||
       localStorage.getItem('sct_admin_token') ||
