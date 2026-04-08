@@ -118,15 +118,21 @@
           console.warn('portal token bootstrap failed', e);
         }
       })();
-    const token =
-      window.__SCT_ADMIN_TOKEN__ ||
-      localStorage.getItem('sct_admin_token') ||
-      sessionStorage.getItem('sct_admin_token') ||
-      localStorage.getItem('adminToken') ||
-      localStorage.getItem('token') ||
-      sessionStorage.getItem('adminToken') ||
-      sessionStorage.getItem('token') ||
-      '';
+    function readAdminToken() {
+      return (
+        window.__SCT_ADMIN_TOKEN__ ||
+        localStorage.getItem('sct_admin_token') ||
+        sessionStorage.getItem('sct_admin_token') ||
+        localStorage.getItem('adminToken') ||
+        localStorage.getItem('token') ||
+        sessionStorage.getItem('adminToken') ||
+        sessionStorage.getItem('token') ||
+        ''
+      );
+    }
+
+    const token = readAdminToken();
+    console.log('SCT portal token present:', !!token);
 
     function esc(v) {
       return String(v == null ? '' : v)
@@ -270,7 +276,10 @@
     async function loadRequests() {
       document.getElementById('error').style.display = 'none';
 
-      if (!token) {
+      const liveToken = readAdminToken();
+      console.log('SCT portal live token present:', !!liveToken);
+
+      if (!liveToken) {
         showError('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
         setStatus('Not loaded');
         return;
@@ -278,8 +287,9 @@
 
       try {
         const res = await fetch(API + '/api/admin/portal-jobs', {
-          headers: { Authorization: 'Bearer ' + token }
+          headers: { Authorization: 'Bearer ' + liveToken }
         });
+        console.log('SCT portal jobs response status:', res.status);
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to load portal jobs');
 
