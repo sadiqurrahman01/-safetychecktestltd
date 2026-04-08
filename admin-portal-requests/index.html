@@ -154,15 +154,6 @@
       box.style.display = 'block';
       box.textContent = msg;
     }
-
-    function setDebug(obj) {
-      const pre = document.getElementById('debugPre');
-      if (!pre) return;
-      try {
-        pre.textContent = JSON.stringify(obj, null, 2);
-      } catch (e) {
-        pre.textContent = String(obj);
-      }
     }
 
     async function deleteJob(id, ref) {
@@ -322,16 +313,6 @@
           String(job.serviceType || '').trim().toLowerCase() === 'portal access'
         );
 
-        setDebug({
-          href: location.href,
-          hasLiveToken: !!liveToken,
-          responseOk: !!res.ok,
-          responseStatus: res.status,
-          dataOk: !!(data && data.ok),
-          jobsCount: jobs.length,
-          portalRequestsCount: requests.length,
-          phase: 'after-fetch'
-        });
 
         if (!res.ok || !data.ok) throw new Error(data.message || 'Failed to load portal jobs');
 
@@ -340,12 +321,6 @@
       } catch (err) {
         showError(err.message || 'Failed to load portal requests');
         setStatus('Load failed');
-        setDebug({
-          href: location.href,
-          hasLiveToken: !!liveToken,
-          error: err && err.message ? err.message : String(err),
-          phase: 'catch'
-        });
       }
     }
 
