@@ -20,6 +20,36 @@
     .empty { background:#ecfeff; border:1px solid #a5f3fc; color:#155e75; border-radius:12px; padding:14px; }
     .error { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:12px; padding:14px; }
   </style>
+
+    <script>
+      (function () {
+        try {
+          var url = new URL(window.location.href);
+          var hash = window.location.hash || "";
+          var hashQuery = "";
+          if (hash.includes("?")) hashQuery = hash.split("?")[1] || "";
+          var hashParams = new URLSearchParams(hashQuery);
+          var searchParams = url.searchParams;
+
+          var token =
+            searchParams.get("token") ||
+            hashParams.get("token") ||
+            localStorage.getItem("sct_admin_token") ||
+            sessionStorage.getItem("sct_admin_token") ||
+            "";
+
+          if (token) {
+            localStorage.setItem("sct_admin_token", token);
+            sessionStorage.setItem("sct_admin_token", token);
+          }
+
+          window.__SCT_ADMIN_TOKEN__ = token;
+        } catch (e) {
+          console.error("Token bootstrap failed", e);
+        }
+      })();
+    </script>
+
 </head>
 <body>
   <div class="wrap">
@@ -67,7 +97,7 @@
     }
 
     async function deleteJob(id, ref) {
-      if (!token) return alert('Admin token missing. Log in to admin first.');
+      if (!token) return alert('Admin token missing. Open admin first and log in, or open this page from the Admin button again.');
       if (!confirm('Delete portal access request ' + ref + '?')) return;
       try {
         const res = await fetch(API + '/api/admin/portal-jobs/' + encodeURIComponent(id), {
@@ -192,7 +222,7 @@
     async function loadRequests() {
       document.getElementById('error').style.display = 'none';
       if (!token) {
-        showError('Admin token missing. Open admin first and log in, then reload this page.');
+        showError('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
         setStatus('Not loaded');
         return;
       }
