@@ -19,37 +19,44 @@
     .status { margin:12px 0 18px; color:#0f172a; font-weight:600; }
     .empty { background:#ecfeff; border:1px solid #a5f3fc; color:#155e75; border-radius:12px; padding:14px; }
     .error { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:12px; padding:14px; }
+    .actions { margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; }
+    .row { margin-top:14px; }
   </style>
 
-    <script>
-      (function () {
-        try {
-          var url = new URL(window.location.href);
-          var hash = window.location.hash || "";
-          var hashQuery = "";
-          if (hash.includes("?")) hashQuery = hash.split("?")[1] || "";
-          var hashParams = new URLSearchParams(hashQuery);
-          var searchParams = url.searchParams;
+  <script>
+    (function () {
+      try {
+        var url = new URL(window.location.href);
+        var searchParams = url.searchParams;
+        var hash = window.location.hash || "";
+        var hashQuery = hash.indexOf("?") >= 0 ? hash.split("?")[1] : "";
+        var hashParams = new URLSearchParams(hashQuery);
 
-          var token =
-            searchParams.get("token") ||
-            hashParams.get("token") ||
-            localStorage.getItem("sct_admin_token") ||
-            sessionStorage.getItem("sct_admin_token") ||
-            "";
+        var token =
+          searchParams.get("token") ||
+          hashParams.get("token") ||
+          localStorage.getItem("sct_admin_token") ||
+          sessionStorage.getItem("sct_admin_token") ||
+          localStorage.getItem("adminToken") ||
+          localStorage.getItem("token") ||
+          sessionStorage.getItem("adminToken") ||
+          sessionStorage.getItem("token") ||
+          "";
 
-          if (token) {
-            localStorage.setItem("sct_admin_token", token);
-            sessionStorage.setItem("sct_admin_token", token);
-          }
-
-          window.__SCT_ADMIN_TOKEN__ = token;
-        } catch (e) {
-          console.error("Token bootstrap failed", e);
+        if (token) {
+          localStorage.setItem("sct_admin_token", token);
+          sessionStorage.setItem("sct_admin_token", token);
+          localStorage.setItem("adminToken", token);
+          sessionStorage.setItem("adminToken", token);
         }
-      })();
-    </script>
 
+        window.__SCT_ADMIN_TOKEN__ = token;
+      } catch (err) {
+        console.error("Portal token bootstrap failed", err);
+        window.__SCT_ADMIN_TOKEN__ = "";
+      }
+    })();
+  </script>
 </head>
 <body>
   <div class="wrap">
@@ -72,10 +79,14 @@
   <script>
     const API = 'https://api.safetychecktestltd.co.uk';
     const token =
+      window.__SCT_ADMIN_TOKEN__ ||
+      localStorage.getItem('sct_admin_token') ||
+      sessionStorage.getItem('sct_admin_token') ||
       localStorage.getItem('adminToken') ||
       localStorage.getItem('token') ||
       sessionStorage.getItem('adminToken') ||
-      sessionStorage.getItem('token');
+      sessionStorage.getItem('token') ||
+      '';
 
     function esc(v) {
       return String(v == null ? '' : v)
@@ -97,8 +108,9 @@
     }
 
     async function deleteJob(id, ref) {
-      if (!token) return alert('Admin token missing. Open admin first and log in, or open this page from the Admin button again.');
+      if (!token) return alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
       if (!confirm('Delete portal access request ' + ref + '?')) return;
+
       try {
         const res = await fetch(API + '/api/admin/portal-jobs/' + encodeURIComponent(id), {
           method: 'DELETE',
@@ -112,7 +124,6 @@
       }
     }
 
-    
     function assignPortalJob(encodedJob) {
       try {
         const job = JSON.parse(decodeURIComponent(encodedJob));
@@ -130,7 +141,7 @@
           portalJobId: job._id || '',
           createdAt: job.createdAt || ''
         }));
-        window.open('/#/admin', '_blank');
+        window.open('/#/admin?t=' + Date.now(), '_blank');
       } catch (err) {
         alert('Failed to prepare job draft');
       }
@@ -153,7 +164,7 @@
           portalJobId: job._id || '',
           createdAt: job.createdAt || ''
         }));
-        window.open('/admin-employees/','_blank');
+        window.open('/admin-employees/?t=' + Date.now(), '_blank');
       } catch (err) {
         alert('Failed to prepare employee assignment');
       }
@@ -163,15 +174,15 @@
       try {
         const job = JSON.parse(decodeURIComponent(encodedJob));
         localStorage.setItem('sctPortalAutoAssignDraft', JSON.stringify(job));
-        window.open('/admin-employees/','_blank');
+        window.open('/admin-employees/?t=' + Date.now(), '_blank');
       } catch (err) {
         alert('Failed to prepare auto assignment');
       }
     }
 
-
     function render(items) {
       const el = document.getElementById('list');
+
       if (!items.length) {
         el.innerHTML = '<div class="empty">No portal requests found.</div>';
         return;
@@ -186,7 +197,7 @@
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button class="btn btn-light" onclick="window.print()">Print</button>
-              <button class="btn-danger btn" onclick="deleteJob('${esc(job._id)}','${esc(job.reference || '')}')">Delete</button>
+              <button class="btn btn-danger" onclick="deleteJob('${esc(job._id)}','${esc(job.reference || '')}')">Delete</button>
             </div>
           </div>
 
@@ -201,19 +212,16 @@
             <div><div class="label">Source</div><div class="value">${esc(job.source || '-')}</div></div>
           </div>
 
-          <div style="margin-top:14px;">
-            <div class="label">Description</div>
-                      <div class="row">
+          <div class="row">
             <div class="label">Description</div>
             <div class="value">${esc(job.description || '-')}</div>
           </div>
 
-          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+          <div class="actions">
             <button class="btn" onclick='assignPortalJob("${encodeURIComponent(JSON.stringify(job))}")'>Assign Job</button>
             <button class="btn" onclick='assignPortalJobToEmployee("${encodeURIComponent(JSON.stringify(job))}")'>Assign To Employee</button>
             <button class="btn" onclick='autoAssignPortalJob("${encodeURIComponent(JSON.stringify(job))}")'>Auto Assign</button>
-            <button class="btn" onclick="window.open('/#/admin','_blank')">Open Admin</button>
-          </div>
+            <button class="btn btn-light" onclick="window.open('/#/admin?t=' + Date.now(), '_blank')">Open Admin</button>
           </div>
         </div>
       `).join('');
@@ -221,6 +229,7 @@
 
     async function loadRequests() {
       document.getElementById('error').style.display = 'none';
+
       if (!token) {
         showError('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
         setStatus('Not loaded');
