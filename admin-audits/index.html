@@ -171,6 +171,13 @@
       var sortEl = document.getElementById("sortOrder");
 
       try {
+        if (searchEl) searchEl.value = '';
+        if (actionEl) actionEl.value = 'all';
+        if (roleEl) roleEl.value = 'all';
+        if (sortEl) sortEl.value = 'newest';
+      } catch (e) {}
+
+      try {
         if (actionEl && (!actionEl.value || actionEl.value === '')) actionEl.value = 'all';
         if (roleEl && (!roleEl.value || roleEl.value === '')) roleEl.value = 'all';
         if (sortEl && (!sortEl.value || sortEl.value === '')) sortEl.value = 'newest';
@@ -545,6 +552,7 @@
 
       function renderAll() {
         applyFilters();
+        state.filtered = state.audits.slice();
         renderStats();
         renderList();
       }
