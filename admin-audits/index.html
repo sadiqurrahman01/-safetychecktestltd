@@ -170,6 +170,12 @@
       var roleEl = document.getElementById("roleFilter");
       var sortEl = document.getElementById("sortOrder");
 
+      try {
+        if (actionEl && (!actionEl.value || actionEl.value === '')) actionEl.value = 'all';
+        if (roleEl && (!roleEl.value || roleEl.value === '')) roleEl.value = 'all';
+        if (sortEl && (!sortEl.value || sortEl.value === '')) sortEl.value = 'newest';
+      } catch (e) {}
+
 
       function setAuditViewMode(mode) {
         auditViewMode = mode === "compact" ? "compact" : "expanded";
