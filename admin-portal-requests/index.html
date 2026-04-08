@@ -131,8 +131,6 @@
       );
     }
 
-    const token = readAdminToken();
-    console.log('SCT portal token present:', !!token);
 
     function esc(v) {
       return String(v == null ? '' : v)
@@ -154,13 +152,14 @@
     }
 
     async function deleteJob(id, ref) {
-      if (!token) return alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
+      const liveToken = readAdminToken();
+      if (!liveToken) return alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
       if (!confirm('Delete portal access request ' + ref + '?')) return;
 
       try {
         const res = await fetch(API + '/api/admin/portal-jobs/' + encodeURIComponent(id), {
           method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + token }
+          headers: { Authorization: 'Bearer ' + liveToken }
         });
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.message || 'Delete failed');
@@ -187,7 +186,7 @@
           portalJobId: job._id || '',
           createdAt: job.createdAt || ''
         }));
-        window.open('/#/admin?t=' + Date.now(), '_blank');
+        window.open('/#/admin?t=' + Date.now() + '&token=' + encodeURIComponent(readAdminToken()), '_blank');
       } catch (err) {
         alert('Failed to prepare job draft');
       }
@@ -210,7 +209,7 @@
           portalJobId: job._id || '',
           createdAt: job.createdAt || ''
         }));
-        window.open('/admin-employees/?t=' + Date.now(), '_blank');
+        window.open('/admin-employees/?t=' + Date.now() + '&token=' + encodeURIComponent(readAdminToken()), '_blank');
       } catch (err) {
         alert('Failed to prepare employee assignment');
       }
@@ -220,7 +219,7 @@
       try {
         const job = JSON.parse(decodeURIComponent(encodedJob));
         localStorage.setItem('sctPortalAutoAssignDraft', JSON.stringify(job));
-        window.open('/admin-employees/?t=' + Date.now(), '_blank');
+        window.open('/admin-employees/?t=' + Date.now() + '&token=' + encodeURIComponent(readAdminToken()), '_blank');
       } catch (err) {
         alert('Failed to prepare auto assignment');
       }
@@ -267,7 +266,7 @@
             <button class="btn" onclick='assignPortalJob("${encodeURIComponent(JSON.stringify(job))}")'>Assign Job</button>
             <button class="btn" onclick='assignPortalJobToEmployee("${encodeURIComponent(JSON.stringify(job))}")'>Assign To Employee</button>
             <button class="btn" onclick='autoAssignPortalJob("${encodeURIComponent(JSON.stringify(job))}")'>Auto Assign</button>
-            <button class="btn btn-light" onclick="window.open('/#/admin?t=' + Date.now(), '_blank')">Open Admin</button>
+            <button class="btn btn-light" onclick="window.open('/#/admin?t=' + Date.now() + '&token=' + encodeURIComponent(readAdminToken()), '_blank')">Open Admin</button>
           </div>
         </div>
       `).join('');
