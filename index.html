@@ -18,7 +18,35 @@
     </script>
     <script type="module" crossorigin src="/assets/index-audits-button.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-nqMpL4T3.css">
-  </head>
+  
+  <style>
+    @media (max-width: 768px) {
+      .about-section, #about {
+        padding: 24px 16px !important;
+      }
+      .about-section h2, #about h2,
+      .about-section h3, #about h3 {
+        line-height: 1.25 !important;
+        margin-bottom: 12px !important;
+      }
+      .about-section p, #about p,
+      .about-section li, #about li {
+        font-size: 15px !important;
+        line-height: 1.65 !important;
+      }
+      .about-section .grid, #about .grid,
+      .about-section .cards, #about .cards {
+        grid-template-columns: 1fr !important;
+      }
+      .about-section a, #about a,
+      .about-section button, #about button {
+        width: 100% !important;
+        text-align: center !important;
+      }
+    }
+  </style>
+
+</head>
   <body>
     <div id="root"></div>
   </body>
