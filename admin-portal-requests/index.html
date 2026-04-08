@@ -82,6 +82,64 @@
       }
     }
 
+    
+    function assignPortalJob(encodedJob) {
+      try {
+        const job = JSON.parse(decodeURIComponent(encodedJob));
+        localStorage.setItem('sctPortalAssignDraft', JSON.stringify({
+          organisationName: job.organisationName || '',
+          serviceType: job.serviceType || 'Portal Access',
+          addressLine1: job.siteAddress || '',
+          postcode: job.postcode || '',
+          contactName: job.contactName || '',
+          email: job.email || '',
+          phone: job.phone || '',
+          description: job.description || '',
+          priority: job.priority || 'Normal',
+          source: job.source || '',
+          portalJobId: job._id || '',
+          createdAt: job.createdAt || ''
+        }));
+        window.open('/#/admin', '_blank');
+      } catch (err) {
+        alert('Failed to prepare job draft');
+      }
+    }
+
+    function assignPortalJobToEmployee(encodedJob) {
+      try {
+        const job = JSON.parse(decodeURIComponent(encodedJob));
+        localStorage.setItem('sctPortalAssignDraft', JSON.stringify({
+          organisationName: job.organisationName || '',
+          serviceType: job.serviceType || 'Portal Access',
+          addressLine1: job.siteAddress || '',
+          postcode: job.postcode || '',
+          contactName: job.contactName || '',
+          email: job.email || '',
+          phone: job.phone || '',
+          description: job.description || '',
+          priority: job.priority || 'Normal',
+          source: job.source || '',
+          portalJobId: job._id || '',
+          createdAt: job.createdAt || ''
+        }));
+        window.open('/admin-employees/','_blank');
+      } catch (err) {
+        alert('Failed to prepare employee assignment');
+      }
+    }
+
+    function autoAssignPortalJob(encodedJob) {
+      try {
+        const job = JSON.parse(decodeURIComponent(encodedJob));
+        localStorage.setItem('sctPortalAutoAssignDraft', JSON.stringify(job));
+        window.open('/admin-employees/','_blank');
+      } catch (err) {
+        alert('Failed to prepare auto assignment');
+      }
+    }
+
+
     function render(items) {
       const el = document.getElementById('list');
       if (!items.length) {
@@ -115,7 +173,17 @@
 
           <div style="margin-top:14px;">
             <div class="label">Description</div>
+                      <div class="row">
+            <div class="label">Description</div>
             <div class="value">${esc(job.description || '-')}</div>
+          </div>
+
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn" onclick='assignPortalJob("${encodeURIComponent(JSON.stringify(job))}")'>Assign Job</button>
+            <button class="btn" onclick='assignPortalJobToEmployee("${encodeURIComponent(JSON.stringify(job))}")'>Assign To Employee</button>
+            <button class="btn" onclick='autoAssignPortalJob("${encodeURIComponent(JSON.stringify(job))}")'>Auto Assign</button>
+            <button class="btn" onclick="window.open('/#/admin','_blank')">Open Admin</button>
+          </div>
           </div>
         </div>
       `).join('');
@@ -142,7 +210,7 @@
           String(job.serviceType || '').trim().toLowerCase() === 'portal access'
         );
 
-        setStatus('Loaded ' + requests.length + ' portal request(s).');
+        setStatus('Loaded ' + requests.length + ' portal request(s). Use Assign Job, Assign To Employee, or Auto Assign.');
         render(requests);
       } catch (err) {
         showError(err.message || 'Failed to load portal requests');
