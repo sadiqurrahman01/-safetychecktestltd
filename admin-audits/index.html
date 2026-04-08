@@ -155,6 +155,10 @@
         audits: [],
         filtered: []
       };
+
+      try {
+        localStorage.removeItem('sct_audit_preset');
+      } catch (e) {}
       var auditViewMode = localStorage.getItem("sct_audit_view_mode") || "expanded";
 
       var messageEl = document.getElementById("message");
@@ -223,8 +227,8 @@
         if (actionEl) actionEl.value = 'all';
         if (roleEl) roleEl.value = 'all';
         if (sortEl) sortEl.value = 'newest';
-        if (dateFromEl) dateFromEl.value = '';
-        if (dateToEl) dateToEl.value = '';
+        if (typeof dateFromEl !== 'undefined' && dateFromEl) dateFromEl.value = '';
+        if (typeof dateToEl !== 'undefined' && dateToEl) dateToEl.value = '';
       }
 
       function setDateRangeFromToday(days) {
