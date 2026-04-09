@@ -54,7 +54,7 @@ sessionStorage.setItem(`sct_admin_token`,t);
 localStorage.setItem(`adminToken`,t);
 sessionStorage.setItem(`adminToken`,t);
 }
-window.location.href=`https://www.safetychecktestltd.co.uk/#/admin?tab=overview&t=`+Date.now()+`&tab=jobs`;
+window.location.href=`https://www.safetychecktestltd.co.uk/#/admin?tab=jobs&t=`+Date.now();
 }catch(err){
 alert(`Failed to open jobs page`);
 }
