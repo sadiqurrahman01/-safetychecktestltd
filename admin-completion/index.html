@@ -336,7 +336,7 @@ setStatus(
       setStatus('Admin token cleared.');
     });
     document.getElementById('openAdmin').addEventListener('click', () => {
-      window.open('https://www.safetychecktestltd.co.uk/#/admin?t=' + Date.now(), '_blank');
+      window.open('https://www.safetychecktestltd.co.uk/#/admin?tab=overview&t=' + Date.now(), '_blank');
     });
 
     searchInput.addEventListener('input', render);
@@ -369,7 +369,7 @@ setStatus(
   }
 
   function redirectToAdmin() {
-    window.location.href = "https://www.safetychecktestltd.co.uk/#/admin?t=" + Date.now();
+    window.location.href = "https://www.safetychecktestltd.co.uk/#/admin?tab=overview&t=" + Date.now();
   }
 
   var token = getAdminToken();
