@@ -6,7 +6,30 @@
     <script>
       (function () {
         var path = location.pathname + location.search + location.hash;
-        sessionStorage.setItem("gh_redirect_path", path);
+        var pathname = String(location.pathname || "");
+        var hash = String(location.hash || "");
+        var isAdminEntry =
+          pathname === "/admin" ||
+          pathname === "/admin/" ||
+          hash === "#/admin" ||
+          hash.indexOf("#/admin?") === 0 ||
+          path === "/admin" ||
+          path.indexOf("/admin?") === 0;
+
+        try {
+          if (isAdminEntry) {
+            ["sct_admin_token","adminToken","token"].forEach(function (k) {
+              localStorage.removeItem(k);
+              sessionStorage.removeItem(k);
+            });
+            sessionStorage.setItem("gh_redirect_path", "/#/login?t=" + Date.now());
+          } else {
+            sessionStorage.setItem("gh_redirect_path", path);
+          }
+        } catch (e) {
+          sessionStorage.setItem("gh_redirect_path", isAdminEntry ? "/#/login?t=" + Date.now() : path);
+        }
+
         location.replace("/");
       })();
     </script>
