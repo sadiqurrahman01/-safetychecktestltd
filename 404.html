@@ -6,7 +6,23 @@
     <script>
       (function () {
         var path = location.pathname + location.search + location.hash;
-        sessionStorage.setItem("gh_redirect_path", path);
+        var pathname = String(location.pathname || "");
+        var hash = String(location.hash || "");
+        var isAdminEntry =
+          pathname === "/admin" ||
+          pathname === "/admin/" ||
+          hash === "#/admin" ||
+          hash.indexOf("#/admin?") === 0 ||
+          path === "/admin" ||
+          path.indexOf("/admin?") === 0;
+
+        try {
+          sessionStorage.setItem(
+            "gh_redirect_path",
+            isAdminEntry ? "/#/login?t=" + Date.now() : path
+          );
+        } catch (e) {}
+
         location.replace("/");
       })();
     </script>
