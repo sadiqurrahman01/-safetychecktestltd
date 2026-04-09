@@ -136,6 +136,27 @@
 })();
 </script>
 
+<script>
+(function () {
+  try {
+    var path = String(window.location.pathname || '');
+    var hash = String(window.location.hash || '');
+    var onAdminRoute =
+      path === '/admin' ||
+      path === '/admin/' ||
+      hash === '#/admin' ||
+      hash.indexOf('#/admin?') === 0;
+
+    if (onAdminRoute) {
+      ['sct_admin_token','adminToken','token'].forEach(function (k) {
+        try { localStorage.removeItem(k); } catch (e) {}
+        try { sessionStorage.removeItem(k); } catch (e) {}
+      });
+    }
+  } catch (e) {}
+})();
+</script>
+
 </head>
   <body>
     <div id="root"></div>
