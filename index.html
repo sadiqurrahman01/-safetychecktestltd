@@ -117,6 +117,25 @@
 </style>
 <!-- ABOUT CTA FINAL MOBILE FIX END -->
 
+
+<script>
+(function () {
+  try {
+    var path = String(window.location.pathname || '');
+    var hash = String(window.location.hash || '');
+    var isAdminEntry =
+      path === '/admin' ||
+      path === '/admin/' ||
+      hash === '#/admin' ||
+      hash.indexOf('#/admin?') === 0;
+
+    if (isAdminEntry) {
+      window.location.replace('/#/login?t=' + Date.now());
+    }
+  } catch (e) {}
+})();
+</script>
+
 </head>
   <body>
     <div id="root"></div>
