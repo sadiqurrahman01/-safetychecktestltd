@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PAT Pricing System - Safety Check Test Ltd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#0f172a}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .card{background:#fff;border:1px solid #dbe4f0;border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 10px 30px rgba(15,23,42,.08)}
+    h1{margin:0 0 6px;font-size:30px}
+    h2{margin:0 0 14px;font-size:20px}
+    .muted{color:#64748b;line-height:1.5}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}
+    input,textarea,select{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:12px;font-size:15px}
+    textarea{min-height:110px}
+    button{border:0;border-radius:12px;background:#0f766e;color:#fff;font-weight:800;padding:12px 16px;cursor:pointer}
+    button.secondary{background:#0f172a}
+    .total{font-size:38px;font-weight:900;color:#0f766e}
+    .breakdown{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px;white-space:pre-wrap;line-height:1.6}
+    .pill{display:inline-block;background:#dcfce7;color:#166534;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:800}
+    .warn{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;padding:12px;border-radius:12px}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <span class="pill">Safety Check Test Ltd</span>
+      <h1>PAT Pricing System</h1>
+      <p class="muted">
+        Standard rule: £75 call-out + £2 per PAT item. Minimum invoice £120.
+        Certificate included. No hourly charge unless agreed before the job.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Job details</h2>
+      <div class="grid">
+        <div>
+          <label>Customer / business name</label>
+          <input id="customer" placeholder="Bims Restaurant">
+        </div>
+        <div>
+          <label>Site / address</label>
+          <input id="site" placeholder="Restaurant address">
+        </div>
+        <div>
+          <label>PAT item count</label>
+          <input id="items" type="number" min="0" step="1" value="0">
+        </div>
+        <div>
+          <label>Call-out charge</label>
+          <input id="callout" type="number" min="0" step="0.01" value="75">
+        </div>
+        <div>
+          <label>Price per PAT item</label>
+          <input id="perItem" type="number" min="0" step="0.01" value="2">
+        </div>
+        <div>
+          <label>Minimum invoice</label>
+          <input id="minimum" type="number" min="0" step="0.01" value="120">
+        </div>
+        <div>
+          <label>Extra agreed charges</label>
+          <input id="extras" type="number" min="0" step="0.01" value="0">
+        </div>
+        <div>
+          <label>Manual final price override</label>
+          <input id="override" type="number" min="0" step="0.01" placeholder="Leave blank unless agreed">
+        </div>
+        <div>
+          <label>Start time</label>
+          <input id="start" value="12:30">
+        </div>
+        <div>
+          <label>Finish time</label>
+          <input id="finish" value="16:00">
+        </div>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="calculate()">Calculate PAT price</button>
+        <button class="secondary" onclick="copyInvoiceText()">Copy invoice text</button>
+        <button class="secondary" onclick="copyJobText()">Copy job notes</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Price result</h2>
+      <div class="total" id="total">£0.00</div>
+      <div class="breakdown" id="breakdown"></div>
+    </div>
+
+    <div class="card">
+      <h2>Invoice wording</h2>
+      <textarea id="invoiceText"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Admin job notes</h2>
+      <textarea id="jobText"></textarea>
+      <div class="warn" style="margin-top:12px">
+        Use this amount in Master Admin → Jobs → Invoice Amount. Then send the invoice email and attach/send the PAT certificate separately if needed.
+      </div>
+    </div>
+  </div>
+
+<script>
+function money(n){
+  return "£" + Number(n || 0).toFixed(2);
+}
+
+function val(id){
+  return document.getElementById(id).value;
+}
+
+function num(id){
+  const n = Number(String(val(id) || "0").replace(/,/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function calculate(){
+  const customer = val("customer").trim() || "Customer";
+  const site = val("site").trim() || "Site";
+  const items = Math.max(0, Math.round(num("items")));
+  const callout = num("callout");
+  const perItem = num("perItem");
+  const minimum = num("minimum");
+  const extras = num("extras");
+  const overrideRaw = String(val("override") || "").trim();
+  const override = overrideRaw === "" ? null : num("override");
+  const start = val("start").trim();
+  const finish = val("finish").trim();
+
+  const itemTotal = items * perItem;
+  const calculated = callout + itemTotal + extras;
+  const beforeOverride = Math.max(calculated, minimum);
+  const finalTotal = override !== null ? override : beforeOverride;
+
+  document.getElementById("total").textContent = money(finalTotal);
+
+  const breakdown =
+`PAT pricing breakdown
+
+Customer: ${customer}
+Site: ${site}
+
+Call-out: ${money(callout)}
+PAT items: ${items} x ${money(perItem)} = ${money(itemTotal)}
+Extra agreed charges: ${money(extras)}
+Minimum invoice rule: ${money(minimum)}
+${override !== null ? "Manual agreed override: " + money(override) : "Calculated total: " + money(beforeOverride)}
+
+Final invoice total: ${money(finalTotal)}
+
+Time on site: ${start || "-"} to ${finish || "-"}
+Hourly charging: Not charged by default unless agreed before the job.
+Certificate/report: Included.`;
+
+  document.getElementById("breakdown").textContent = breakdown;
+
+  document.getElementById("invoiceText").value =
+`PAT Testing Service - ${customer}
+
+PAT testing carried out at ${site}.
+
+Work included:
+- Site attendance and call-out
+- PAT inspection and testing
+- PAT certificate/report preparation
+
+Price breakdown:
+Call-out: ${money(callout)}
+PAT testing: ${items} item(s) x ${money(perItem)} = ${money(itemTotal)}
+${extras > 0 ? "Extra agreed charges: " + money(extras) + "\n" : ""}${override !== null ? "Agreed fixed price: " + money(override) + "\n" : ""}
+
+Total due: ${money(finalTotal)}
+
+Certificate included.
+No hourly charge has been added.`;
+
+  document.getElementById("jobText").value =
+`Job Type: PAT
+Title: PAT Testing - ${customer}
+Customer: ${customer}
+Site: ${site}
+Time attended: ${start || "-"} to ${finish || "-"}
+
+PAT pricing rule used:
+£75 call-out + £2 per PAT item, minimum invoice £120.
+Certificate included.
+No hourly charge unless agreed before the job.
+
+PAT items tested: ${items}
+Invoice amount: ${money(finalTotal)}
+Notes: Send invoice and PAT certificate/report.`;
+}
+
+function copyInvoiceText(){
+  calculate();
+  navigator.clipboard.writeText(document.getElementById("invoiceText").value);
+  alert("Invoice text copied");
+}
+
+function copyJobText(){
+  calculate();
+  navigator.clipboard.writeText(document.getElementById("jobText").value);
+  alert("Job notes copied");
+}
+
+calculate();
+</script>
+</body>
+</html>
