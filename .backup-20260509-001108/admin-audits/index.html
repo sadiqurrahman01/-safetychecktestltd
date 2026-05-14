@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Check Test Audits</title>
+  <style>
+    :root{
+      --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0; --text:#0f172a; --muted:#64748b;
+      --blue:#2563eb; --green:#059669; --purple:#7c3aed; --red:#dc2626; --amber:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .title{font-size:2rem;font-weight:800;margin:0 0 6px}
+    .small{color:var(--muted);font-size:.95rem}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn,.input,.select{
+      height:42px;border-radius:12px;font-size:.95rem
+    }
+    .btn{
+      border:1px solid var(--line);background:#fff;color:var(--text);padding:0 14px;
+      font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center
+    }
+    .btn-blue{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn-green{background:var(--green);border-color:var(--green);color:#fff}
+    .btn-purple{background:var(--purple);border-color:var(--purple);color:#fff}
+    .btn-red{background:var(--red);border-color:var(--red);color:#fff}
+    .toolbar,.card{
+      background:var(--card);border:1px solid var(--line);border-radius:18px;
+      box-shadow:0 12px 30px rgba(15,23,42,.06)
+    }
+    .toolbar{padding:16px;margin-bottom:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .card{padding:18px}
+    .input,.select{
+      width:100%;border:1px solid #cbd5e1;background:#fff;color:var(--text);padding:0 12px
+    }
+    .label{font-size:.9rem;font-weight:700;margin-bottom:6px;display:block}
+    .msg{padding:14px 16px;border-radius:12px;font-weight:700;margin-bottom:14px}
+    .ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+    .err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+    .stat .k{color:var(--muted);font-size:.9rem;margin-bottom:8px}
+    .stat .v{font-size:1.5rem;font-weight:800}
+    .list{display:grid;gap:14px}
+    .audit{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+    .audit-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f5f3ff;color:#6d28d9;font-weight:800;font-size:.78rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .box{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px}
+    pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:.86rem;color:#334155}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1 class="title">Audit Logs</h1>
+        <div class="small" id="who">Checking session...</div>
+      </div>
+      <div class="row" style="gap:8px;flex-wrap:wrap;align-items:center;">
+        <a class="btn btn-purple" href="https://www.safetychecktestltd.co.uk/#/admin">Back to Master Admin</a>
+        <button class="btn btn-green" id="exportJson">Export JSON</button>
+        <button class="btn" id="filteredCsvBtn">Export Filtered CSV</button>
+        <button class="btn" id="printBtn">Print View</button>
+        <button class="btn btn-blue" id="refreshBtn">Refresh</button>
+        <button class="btn" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+
+    <div id="message"></div>
+
+    <div class="toolbar">
+      <div>
+        <label class="label">Search</label>
+        <input class="input" id="search" placeholder="action, message, target, user, email" />
+      </div>
+      <div>
+        <label class="label">Action</label>
+        <input class="input" id="actionFilter" placeholder="e.g. portal_job_created" />
+      </div>
+      <div>
+        <label class="label">Role</label>
+        <select class="select" id="roleFilter">
+          <option value="all">all</option>
+          <option value="master_admin">master_admin</option>
+          <option value="admin">admin</option>
+          <option value="partner">partner</option>
+          <option value="council">council</option>
+        </select>
+      </div>
+      <div>
+        <label class="label">Sort</label>
+        <select class="select" id="sortOrder">
+          <option value="newest">newest first</option>
+          <option value="oldest">oldest first</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="auditViewRow" style="gap:8px;flex-wrap:wrap;margin:0 0 14px;">
+      <button class="btn" id="viewModeCompact" type="button">Compact View</button>
+      <button class="btn" id="viewModeExpanded" type="button">Expanded View</button>
+    </div>
+
+    <div class="row" id="auditPresetRow" style="gap:8px;flex-wrap:wrap;margin:0 0 14px;">
+      <button class="btn" id="presetTodayLogins" type="button">Today Logins</button>
+      <button class="btn" id="presetWeekEmployees" type="button">This Week Employees</button>
+      <button class="btn" id="presetPortal" type="button">Portal Jobs</button>
+      <button class="btn" id="presetPassword" type="button">Password Resets</button>
+      <button class="btn" id="presetClear" type="button">Clear Presets</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <script>
+    function getAdminToken() {
+      try {
+        const qs = new URLSearchParams(window.location.search);
+        const urlToken = qs.get('token') || '';
+        if (urlToken) {
+          localStorage.setItem('sct_admin_token', urlToken);
+          sessionStorage.setItem('sct_admin_token', urlToken);
+          localStorage.setItem('adminToken', urlToken);
+          sessionStorage.setItem('adminToken', urlToken);
+        }
+      } catch (e) {}
+      return (
+        localStorage.getItem('sct_admin_token') ||
+        sessionStorage.getItem('sct_admin_token') ||
+        localStorage.getItem('adminToken') ||
+        sessionStorage.getItem('adminToken') ||
+        localStorage.getItem('token') ||
+        sessionStorage.getItem('token') ||
+        ''
+      );
+    }
+
+    const token = getAdminToken();
+    window.__SCT_ADMIN_TOKEN__ = token;
+
+    (function () {
+      var API = "https://api.safetychecktestltd.co.uk";
+      var token =
+        localStorage.getItem("sct_admin_token") ||
+        localStorage.getItem("adminToken") ||
+        "";
+
+      var state = {
+        admin: null,
+        audits: [],
+        filtered: []
+      };
+
+      try {
+        localStorage.removeItem('sct_audit_preset');
+      } catch (e) {}
+      var auditViewMode = localStorage.getItem("sct_audit_view_mode") || "expanded";
+
+      var messageEl = document.getElementById("message");
+      var whoEl = document.getElementById("who");
+      var statsEl = document.getElementById("stats");
+      var listEl = document.getElementById("list");
+      var searchEl = document.getElementById("search");
+      var actionEl = document.getElementById("actionFilter");
+      var roleEl = document.getElementById("roleFilter");
+      var sortEl = document.getElementById("sortOrder");
+
+      try {
+        if (searchEl) searchEl.value = '';
+        if (actionEl) actionEl.value = 'all';
+        if (roleEl) roleEl.value = 'all';
+        if (sortEl) sortEl.value = 'newest';
+      } catch (e) {}
+
+      try {
+        if (actionEl && (!actionEl.value || actionEl.value === '')) actionEl.value = 'all';
+        if (roleEl && (!roleEl.value || roleEl.value === '')) roleEl.value = 'all';
+        if (sortEl && (!sortEl.value || sortEl.value === '')) sortEl.value = 'newest';
+      } catch (e) {}
+
+
+      function setAuditViewMode(mode) {
+        auditViewMode = mode === "compact" ? "compact" : "expanded";
+        try { localStorage.setItem("sct_audit_view_mode", auditViewMode); } catch (e) {}
+        var compactBtn = document.getElementById("viewModeCompact");
+        var expandedBtn = document.getElementById("viewModeExpanded");
+        if (compactBtn) compactBtn.style.opacity = auditViewMode === "compact" ? "1" : ".7";
+        if (expandedBtn) expandedBtn.style.opacity = auditViewMode === "expanded" ? "1" : ".7";
+        renderList();
+      }
+
+
+      window.copyAuditId = async function(id) {
+        try {
+          if (!id) return;
+          await navigator.clipboard.writeText(String(id));
+          msg("Audit ID copied: " + id, "ok");
+        } catch (e) {
+          msg("Could not copy audit ID", "err");
+        }
+      };
+
+      window.copyAuditJson = async function(id) {
+        try {
+          var item = ((state && state.audits) || []).find(function(x){
+            return String((x && (x._id || x.id)) || "") === String(id || "");
+          });
+          if (!item) {
+            msg("Audit JSON not found", "err");
+            return;
+          }
+          await navigator.clipboard.writeText(JSON.stringify(item, null, 2));
+          msg("Audit JSON copied.", "ok");
+        } catch (e) {
+          msg("Could not copy audit JSON", "err");
+        }
+      };
+
+      function msg(text, kind) {
+        messageEl.innerHTML = text ? '<div class="msg ' + (kind || 'ok') + '">' + text + '</div>' : '';
+      }
+
+      function escapeHtml(v) {
+        return String(v == null ? "" : v)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      
+      function clearAllAuditFilters() {
+        if (searchEl) searchEl.value = '';
+        if (actionEl) actionEl.value = 'all';
+        if (roleEl) roleEl.value = 'all';
+        if (sortEl) sortEl.value = 'newest';
+        if (typeof dateFromEl !== 'undefined' && dateFromEl) dateFromEl.value = '';
+        if (typeof dateToEl !== 'undefined' && dateToEl) dateToEl.value = '';
+      }
+
+      function setDateRangeFromToday(days) {
+        var now = new Date();
+        var start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        start.setDate(start.getDate() - (days - 1));
+        var end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        end.setDate(end.getDate() + 1);
+
+        function fmt(d) {
+          var y = d.getFullYear();
+          var m = String(d.getMonth() + 1).padStart(2, '0');
+          var day = String(d.getDate()).padStart(2, '0');
+          return y + '-' + m + '-' + day;
+        }
+
+        if (typeof dateFromEl !== 'undefined' && dateFromEl) dateFromEl.value = fmt(start);
+        if (typeof dateToEl !== 'undefined' && dateToEl) dateToEl.value = fmt(end);
+      }
+
+      function applyAuditPreset(name) {
+        clearAllAuditFilters();
+
+        if (name === 'todayLogins') {
+          if (searchEl) searchEl.value = 'admin_login admin_logout';
+          setDateRangeFromToday(1);
+        } else if (name === 'weekEmployees') {
+          if (searchEl) searchEl.value = 'employee_';
+          setDateRangeFromToday(7);
+        } else if (name === 'portal') {
+          if (searchEl) searchEl.value = 'portal_job_';
+        } else if (name === 'password') {
+          if (searchEl) searchEl.value = 'password_reset';
+        }
+
+        renderAll(true);
+      }
+
+      function getFilteredLogs() {
+        var q = String(searchEl && searchEl.value || '').trim().toLowerCase();
+        var action = String(actionEl && actionEl.value || 'all');
+        var role = String(roleEl && roleEl.value || 'all');
+        var sort = String(sortEl && sortEl.value || 'newest');
+
+        var filtered = (logs || []).filter(function(x){
+          var hay = [
+            x.action, x.message, x.targetType, x.targetId,
+            x.actorEmail, x.actorName, x.actorRole, x.targetEmail
+          ].join(' ').toLowerCase();
+
+          if (q && hay.indexOf(q) === -1) return false;
+          if (action !== 'all' && String(x.action || '') !== action) return false;
+          if (role !== 'all' && String(x.actorRole || '') !== role) return false;
+          return true;
+        });
+
+        filtered.sort(function(a, b){
+          var av = new Date(a.createdAt || 0).getTime();
+          var bv = new Date(b.createdAt || 0).getTime();
+          return sort === 'oldest' ? av - bv : bv - av;
+        });
+
+        return filtered;
+      }
+
+      window.printFilteredAudits = function () {
+        try {
+          var filtered = getFilteredLogs();
+          var rows = filtered.map(function (x) {
+            return '<tr>' +
+              '<td style="border:1px solid #ccc;padding:8px;vertical-align:top;">' + escapeHtml(x.createdAt || '-') + '</td>' +
+              '<td style="border:1px solid #ccc;padding:8px;vertical-align:top;">' + escapeHtml(x.action || '-') + '</td>' +
+              '<td style="border:1px solid #ccc;padding:8px;vertical-align:top;">' + escapeHtml(x.actorRole || '-') + '</td>' +
+              '<td style="border:1px solid #ccc;padding:8px;vertical-align:top;">' + escapeHtml(x.actorEmail || '-') + '</td>' +
+              '<td style="border:1px solid #ccc;padding:8px;vertical-align:top;">' + escapeHtml(x.targetType || '-') + '</td>' +
+              '<td style="border:1px solid #ccc;padding:8px;vertical-align:top;">' + escapeHtml(x.message || '-') + '</td>' +
+            '</tr>';
+          }).join('');
+
+          var w = window.open('', '_blank');
+          if (!w) {
+            msg('Could not open print window', 'err');
+            return;
+          }
+
+          w.document.write(
+            '<!doctype html><html><head><title>Audit Print View</title><meta charset="utf-8">' +
+            '<style>body{font-family:Arial,sans-serif;padding:24px;color:#111}h1{margin:0 0 8px;font-size:24px}p{margin:0 0 16px;color:#444}table{width:100%;border-collapse:collapse;font-size:12px}th{border:1px solid #ccc;padding:8px;background:#f3f4f6;text-align:left}td{word-break:break-word}</style>' +
+            '</head><body>' +
+            '<h1>Audit Logs</h1>' +
+            '<p>Filtered results: ' + String(filtered.length) + ' | Generated: ' + new Date().toLocaleString() + '</p>' +
+            '<table><thead><tr><th>Date</th><th>Action</th><th>Role</th><th>Email</th><th>Target</th><th>Message</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+            '</body></html>'
+          );
+          w.document.close();
+          w.focus();
+          w.print();
+        } catch (e) {
+          msg('Failed to open print view', 'err');
+        }
+      };
+
+
+      function logout() {
+        localStorage.removeItem("sct_admin_token");
+        localStorage.removeItem("adminToken");
+        window.location.href = "https://www.safetychecktestltd.co.uk/#/admin";
+      }
+
+      async function apiGet(paths) {
+        var lastErr = "Request failed";
+        for (var i = 0; i < paths.length; i++) {
+          try {
+            var res = await fetch(API + paths[i], {
+              headers: { Authorization: "Bearer " + token }
+            });
+            var txt = await res.text();
+            var data = txt ? JSON.parse(txt) : {};
+            if (res.ok && data && (data.ok !== false)) return { path: paths[i], data: data };
+            lastErr = (data && data.message) || ("Failed on " + paths[i]);
+          } catch (e) {
+            lastErr = e.message || "Request failed";
+          }
+        }
+        throw new Error(lastErr);
+      }
+
+      async function apiDelete(paths) {
+        var lastErr = "Delete failed";
+        for (var i = 0; i < paths.length; i++) {
+          try {
+            var res = await fetch(API + paths[i], {
+              method: "DELETE",
+              headers: { Authorization: "Bearer " + token }
+            });
+            var txt = await res.text();
+            var data = txt ? JSON.parse(txt) : {};
+            if (res.ok && data && (data.ok !== false)) return data;
+            lastErr = (data && data.message) || ("Failed on " + paths[i]);
+          } catch (e) {
+            lastErr = e.message || "Delete failed";
+          }
+        }
+        throw new Error(lastErr);
+      }
+
+      async function loadMe() {
+        var res = await fetch(API + "/api/admin/me", {
+          headers: { Authorization: "Bearer " + token }
+        });
+        var txt = await res.text();
+        var data = txt ? JSON.parse(txt) : {};
+        if (!res.ok || !data.ok) throw new Error((data && data.message) || "Session invalid");
+        state.admin = data.admin || null;
+        whoEl.textContent = (state.admin && state.admin.email ? state.admin.email : "Admin") +
+          (state.admin && state.admin.role ? " · " + state.admin.role : "");
+        if (!state.admin || (state.admin.role !== "master_admin" && state.admin.role !== "admin")) {
+          throw new Error("This audits page is only for admin or master admin");
+        }
+      }
+
+      async function loadAuditsPage(reset) {
+        if (reset) {
+          serverSkip = 0;
+          serverHasMore = true;
+          logs = [];
+        }
+
+        var url = API_BASE + '/api/admin/audits?limit=' + encodeURIComponent(String(serverPageSize)) + '&skip=' + encodeURIComponent(String(serverSkip));
+        var res = await fetch(url, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        var data = await res.json().catch(function(){ return {}; });
+        if (!res.ok || !data.ok) throw new Error((data && data.message) || 'Failed to load audits');
+
+        var batch = Array.isArray(data.logs) ? data.logs : [];
+        logs = reset ? batch : logs.concat(batch);
+        serverSkip = logs.length;
+        serverHasMore = !!data.hasMore;
+
+        if (loadMoreBtn) {
+          loadMoreBtn.style.display = serverHasMore ? 'inline-flex' : 'none';
+          loadMoreBtn.textContent = serverHasMore ? 'Load More' : 'All Loaded';
+        }
+
+        renderAll(false);
+      }
+
+      async function loadAudits() {
+        var result = await apiGet([
+          "/api/admin/audit-logs",
+          "/api/admin/audits"
+        ]);
+        var data = result.data || {};
+        state.audits = data.auditLogs || data.audits || data.logs || [];
+      }
+
+      function applyFilters() {
+        var q = (searchEl.value || "").trim().toLowerCase();
+        var actionQ = (actionEl.value || "").trim().toLowerCase();
+        var roleQ = roleEl.value || "all";
+        var sortQ = sortEl.value || "newest";
+
+        var arr = state.audits.filter(function (x) {
+          var hay = [
+            x.action, x.message, x.targetType, x.targetId,
+            x.adminEmail, x.userEmail, x.email,
+            x.adminRole, x.userRole, x.role
+          ].join(" ").toLowerCase();
+
+          var roleVal = String(x.adminRole || x.userRole || x.role || "").toLowerCase();
+          var actionVal = String(x.action || "").toLowerCase();
+
+          if (q && hay.indexOf(q) === -1) return false;
+          if (actionQ && actionVal.indexOf(actionQ) === -1) return false;
+          if (roleQ !== "all" && roleVal !== roleQ) return false;
+          return true;
+        });
+
+        arr.sort(function (a, b) {
+          var ta = new Date(a.createdAt || a.timestamp || 0).getTime();
+          var tb = new Date(b.createdAt || b.timestamp || 0).getTime();
+          return sortQ === "oldest" ? ta - tb : tb - ta;
+        });
+
+        state.filtered = arr;
+      }
+
+      function renderStats() {
+        var total = state.filtered.length;
+        var deletes = state.filtered.filter(function (x) { return String(x.action || "").toLowerCase().indexOf("delete") !== -1; }).length;
+        var creates = state.filtered.filter(function (x) { return String(x.action || "").toLowerCase().indexOf("create") !== -1; }).length;
+        var updates = state.filtered.filter(function (x) { return String(x.action || "").toLowerCase().indexOf("update") !== -1 || String(x.action || "").toLowerCase().indexOf("patch") !== -1; }).length;
+
+        statsEl.innerHTML =
+          '<div class="stat"><div class="k">Filtered Logs</div><div class="v">' + total + '</div></div>' +
+          '<div class="stat"><div class="k">Create Actions</div><div class="v">' + creates + '</div></div>' +
+          '<div class="stat"><div class="k">Update Actions</div><div class="v">' + updates + '</div></div>' +
+          '<div class="stat"><div class="k">Delete Actions</div><div class="v">' + deletes + '</div></div>';
+      }
+
+      function renderList() {
+        if (!state.filtered.length) {
+          listEl.innerHTML = '<div class="card"><div class="small">No audit logs found.</div></div>';
+          return;
+        }
+
+        listEl.innerHTML = state.filtered.map(function (x) {
+          var id = x._id || x.id || "";
+          var role = x.adminRole || x.userRole || x.role || "-";
+          var email = x.adminEmail || x.userEmail || x.email || "-";
+          var created = x.createdAt || x.timestamp || "";
+          var meta = x.metadata || x.meta || {};
+          var canDelete = state.admin && state.admin.role === "master_admin" && id;
+
+          return '' +
+            '<div class="audit">' +
+              '<div class="audit-top">' +
+                '<div>' +
+                  '<h3 style="margin:0 0 6px;font-size:1.05rem;">' + escapeHtml(x.action || "audit_log") + '</h3>' +
+                  '<div class="small">' + escapeHtml(created ? new Date(created).toLocaleString() : "-") + '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                  '<span class="pill">' + escapeHtml(role) + '</span>' +
+                  (canDelete ? '<button class="btn btn-red" data-del="' + escapeHtml(id) + '">Delete Audit</button>' : '') +
+                '</div>' +
+              '</div>' +
+              (auditViewMode === "compact"
+                ? ('<div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px;">' +
+                    '<span class="pill">' + escapeHtml(email) + '</span>' +
+                    '<span class="pill">' + escapeHtml((x.targetType || "-")) + '</span>' +
+                    '<span class="pill">' + escapeHtml(x._id || "-") + '</span>' +
+                   '</div>' +
+                   '<div class="box" style="margin-top:12px;"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>')
+                : ('<div class="grid">' +
+                    '<div class="box"><strong>User</strong><pre>' + escapeHtml(email) + '</pre></div>' +
+                    '<div class="box"><strong>Target</strong><pre>' + escapeHtml((x.targetType || "-") + " / " + (x.targetId || "-")) + '</pre></div>' +
+                    '<div class="box"><strong>Audit ID</strong><pre>' + escapeHtml(x._id || "-") + '</pre><button class="btn" type="button" onclick="window.copyAuditId(\'' + escapeHtml(x._id || '') + '\')">Copy ID</button><button class="btn" type="button" onclick="window.copyAuditJson(\'' + escapeHtml(x._id || '') + '\')">Copy JSON</button></div>' +
+                    '<div class="box"><strong>Message</strong><pre>' + escapeHtml(x.message || "-") + '</pre></div>' +
+                    '<div class="box"><strong>Metadata</strong><pre>' + escapeHtml(JSON.stringify(meta, null, 2) || "{}") + '</pre></div>' +
+                  '</div>')) +
+            '</div>';
+        }).join("");
+
+        Array.from(document.querySelectorAll("[data-del]")).forEach(function (btn) {
+          btn.addEventListener("click", async function () {
+            var id = btn.getAttribute("data-del");
+            if (!id) return;
+            if (!window.confirm("Delete this audit log? Only master admin should do this.")) return;
+            try {
+              btn.disabled = true;
+              btn.textContent = "Deleting...";
+              await apiDelete([
+                "/api/admin/audit-logs/" + encodeURIComponent(id),
+                "/api/admin/audits/" + encodeURIComponent(id)
+              ]);
+              msg("Audit deleted successfully", "ok");
+              setAuditViewMode(auditViewMode);
+      await refresh();
+            } catch (e) {
+              btn.disabled = false;
+              btn.textContent = "Delete Audit";
+              msg(e.message || "Failed to delete audit", "err");
+            }
+          });
+        });
+      }
+
+      function renderAll() {
+        applyFilters();
+        state.filtered = state.audits.slice();
+        renderStats();
+        renderList();
+      }
+
+      async function refresh() {
+        msg("");
+        try {
+          await loadMe();
+          await loadAudits();
+          renderAll();
+        } catch (e) {
+          msg(e.message || "Failed to load audits", "err");
+          if (String(e.message || "").toLowerCase().indexOf("session") !== -1) {
+            setTimeout(function () {
+              window.location.href = "https://www.safetychecktestltd.co.uk/#/admin";
+            }, 1200);
+          }
+        }
+      }
+
+      document.getElementById("refreshBtn").addEventListener("click", refresh);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      document.getElementById("viewModeCompact").addEventListener("click", function () {
+        setAuditViewMode("compact");
+      });
+
+      document.getElementById("viewModeExpanded").addEventListener("click", function () {
+        setAuditViewMode("expanded");
+      });
+
+      var presetTodayLogins = document.getElementById("presetTodayLogins");
+      if (presetTodayLogins) presetTodayLogins.addEventListener("click", function () {
+        applyAuditPreset("todayLogins");
+      });
+
+      var presetWeekEmployees = document.getElementById("presetWeekEmployees");
+      if (presetWeekEmployees) presetWeekEmployees.addEventListener("click", function () {
+        applyAuditPreset("weekEmployees");
+      });
+
+      var presetPortal = document.getElementById("presetPortal");
+      if (presetPortal) presetPortal.addEventListener("click", function () {
+        applyAuditPreset("portal");
+      });
+
+      var presetPassword = document.getElementById("presetPassword");
+      if (presetPassword) presetPassword.addEventListener("click", function () {
+        applyAuditPreset("password");
+      });
+
+      document.getElementById("presetClear").addEventListener("click", function () {
+        clearAllAuditFilters();
+        renderAll(true);
+      });
+
+            document.getElementById("filteredCsvBtn").addEventListener("click", function () {
+        try {
+          var rows = getFilteredLogs();
+          var headers = ["createdAt","action","actorRole","actorEmail","actorName","targetType","targetId","targetEmail","message","ip"];
+
+          function esc(v) {
+            var t = String(v == null ? "" : v);
+            return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+          }
+
+          var csv = [headers.join(",")].concat(
+            rows.map(function (r) {
+              return headers.map(function (h) { return esc(r[h]); }).join(",");
+            })
+          ).join("\n");
+
+          var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "safety-check-test-audits-filtered-" + new Date().toISOString().slice(0,10) + ".csv";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          msg("Filtered CSV exported.", "ok");
+        } catch (e) {
+          msg("Failed to export filtered CSV", "err");
+        }
+      });
+
+      document.getElementById("printBtn").addEventListener("click", function () {
+        window.printFilteredAudits();
+      });
+
+document.getElementById("exportJson").addEventListener("click", function () {
+        var blob = new Blob([JSON.stringify({
+          exportedAt: new Date().toISOString(),
+          count: state.filtered.length,
+          audits: state.filtered
+        }, null, 2)], { type: "application/json" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "safety-check-test-audits-" + new Date().toISOString().slice(0,10) + ".json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      [searchEl, actionEl, roleEl, sortEl].forEach(function (el) {
+        el.addEventListener("input", renderAll);
+        el.addEventListener("change", renderAll);
+      });
+
+      loadAuditsPage(true);
+    })();
+  </script>
+</body>
+</html>

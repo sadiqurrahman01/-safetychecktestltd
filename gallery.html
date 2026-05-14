@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Work Gallery | Safety Check Test Ltd</title>
+  <meta name="description" content="View real completed work by Safety Check Test Ltd including kitchen renovation, patio works, fencing, exterior improvements, electrical, plumbing, gas, PAT testing, decorating and building services." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --sct-navy: #071b46;
+      --sct-blue: #0d2d6c;
+      --sct-gold: #c59b42;
+      --sct-soft: #f7f8fb;
+      --sct-border: #d9dee8;
+      --sct-text: #1f2937;
+    }
+
+    body {
+      background: #f4f6fb;
+    }
+
+    .gallery-hero {
+      background:
+        linear-gradient(135deg, rgba(7, 27, 70, 0.94), rgba(13, 45, 108, 0.88)),
+        radial-gradient(circle at top right, rgba(197, 155, 66, 0.35), transparent 34%);
+      color: #fff;
+      padding: 70px 20px 48px;
+      border-bottom: 5px solid var(--sct-gold);
+    }
+
+    .gallery-wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .gallery-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin-bottom: 18px;
+    }
+
+    .gallery-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 0.95;
+      margin: 0 0 18px;
+      letter-spacing: -0.04em;
+    }
+
+    .gallery-hero p {
+      max-width: 850px;
+      font-size: 1.12rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    .gallery-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .gallery-stat {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .gallery-stat strong {
+      display: block;
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .gallery-stat span {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.92rem;
+    }
+
+    .gallery-main {
+      padding: 38px 0 70px;
+    }
+
+    .gallery-intro-card {
+      background: #fff;
+      border: 1px solid var(--sct-border);
+      border-radius: 28px;
+      box-shadow: 0 22px 60px rgba(7, 27, 70, 0.08);
+      padding: 28px;
+      margin: -72px auto 28px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .gallery-intro-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .gallery-intro-card h2 {
+      color: var(--sct-navy);
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      margin: 0 0 10px;
+    }
+
+    .gallery-intro-card p {
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .trust-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--sct-navy);
+      font-weight: 800;
+      background: var(--sct-soft);
+      border: 1px solid var(--sct-border);
+      padding: 12px 14px;
+      border-radius: 14px;
+    }
+
+    .trust-item::before {
+      content: "✓";
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--sct-gold);
+      color: #fff;
+      font-size: 0.82rem;
+      flex: 0 0 auto;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 26px 0;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--sct-border);
+      background: #fff;
+      color: var(--sct-navy);
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: 0.2s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--sct-navy);
+      color: #fff;
+      border-color: var(--sct-navy);
+      transform: translateY(-1px);
+    }
+
+    .project-section {
+      background: #fff;
+      border: 1px solid var(--sct-border);
+      border-radius: 28px;
+      box-shadow: 0 18px 46px rgba(7, 27, 70, 0.07);
+      padding: 24px;
+      margin: 24px 0;
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--sct-border);
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+    }
+
+    .section-number {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      background: var(--sct-navy);
+      color: #fff;
+      border-radius: 12px;
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      color: var(--sct-navy);
+      margin: 0;
+      font-size: clamp(1.35rem, 2.2vw, 2rem);
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: #667085;
+      line-height: 1.55;
+      max-width: 780px;
+    }
+
+    .badge {
+      background: #fff7e6;
+      color: #7a5400;
+      border: 1px solid #ead096;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      white-space: nowrap;
+      font-size: 0.85rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .work-card {
+      position: relative;
+      grid-column: span 4;
+      min-height: 260px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #eef2f7;
+      border: 1px solid var(--sct-border);
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(7, 27, 70, 0.08);
+    }
+
+    .work-card.large {
+      grid-column: span 6;
+      min-height: 330px;
+    }
+
+    .work-card.wide {
+      grid-column: span 8;
+      min-height: 320px;
+    }
+
+    .work-card.small {
+      grid-column: span 3;
+      min-height: 220px;
+    }
+
+    .work-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      transition: transform 0.35s ease;
+    }
+
+    .work-card:hover img {
+      transform: scale(1.045);
+    }
+
+    .work-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(3, 12, 31, 0.82), rgba(3, 12, 31, 0.08) 58%);
+    }
+
+    .work-meta {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 2;
+      color: #fff;
+    }
+
+    .work-tag {
+      display: inline-flex;
+      background: var(--sct-gold);
+      color: #fff;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .work-meta h3 {
+      margin: 0 0 4px;
+      font-size: 1.08rem;
+      line-height: 1.25;
+    }
+
+    .work-meta p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .placeholder-card {
+      grid-column: span 4;
+      min-height: 230px;
+      border: 2px dashed #cbd5e1;
+      border-radius: 20px;
+      background: #f8fafc;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #475569;
+    }
+
+    .placeholder-card strong {
+      color: var(--sct-navy);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .trade-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+
+    .trade-card {
+      background: var(--sct-soft);
+      border: 1px solid var(--sct-border);
+      border-radius: 20px;
+      padding: 18px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .trade-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+
+    .trade-card h3 {
+      color: var(--sct-navy);
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .trade-card p {
+      color: #667085;
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .cta-panel {
+      background: linear-gradient(135deg, var(--sct-navy), var(--sct-blue));
+      border-radius: 28px;
+      padding: 34px;
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .cta-panel h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+    }
+
+    .cta-panel p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.65;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .cta-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .cta-primary {
+      background: var(--sct-gold);
+      color: #fff;
+    }
+
+    .cta-secondary {
+      background: #fff;
+      color: var(--sct-navy);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.9);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: min(1100px, 96vw);
+      max-height: 82vh;
+      border-radius: 16px;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      border: 0;
+      background: #fff;
+      color: var(--sct-navy);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    @media (max-width: 980px) {
+      .gallery-stats,
+      .gallery-intro-grid,
+      .cta-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .work-card,
+      .work-card.large,
+      .work-card.wide,
+      .work-card.small,
+      .placeholder-card {
+        grid-column: span 6;
+      }
+
+      .trade-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .cta-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .gallery-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .project-section,
+      .gallery-intro-card {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .badge {
+        display: inline-flex;
+        margin-top: 12px;
+      }
+
+      .work-card,
+      .work-card.large,
+      .work-card.wide,
+      .work-card.small,
+      .placeholder-card {
+        grid-column: span 12;
+        min-height: 260px;
+      }
+
+      .trade-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-title">Safety Check Test Ltd</span>
+        <span class="brand-subtitle">Electrical, Fire, Property & Building Services</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#quote">Quotes</a>
+        <a href="gallery.html" aria-current="page">Gallery</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="gallery-hero">
+    <div class="gallery-wrap">
+      <div class="gallery-kicker">Real project photos • No stock images</div>
+      <h1>Our Work Gallery</h1>
+      <p>
+        A professional showcase of completed kitchen, patio, fencing, external works and property improvements by Safety Check Test Ltd.
+        Built for landlords, managing agents, businesses and homeowners who want reliable multi-trade support.
+      </p>
+
+      <div class="gallery-stats">
+        <div class="gallery-stat"><strong>Kitchen</strong><span>Repair, tiling, worktops and finishing</span></div>
+        <div class="gallery-stat"><strong>Exterior</strong><span>Patio, fencing and garden works</span></div>
+        <div class="gallery-stat"><strong>Multi-Trade</strong><span>Electrical, gas, plumbing and building</span></div>
+        <div class="gallery-stat"><strong>London</strong><span>Domestic, landlord and commercial support</span></div>
+      </div>
+    </div>
+  </section>
+
+  <main class="gallery-main">
+    <div class="gallery-wrap">
+      <section class="gallery-intro-card">
+        <div class="gallery-intro-grid">
+          <div>
+            <h2>From damaged and outdated to clean, safe and professional.</h2>
+            <p>
+              This gallery is ordered like a real project journey: before condition, preparation, renovation works and finished result.
+              Add your real photos into the folders shown below and the page will showcase them in a clean, premium layout.
+            </p>
+          </div>
+          <div class="trust-list">
+            <div class="trust-item">Real completed work</div>
+            <div class="trust-item">Clear before, during and after layout</div>
+            <div class="trust-item">Built for customer confidence</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="filter-bar" aria-label="Gallery filters">
+        <button class="filter-btn active" data-filter="all">All Work</button>
+        <button class="filter-btn" data-filter="kitchen">Kitchen</button>
+        <button class="filter-btn" data-filter="exterior">Exterior</button>
+        <button class="filter-btn" data-filter="before">Before</button>
+        <button class="filter-btn" data-filter="during">During</button>
+        <button class="filter-btn" data-filter="after">After</button>
+        <button class="filter-btn" data-filter="trades">Trades</button>
+      </div>
+
+      <section class="project-section" data-category="exterior before after">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">1</span>Fence Replacement</h2>
+            <p>Old fence removed, access prepared and new timber fencing installed for a cleaner and more secure finish.</p>
+          </div>
+          <span class="badge">Exterior Upgrade</span>
+        </div>
+        <div class="gallery-grid" id="fenceGrid"></div>
+      </section>
+
+      <section class="project-section" data-category="exterior before">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">2</span>Garden Before Works</h2>
+            <p>The original garden area before landscaping and external improvements began.</p>
+          </div>
+          <span class="badge">Before Condition</span>
+        </div>
+        <div class="gallery-grid" id="gardenBeforeGrid"></div>
+      </section>
+
+      <section class="project-section" data-category="exterior during">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">3</span>Patio Preparation & Sub-Base</h2>
+            <p>Preparation, ground works, membrane, sub-base and slab laying arranged in a clear project timeline.</p>
+          </div>
+          <span class="badge">Site Preparation</span>
+        </div>
+        <div class="gallery-grid" id="patioPrepGrid"></div>
+      </section>
+
+      <section class="project-section" data-category="exterior during after">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">4</span>Concrete & Side Access Works</h2>
+            <p>Side access and covered patio concrete works, from pour and levelling through to the finished usable space.</p>
+          </div>
+          <span class="badge">External Works</span>
+        </div>
+        <div class="gallery-grid" id="concreteGrid"></div>
+      </section>
+
+      <section class="project-section" data-category="kitchen before during">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">5</span>Kitchen Repair & Preparation</h2>
+            <p>Backsplash removal, wall preparation, unit alterations, ceiling repair and tiling works.</p>
+          </div>
+          <span class="badge">Kitchen Renovation</span>
+        </div>
+        <div class="gallery-grid" id="kitchenRepairGrid"></div>
+      </section>
+
+      <section class="project-section" data-category="kitchen after">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">6</span>Finished Kitchen Reveal</h2>
+            <p>Clean white units, warm wood-effect worktops, smart tiling, finished flooring and a brighter modern kitchen.</p>
+          </div>
+          <span class="badge">Finished Result</span>
+        </div>
+        <div class="gallery-grid" id="kitchenAfterGrid"></div>
+      </section>
+
+      <section class="project-section" data-category="trades">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title"><span class="section-number">7</span>Multi-Trade Services</h2>
+            <p>
+              Add real team photos only when available. Do not use fake AI tradesmen. If faces are not approved, use photos showing tools, uniform backs,
+              hands at work, certificates, vans or work areas instead.
+            </p>
+          </div>
+          <span class="badge">Real Team Only</span>
+        </div>
+
+        <div class="trade-grid">
+          <div class="trade-card"><div><div class="trade-icon">⚡</div><h3>Electrician</h3><p>EICR, fixed wire testing, fault finding and electrical repairs.</p></div></div>
+          <div class="trade-card"><div><div class="trade-icon">🔧</div><h3>Plumber</h3><p>Leaks, pipework, repairs and maintenance support.</p></div></div>
+          <div class="trade-card"><div><div class="trade-icon">🔥</div><h3>Gas Engineer</h3><p>Gas and boiler services by Gas Safe registered engineers.</p></div></div>
+          <div class="trade-card"><div><div class="trade-icon">✅</div><h3>PAT Testing</h3><p>Portable appliance inspection and testing for managed properties.</p></div></div>
+          <div class="trade-card"><div><div class="trade-icon">🎨</div><h3>Painter & Decorator</h3><p>Interior and exterior preparation, painting and finishing.</p></div></div>
+          <div class="trade-card"><div><div class="trade-icon">🏗️</div><h3>Builder</h3><p>Repairs, refurbishments, external works and property improvements.</p></div></div>
+        </div>
+
+        <div class="gallery-grid" id="tradesGrid" style="margin-top:16px;"></div>
+      </section>
+
+      <section class="cta-panel">
+        <div>
+          <h2>Need a quote for property works?</h2>
+          <p>Upload photos through the quote wizard and we will review the job properly. We support landlords, agents, businesses, homeowners and managed properties.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="cta-primary" href="index.html#quote">Start Quote Wizard</a>
+          <a class="cta-secondary" href="index.html#contact">Contact Us</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img src="" alt="" id="lightboxImage" />
+  </div>
+
+  <script src="assets/gallery/gallery-data.js"></script>
+  <script>
+    const fallbackData = {
+      fence: [],
+      gardenBefore: [],
+      patioPrep: [],
+      concrete: [],
+      kitchenRepair: [],
+      kitchenAfter: [],
+      trades: []
+    };
+
+    const galleryData = window.SCT_GALLERY_DATA || fallbackData;
+
+    const sections = [
+      ["fenceGrid", galleryData.fence],
+      ["gardenBeforeGrid", galleryData.gardenBefore],
+      ["patioPrepGrid", galleryData.patioPrep],
+      ["concreteGrid", galleryData.concrete],
+      ["kitchenRepairGrid", galleryData.kitchenRepair],
+      ["kitchenAfterGrid", galleryData.kitchenAfter],
+      ["tradesGrid", galleryData.trades]
+    ];
+
+    function createPlaceholder(container, folder) {
+      container.innerHTML = `
+        <div class="placeholder-card">
+          <strong>Add real photos here</strong>
+          <span>Put images inside <code>${folder}</code> then run <code>python3 scripts/build-gallery-data.py</code>.</span>
+        </div>
+      `;
+    }
+
+    function renderCards(containerId, items) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const folderMap = {
+        fenceGrid: "assets/gallery/exterior-after",
+        gardenBeforeGrid: "assets/gallery/exterior-before",
+        patioPrepGrid: "assets/gallery/exterior-during",
+        concreteGrid: "assets/gallery/exterior-after",
+        kitchenRepairGrid: "assets/gallery/kitchen-during",
+        kitchenAfterGrid: "assets/gallery/kitchen-after",
+        tradesGrid: "assets/gallery/trades"
+      };
+
+      if (!items || !items.length) {
+        createPlaceholder(container, folderMap[containerId] || "assets/gallery/import");
+        return;
+      }
+
+      container.innerHTML = items.map((item, index) => {
+        const sizeClass = item.size || (index % 7 === 0 ? "large" : index % 9 === 0 ? "wide" : "");
+        return `
+          <article class="work-card ${sizeClass}" data-open-image="${item.src}">
+            <img src="${item.src}" alt="${item.alt || item.title || "Safety Check Test completed work"}" loading="lazy" />
+            <div class="work-meta">
+              <span class="work-tag">${item.tag || "Project"}</span>
+              <h3>${item.title || "Completed Work"}</h3>
+              <p>${item.caption || "Safety Check Test Ltd project photo"}</p>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    sections.forEach(([id, items]) => renderCards(id, items));
+
+    document.querySelectorAll(".filter-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        const filter = button.dataset.filter;
+        document.querySelectorAll(".project-section").forEach((section) => {
+          const categories = section.dataset.category || "";
+          section.style.display = filter === "all" || categories.includes(filter) ? "" : "none";
+        });
+      });
+    });
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+
+    document.addEventListener("click", (event) => {
+      const card = event.target.closest("[data-open-image]");
+      if (!card) return;
+      lightboxImage.src = card.dataset.openImage;
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+    });
+
+    document.querySelector(".lightbox-close").addEventListener("click", () => {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImage.src = "";
+    });
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        lightbox.classList.remove("open");
+        lightbox.setAttribute("aria-hidden", "true");
+        lightboxImage.src = "";
+      }
+    });
+  </script>
+</body>
+</html>
