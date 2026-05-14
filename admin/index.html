@@ -1,71 +1,260 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Redirecting to Admin Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=/#/admin?tab=overview">
-  <script>
-    window.location.replace('/#/admin?tab=overview&t=' + Date.now());
-  
-
-function cleanId(value) {
-  return String(value || '').trim();
-}
-
-function safeApiBase() {
-  return String(API || 'https://api.safetychecktestltd.co.uk').replace(/\/$/, '');
-}
-
-function getLiveAdminToken() {
-  try {
-    return (
-      localStorage.getItem('sct_admin_token') ||
-      localStorage.getItem('sctAdminToken') ||
-      localStorage.getItem('adminToken') ||
-      localStorage.getItem('token') ||
-      ''
-    );
-  } catch (e) {
-    return '';
-  }
-}
-
-async function safeDeleteRequest(url, label) {
-  const token = getLiveAdminToken();
-  if (!token) {
-    alert('Admin token missing. Please open admin, log in again, then retry.');
-    return false;
-  }
-
-  if (!url || typeof url !== 'string' || !url.startsWith('http')) {
-    alert('Delete failed: invalid delete URL.');
-    console.error('Invalid delete URL:', url);
-    return false;
-  }
-
-  if (!confirm('Delete ' + (label || 'this item') + '?')) return false;
-
-  const res = await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json'
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Admin Login | Safety Check Test Ltd</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Arial,Helvetica,sans-serif;
+      background:linear-gradient(135deg,#020617,#0f172a,#1e293b);
+      color:#0f172a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
     }
-  });
-
-  const data = await res.json().catch(() => ({}));
-
-  if (!res.ok || data.ok === false) {
-    throw new Error(data.message || data.error || ('Delete failed with status ' + res.status));
-  }
-
-  return true;
-}
-
-</script>
+    .card{
+      width:100%;
+      max-width:460px;
+      background:#fff;
+      border-radius:24px;
+      padding:30px;
+      box-shadow:0 24px 70px rgba(0,0,0,.35);
+      border:1px solid #e5e7eb;
+    }
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      margin-bottom:22px;
+    }
+    .brand img{
+      width:58px;
+      height:58px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+    }
+    h1{
+      margin:0;
+      font-size:26px;
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:5px;
+      color:#64748b;
+      font-size:14px;
+    }
+    label{
+      display:block;
+      margin:16px 0 7px;
+      font-weight:800;
+      font-size:13px;
+      color:#334155;
+    }
+    input{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:14px;
+      padding:13px 14px;
+      font-size:15px;
+      outline:none;
+    }
+    input:focus{
+      border-color:#2563eb;
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+    button{
+      width:100%;
+      margin-top:22px;
+      border:0;
+      border-radius:16px;
+      padding:14px 18px;
+      background:#2563eb;
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    button:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .msg{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      display:none;
+      font-size:14px;
+      line-height:1.4;
+    }
+    .err{
+      display:block;
+      background:#fef2f2;
+      color:#991b1b;
+      border:1px solid #fecaca;
+    }
+    .ok{
+      display:block;
+      background:#ecfdf5;
+      color:#065f46;
+      border:1px solid #bbf7d0;
+    }
+    .foot{
+      margin-top:18px;
+      color:#64748b;
+      font-size:12px;
+      line-height:1.5;
+      text-align:center;
+    }
+  </style>
 </head>
 <body>
-  Redirecting to admin dashboard...
+  <main class="card">
+    <div class="brand">
+      <img src="/imagesct.jpeg" alt="Safety Check Test Ltd logo" />
+      <div>
+        <h1>Admin Login</h1>
+        <div class="sub">Safety Check Test Ltd secure admin access</div>
+      </div>
+    </div>
+
+    <form id="loginForm" autocomplete="off">
+      <label for="email">Admin email</label>
+      <input id="email" name="email" type="email" autocomplete="username" required />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required />
+
+      <button id="loginBtn" type="submit">Login to Admin Dashboard</button>
+      <div id="msg" class="msg"></div>
+    </form>
+
+    <div class="foot">
+      This page always requires a fresh admin login. Saved browser tokens are cleared when this page opens.
+    </div>
+  </main>
+
+<script>
+(function(){
+  const API = 'https://api.safetychecktestltd.co.uk';
+
+  const TOKEN_KEYS = [
+    'sct_admin_token',
+    'sctAdminToken',
+    'adminToken',
+    'token',
+    'sct_token',
+    'sctUser',
+    'sct_admin_user',
+    'sct_admin_role'
+  ];
+
+  function clearOldAdminSession(){
+    try{
+      TOKEN_KEYS.forEach(function(k){
+        localStorage.removeItem(k);
+        sessionStorage.removeItem(k);
+      });
+    }catch(e){}
+  }
+
+  clearOldAdminSession();
+
+  const form = document.getElementById('loginForm');
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('loginBtn');
+
+  function show(type, text){
+    msg.className = 'msg ' + type;
+    msg.textContent = text;
+  }
+
+  function saveAdminSession(data){
+    const token = data.token || data.adminToken || data.accessToken || '';
+    const user = data.admin || data.user || data.account || null;
+
+    if(!token){
+      throw new Error('Login succeeded but no admin token was returned.');
+    }
+
+    localStorage.setItem('sct_admin_token', token);
+    localStorage.setItem('sctAdminToken', token);
+    localStorage.setItem('adminToken', token);
+
+    if(user){
+      localStorage.setItem('sct_admin_user', JSON.stringify(user));
+      if(user.role) localStorage.setItem('sct_admin_role', user.role);
+    }
+  }
+
+  async function login(payload){
+    const endpoints = [
+      '/api/admin/login',
+      '/api/admin/auth/login',
+      '/api/login/admin'
+    ];
+
+    let lastError = null;
+
+    for(const path of endpoints){
+      try{
+        const res = await fetch(API + path, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
+
+        const raw = await res.text();
+        let data = {};
+        try{ data = raw ? JSON.parse(raw) : {}; }
+        catch(e){ data = { message: raw || 'Non JSON response' }; }
+
+        if(res.ok && data.ok !== false){
+          return data;
+        }
+
+        lastError = new Error(data.message || data.error || ('Login failed HTTP ' + res.status));
+      }catch(err){
+        lastError = err;
+      }
+    }
+
+    throw lastError || new Error('Login failed');
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+    show('ok','Checking admin login...');
+
+    try{
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const data = await login({ email, password });
+      saveAdminSession(data);
+
+      show('ok','Login successful. Opening dashboard...');
+      window.location.href = '/#/admin?tab=overview&t=' + Date.now();
+    }catch(err){
+      clearOldAdminSession();
+      show('err', err.message || 'Login failed');
+      btn.disabled = false;
+      btn.textContent = 'Login to Admin Dashboard';
+    }
+  });
+})();
+</script>
 </body>
 </html>
