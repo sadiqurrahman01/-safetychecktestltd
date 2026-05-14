@@ -1,5 +1,29 @@
 (function () {
-  const data = window.SCT_GALLERY_DATA || { boards: [], works: [], trades: [] };
+  function getGalleryData() {
+    const candidates = [
+      window.SCT_GALLERY_DATA,
+      window.GALLERY_DATA,
+      window.galleryData,
+      window.GalleryData,
+      window.sctGalleryData,
+      window.SAFETY_CHECK_GALLERY_DATA,
+      window.SCTGalleryData
+    ];
+
+    for (const item of candidates) {
+      if (item && typeof item === "object") {
+        return {
+          boards: Array.isArray(item.boards) ? item.boards : [],
+          works: Array.isArray(item.works) ? item.works : [],
+          trades: Array.isArray(item.trades) ? item.trades : []
+        };
+      }
+    }
+
+    return { boards: [], works: [], trades: [] };
+  }
+
+  const data = getGalleryData();
 
   const boardGrid = document.querySelector("#projectBoards");
   const workGrid = document.querySelector("#workGallery");
@@ -23,6 +47,9 @@
     const src = esc(item.src || item.url || "");
     const category = esc(item.category || "project");
     const stage = esc(item.stage || "after");
+    const description = esc(item.description || label);
+
+    if (!src) return "";
 
     return `
       <article class="gallery-card ${big ? "gallery-card-large" : ""}" data-category="${category}" data-stage="${stage}">
@@ -32,7 +59,7 @@
         </button>
         <div class="gallery-card-body">
           <h3>${title}</h3>
-          <p>${esc(item.description || label)}</p>
+          <p>${description}</p>
         </div>
       </article>
     `;
@@ -51,11 +78,15 @@
       tradeGrid.innerHTML = (data.trades || []).map((item) => card(item, true)).join("");
     }
 
+    if (boardGrid && !boardGrid.innerHTML.trim()) {
+      boardGrid.innerHTML = "";
+    }
+
     if (workGrid && !workGrid.innerHTML.trim()) {
       workGrid.innerHTML = `
         <div class="empty-gallery">
           <h3>No gallery photos found</h3>
-          <p>Gallery data exists, but no photos were loaded. Check gallery-data.js and assets/gallery.</p>
+          <p>Gallery data was not loaded. Check gallery-data.js is loading before gallery.js.</p>
         </div>
       `;
     }
@@ -114,8 +145,6 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    render();
-    bindFilters();
-  });
+  render();
+  bindFilters();
 })();
