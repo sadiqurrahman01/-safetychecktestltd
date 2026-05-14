@@ -271,7 +271,50 @@
       `).join('');
     }
 
-    async function loadRequests() {
+    
+async function deletePortalJob(id, ref) {
+  const liveToken = getToken();
+  if (!liveToken) {
+    alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
+    return;
+  }
+
+  const safeId = String(id || '').trim();
+  const safeRef = String(ref || safeId || 'this portal request').trim();
+
+  if (!safeId || safeId === 'undefined' || safeId === 'null') {
+    alert('Could not delete: portal request ID is missing.');
+    return;
+  }
+
+  if (!confirm('Delete portal access request ' + safeRef + '?')) return;
+
+  try {
+    const url = API.replace(/\/$/, '') + '/api/admin/portal-jobs/' + encodeURIComponent(safeId);
+
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + liveToken,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || data.ok === false) {
+      throw new Error(data.message || data.error || ('Delete failed with status ' + res.status));
+    }
+
+    await loadRequests();
+  } catch (err) {
+    console.error('Delete portal request failed', err);
+    alert('Delete failed: ' + (err.message || err));
+  }
+}
+
+
+async function loadRequests() {
       document.getElementById('error').style.display = 'none';
 
       const liveToken = readAdminToken();
