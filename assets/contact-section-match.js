@@ -1,6 +1,6 @@
 (function () {
-  if (window.__SCT_FINAL_CONTACT_MATCH__) return;
-  window.__SCT_FINAL_CONTACT_MATCH__ = true;
+  if (window.__SCT_FINAL_CONTACT_MATCH_V2__) return;
+  window.__SCT_FINAL_CONTACT_MATCH_V2__ = true;
 
   function clean(v) {
     return String(v || "").replace(/\s+/g, " ").trim();
@@ -55,6 +55,7 @@
       '    <h2>Need help with compliance, property works or site logistics?</h2>',
       '    <p>Contact Safety Check Test Ltd for electrical, fire, gas, plumbing, maintenance and building support. For removals, flatbed van support and site logistics, you can also book through our sister company, Get It Moving.</p>',
       '  </div>',
+
       '  <div class="sct-contact-grid">',
       '    <a class="sct-contact-card" href="tel:03306335588">',
       '      <span>CALL US</span>',
@@ -65,6 +66,7 @@
       '      <strong>info@safetychecktestltd.co.uk</strong>',
       '    </a>',
       '  </div>',
+
       '  <div class="sct-contact-buttons">',
       '    <a class="sct-btn sct-btn-primary" href="https://wa.me/447379264328" target="_blank" rel="noopener">Message on WhatsApp</a>',
       '    <a class="sct-btn sct-btn-secondary" href="https://www.getitmoving.co.uk" target="_blank" rel="noopener">Book Removals / Flatbed</a>',
