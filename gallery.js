@@ -1,10 +1,6 @@
 (function () {
   function getGalleryData() {
-    if (window.SCT_GALLERY_DATA && typeof window.SCT_GALLERY_DATA === "object") {
-      return window.SCT_GALLERY_DATA;
-    }
-
-    return { boards: [], works: [], trades: [] };
+    return window.SCT_GALLERY_DATA || { boards: [], works: [], trades: [] };
   }
 
   function esc(value) {
@@ -50,26 +46,9 @@
     const works = document.getElementById("workGallery");
     const trades = document.getElementById("tradeGallery");
 
-    if (boards) {
-      boards.innerHTML = (data.boards || []).map(item => makeCard(item, true)).join("");
-    }
-
-    if (works) {
-      works.innerHTML = (data.works || []).map(item => makeCard(item, false)).join("");
-
-      if (!works.innerHTML.trim()) {
-        works.innerHTML = `
-          <div class="empty-gallery">
-            <h3>No gallery photos found</h3>
-            <p>Gallery data did not load correctly.</p>
-          </div>
-        `;
-      }
-    }
-
-    if (trades) {
-      trades.innerHTML = (data.trades || []).map(item => makeCard(item, true)).join("");
-    }
+    if (boards) boards.innerHTML = (data.boards || []).map(item => makeCard(item, true)).join("");
+    if (works) works.innerHTML = (data.works || []).map(item => makeCard(item, false)).join("");
+    if (trades) trades.innerHTML = (data.trades || []).map(item => makeCard(item, true)).join("");
 
     bindFilters();
     bindLightbox();
