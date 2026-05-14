@@ -263,24 +263,6 @@
     }
 
     async 
-async function deleteJob(id) {
-  const safeId = cleanId(id);
-
-  if (!safeId || safeId === 'undefined' || safeId === 'null') {
-    alert('Could not delete: job ID is missing.');
-    return;
-  }
-
-  try {
-    const url = safeApiBase() + '/api/admin/jobs/' + encodeURIComponent(safeId);
-    const ok = await safeDeleteRequest(url, 'job ' + safeId);
-    if (ok && typeof loadJobs === 'function') await loadJobs();
-    if (ok && typeof loadCompletedJobs === 'function') await loadCompletedJobs();
-  } catch (err) {
-    console.error('Delete job failed', err);
-    alert('Delete failed: ' + (err.message || err));
-  }
-}
 
 
 function loadJobs(){
@@ -327,27 +309,50 @@ setStatus(
       cards.forEach(card => card.style.display = 'block');
     };
 
-    window.deleteJob = async function(id, jobId){
-      const token = getToken();
-      if(!token){
-        alert('Admin token missing');
-        return;
-      }
-      if(!confirm('Delete job ' + jobId + '? This cannot be undone.')) return;
+    window.deleteJob = async function(id, jobId) {
+  const safeId = String(id || '').trim();
+  const safeJobId = String(jobId || safeId || 'job').trim();
 
-      try{
-        const res = await fetch(safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(cleanId(id)), { method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + token }
-        });
-        const data = await res.json();
-        if(!res.ok || !data.ok) throw new Error(data.message || 'Delete failed');
-        allJobs = allJobs.filter(j => j._id !== id);
-        render();
-        setStatus('Deleted job ' + jobId);
-      }catch(err){
-        alert(err.message || 'Delete failed');
+  if (!safeId || safeId === 'undefined' || safeId === 'null') {
+    alert('Could not delete: job ID is missing.');
+    return;
+  }
+
+  if (!confirm('Delete job ' + safeJobId + '? This cannot be undone.')) return;
+
+  try {
+    const token =
+      localStorage.getItem('sct_admin_token') ||
+      localStorage.getItem('sctAdminToken') ||
+      localStorage.getItem('adminToken') ||
+      localStorage.getItem('token') ||
+      '';
+
+    if (!token) throw new Error('Admin token missing. Please log in again.');
+
+    const base = String(API || 'https://api.safetychecktestltd.co.uk').replace(/\/$/, '');
+    const res = await fetch(base + '/api/admin/jobs/' + encodeURIComponent(safeId), {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
       }
-    };
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || data.ok === false) {
+      throw new Error(data.message || data.error || 'Delete failed');
+    }
+
+    if (typeof setStatus === 'function') setStatus('Deleted job ' + safeJobId);
+    if (typeof loadJobs === 'function') await loadJobs();
+    else window.location.reload();
+  } catch (err) {
+    console.error('Delete job failed', err);
+    alert(err.message || 'Delete failed');
+  }
+};
 
     document.getElementById('refreshBtn').addEventListener('click', loadJobs);
     document.getElementById('printAllBtn').addEventListener('click', () => window.print());

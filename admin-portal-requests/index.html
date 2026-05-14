@@ -151,14 +151,54 @@
     }
 
     async function deleteJob(id, ref) {
-      const liveToken = readAdminToken();
-      if (!liveToken) return alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
-      if (!confirm('Delete portal access request ' + ref + '?')) return;
+  const safeId = String(id || '').trim();
+  const safeRef = String(ref || safeId || 'portal request').trim();
 
-      try {
-        const res = await fetch(safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(cleanId(id)), { method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + liveToken }
-        });
+  if (!safeId || safeId === 'undefined' || safeId === 'null') {
+    alert('Could not delete: portal request ID is missing.');
+    return;
+  }
+
+  const liveToken =
+    localStorage.getItem('sct_admin_token') ||
+    localStorage.getItem('sctAdminToken') ||
+    localStorage.getItem('adminToken') ||
+    localStorage.getItem('token') ||
+    '';
+
+  if (!liveToken) {
+    alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
+    return;
+  }
+
+  if (!confirm('Delete portal access request ' + safeRef + '?')) return;
+
+  try {
+    const base = String(API || 'https://api.safetychecktestltd.co.uk').replace(/\/$/, '');
+    const res = await fetch(base + '/api/admin/portal-jobs/' + encodeURIComponent(safeId), {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + liveToken,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || data.ok === false) {
+      throw new Error(data.message || data.error || 'Delete failed');
+    }
+
+    if (typeof loadRequests === 'function') {
+      await loadRequests();
+    } else {
+      window.location.reload();
+    }
+  } catch (err) {
+    console.error('Delete portal request failed', err);
+    alert('Delete failed: ' + (err.message || err));
+  }
+});
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.message || 'Delete failed');
         await loadRequests();
@@ -271,24 +311,6 @@
     }
 
     
-async async function deletePortalJob(id, ref) {
-  const safeId = cleanId(id);
-  const safeRef = cleanId(ref) || safeId || 'portal request';
-
-  if (!safeId || safeId === 'undefined' || safeId === 'null') {
-    alert('Could not delete: portal request ID is missing.');
-    return;
-  }
-
-  try {
-    const url = safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(safeId);
-    const ok = await safeDeleteRequest(url, 'portal request ' + safeRef);
-    if (ok && typeof loadRequests === 'function') await loadRequests();
-  } catch (err) {
-    console.error('Delete portal request failed', err);
-    alert('Delete failed: ' + (err.message || err));
-  }
-}
 
   try {
     const url = safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(safeId);
