@@ -4,77 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Our Work Gallery | Safety Check Test Ltd</title>
+  <meta name="description" content="Real project gallery from Safety Check Test Ltd: kitchen renovation, patio works, fencing, external works, building services and multi-trade property improvements across London." />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="gallery.css" />
 </head>
 <body>
   <header class="site-header">
-    <div>
-      <strong>Safety Check Test Ltd</strong>
-      <span>Electrical, Fire, Property & Building Services</span>
+    <div class="brand">
+      <h1>Safety Check Test Ltd</h1>
+      <p>Electrical, Fire, Property & Building Services</p>
     </div>
     <nav>
       <a href="index.html">Home</a>
       <a href="index.html#services">Services</a>
       <a href="index.html#quote">Quotes</a>
-      <a href="gallery.html">Gallery</a>
+      <a href="gallery.html" class="active">Gallery</a>
       <a href="index.html#about">About</a>
       <a href="index.html#contact">Contact</a>
     </nav>
   </header>
 
-  <main class="gallery-page">
+  <main>
     <section class="gallery-hero">
-      <p class="eyebrow">REAL PROJECT PHOTOS • UPDATED BY ADMIN</p>
-      <h1>Our Work Gallery</h1>
-      <p>A professional showcase of completed kitchen, patio, fencing, external works, property maintenance and multi-trade projects by Safety Check Test Ltd.</p>
-
+      <p class="eyebrow">REAL PROJECT PHOTOS • PROFESSIONAL PRESENTATION • QUALITY FINISH</p>
+      <h2>Our Work Gallery</h2>
+      <p>
+        A customer-facing showcase of Safety Check Test Ltd project work including kitchen improvements,
+        patio works, fencing, garden preparation, building repairs and multi-trade property support.
+      </p>
       <div class="gallery-stats">
-        <div><strong>Kitchen</strong><span>Repair, tiling, worktops and finishing</span></div>
+        <div><strong>Kitchen</strong><span>Repair, tiling, worktops and finish</span></div>
         <div><strong>Exterior</strong><span>Patio, fencing and garden works</span></div>
-        <div><strong>Multi-Trade</strong><span>Electrical, gas, plumbing and building</span></div>
-        <div><strong>London</strong><span>Domestic, landlord and commercial support</span></div>
+        <div><strong>Building</strong><span>Refurbishment and structural support</span></div>
+        <div><strong>Multi-Trade</strong><span>Electrical, gas, plumbing and maintenance</span></div>
       </div>
     </section>
 
-    <section class="gallery-intro">
-      <h2>From damaged and outdated to clean, safe and professional.</h2>
-      <p>Browse real project photos uploaded by our admin team. Projects can be filtered by service type and project stage.</p>
+    <section class="project-board-section">
+      <div class="section-heading">
+        <p class="eyebrow">PROJECT BOARDS</p>
+        <h2>Before, During & After Project Stories</h2>
+        <p>Premium boards placed first so customers and business clients immediately see the full transformation.</p>
+      </div>
+      <div class="board-grid" id="projectBoards"></div>
     </section>
 
-    <section class="gallery-filters">
-      <button class="filter-btn active" data-filter="all">All Work</button>
-      <button class="filter-btn" data-filter="project">Project Boards</button>
-      <button class="filter-btn" data-filter="kitchen">Kitchen</button>
-      <button class="filter-btn" data-filter="exterior">Exterior</button>
-      <button class="filter-btn" data-filter="electrical">Electrical</button>
-      <button class="filter-btn" data-filter="plumbing">Plumbing</button>
-      <button class="filter-btn" data-filter="gas">Gas</button>
-      <button class="filter-btn" data-filter="pat">PAT Testing</button>
-      <button class="filter-btn" data-filter="painting">Painting</button>
-      <button class="filter-btn" data-filter="building">Building</button>
-      <button class="filter-btn" data-filter="before">Before</button>
-      <button class="filter-btn" data-filter="during">During</button>
-      <button class="filter-btn" data-filter="after">After</button>
+    <section class="gallery-section">
+      <div class="section-heading">
+        <p class="eyebrow">REAL WORK PHOTOS</p>
+        <h2>Kitchen, Patio, Garden, Fencing & Building Improvements</h2>
+        <p>Ordered as a proper work journey: original condition, preparation, work in progress and finished result.</p>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All Work</button>
+        <button class="filter-btn" data-filter="kitchen">Kitchen</button>
+        <button class="filter-btn" data-filter="exterior">Exterior</button>
+        <button class="filter-btn" data-filter="building">Building</button>
+        <button class="filter-btn" data-filter="before">Before</button>
+        <button class="filter-btn" data-filter="during">During</button>
+        <button class="filter-btn" data-filter="after">After</button>
+        <button class="filter-btn" data-filter="trades">Trades</button>
+      </div>
+      <div class="work-grid" id="workGallery"></div>
     </section>
 
-    <section id="galleryGrid" class="gallery-grid">
-      <div class="gallery-loading">Loading project gallery...</div>
+    <section class="trade-section">
+      <div class="section-heading">
+        <p class="eyebrow">SPECIALIST TRADES</p>
+        <h2>Qualified Multi-Trade Support</h2>
+        <p>Electrical, fire, plumbing, gas, PAT testing, painting, decorating, building and maintenance support for landlords, agents, businesses and property clients.</p>
+      </div>
+      <div class="trade-grid">
+        <article><strong>⚡ Electrician</strong><span>EICR, fixed wire testing, fault finding and electrical repairs.</span></article>
+        <article><strong>🔧 Plumber</strong><span>Leaks, pipework, repairs and maintenance support.</span></article>
+        <article><strong>🔥 Gas Engineer</strong><span>Gas and boiler services by Gas Safe registered engineers.</span></article>
+        <article><strong>✅ PAT Testing</strong><span>Portable appliance inspection and testing for managed properties.</span></article>
+        <article><strong>🎨 Painter & Decorator</strong><span>Interior and exterior preparation, painting and finishing.</span></article>
+        <article><strong>🏗️ Builder</strong><span>Repairs, refurbishments, external works and property improvements.</span></article>
+      </div>
+      <div class="work-grid" id="tradeGallery"></div>
     </section>
 
     <section class="gallery-cta">
       <h2>Need a quote for property works?</h2>
-      <p>Upload photos through the quote wizard and we will review the job properly. We support landlords, agents, businesses, homeowners and managed properties.</p>
-      <a href="index.html#quote">Start Quote Wizard</a>
+      <p>Upload photos through the quote wizard and we will review your job properly.</p>
+      <a href="index.html#quote" class="cta-button">Start Quote Wizard</a>
     </section>
   </main>
 
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <button id="closeLightbox" type="button">×</button>
+  <footer>
+    <p>© 2026 Safety Check Test Ltd. All rights reserved.</p>
+    <p>Electrical Safety • Emergency Call Outs • Gas, Boiler & Plumbing • Fire Compliance • Property Maintenance • Building Works</p>
+  </footer>
+
+  <div class="lightbox" id="lightbox">
+    <button id="closeLightbox" aria-label="Close image">×</button>
     <img id="lightboxImage" alt="" />
-    <div id="lightboxText"></div>
+    <p id="lightboxCaption"></p>
   </div>
 
+  <script src="gallery-data.js"></script>
   <script src="gallery.js"></script>
 </body>
 </html>
