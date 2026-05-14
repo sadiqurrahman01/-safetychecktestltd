@@ -57,6 +57,22 @@ function getToken(){
          sessionStorage.getItem('adminToken') || '';
 }
 
+function getPortalDeleteId(job){
+  return String(
+    (job && (
+      job._id ||
+      job.id ||
+      job.jobId ||
+      job.jobPublicId ||
+      job.internalJobId ||
+      job.reference ||
+      job.ref ||
+      job.portalJobId ||
+      job.requestId
+    )) || ''
+  ).trim();
+}
+
 function esc(v){
   return String(v ?? '').replace(/[&<>"']/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -79,18 +95,28 @@ function encodeJob(job){
 async function api(path, options){
   const token = getToken();
   if(!token) throw new Error('Admin token missing. Open admin first and log in, then reopen Portal Requests.');
-  const res = await fetch(API + path, {
-    ...options,
+
+  const res = await fetch(API.replace(/\/$/, '') + path, {
+    ...(options || {}),
     headers: {
-      ...(options && options.headers ? options.headers : {}),
-      Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json'
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json',
+      ...((options && options.headers) || {})
     }
   });
-  const data = await res.json().catch(() => ({}));
-  if(!res.ok || data.ok === false){
-    throw new Error(data.message || data.error || 'Request failed');
+
+  const raw = await res.text();
+  let data = {};
+  try {
+    data = raw ? JSON.parse(raw) : {};
+  } catch(e) {
+    data = { message: raw || 'Non JSON API response' };
   }
+
+  if(!res.ok || data.ok === false){
+    throw new Error(data.message || data.error || ('Request failed HTTP ' + res.status));
+  }
+
   return data;
 }
 
