@@ -156,8 +156,7 @@
       if (!confirm('Delete portal access request ' + ref + '?')) return;
 
       try {
-        const res = await fetch(API + '/api/admin/portal-jobs/' + encodeURIComponent(id), {
-          method: 'DELETE',
+        const res = await fetch(safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(cleanId(id)), { method: 'DELETE',
           headers: { Authorization: 'Bearer ' + liveToken }
         });
         const data = await res.json();
@@ -272,12 +271,34 @@
     }
 
     
-async function deletePortalJob(id, ref) {
-  const liveToken = getToken();
-  if (!liveToken) {
-    alert('Admin token missing. Open admin first and log in, then reopen Portal Requests from inside admin.');
+async async function deletePortalJob(id, ref) {
+  const safeId = cleanId(id);
+  const safeRef = cleanId(ref) || safeId || 'portal request';
+
+  if (!safeId || safeId === 'undefined' || safeId === 'null') {
+    alert('Could not delete: portal request ID is missing.');
     return;
   }
+
+  try {
+    const url = safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(safeId);
+    const ok = await safeDeleteRequest(url, 'portal request ' + safeRef);
+    if (ok && typeof loadRequests === 'function') await loadRequests();
+  } catch (err) {
+    console.error('Delete portal request failed', err);
+    alert('Delete failed: ' + (err.message || err));
+  }
+}
+
+  try {
+    const url = safeApiBase() + '/api/admin/portal-jobs/' + encodeURIComponent(safeId);
+    const ok = await safeDeleteRequest(url, 'portal request ' + safeRef);
+    if (ok && typeof loadRequests === 'function') await loadRequests();
+  } catch (err) {
+    console.error('Delete portal request failed', err);
+    alert('Delete failed: ' + (err.message || err));
+  }
+}
 
   const safeId = String(id || '').trim();
   const safeRef = String(ref || safeId || 'this portal request').trim();
@@ -348,7 +369,63 @@ async function loadRequests() {
     }
 
     loadRequests();
-  </script>
+  
+
+function cleanId(value) {
+  return String(value || '').trim();
+}
+
+function safeApiBase() {
+  return String(API || 'https://api.safetychecktestltd.co.uk').replace(/\/$/, '');
+}
+
+function getLiveAdminToken() {
+  try {
+    return (
+      localStorage.getItem('sct_admin_token') ||
+      localStorage.getItem('sctAdminToken') ||
+      localStorage.getItem('adminToken') ||
+      localStorage.getItem('token') ||
+      ''
+    );
+  } catch (e) {
+    return '';
+  }
+}
+
+async function safeDeleteRequest(url, label) {
+  const token = getLiveAdminToken();
+  if (!token) {
+    alert('Admin token missing. Please open admin, log in again, then retry.');
+    return false;
+  }
+
+  if (!url || typeof url !== 'string' || !url.startsWith('http')) {
+    alert('Delete failed: invalid delete URL.');
+    console.error('Invalid delete URL:', url);
+    return false;
+  }
+
+  if (!confirm('Delete ' + (label || 'this item') + '?')) return false;
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || data.ok === false) {
+    throw new Error(data.message || data.error || ('Delete failed with status ' + res.status));
+  }
+
+  return true;
+}
+
+</script>
 </body>
 </html>
 

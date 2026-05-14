@@ -538,6 +538,62 @@
     logPanelOpen();
   }
 })();
+
+
+function cleanId(value) {
+  return String(value || '').trim();
+}
+
+function safeApiBase() {
+  return String(API || 'https://api.safetychecktestltd.co.uk').replace(/\/$/, '');
+}
+
+function getLiveAdminToken() {
+  try {
+    return (
+      localStorage.getItem('sct_admin_token') ||
+      localStorage.getItem('sctAdminToken') ||
+      localStorage.getItem('adminToken') ||
+      localStorage.getItem('token') ||
+      ''
+    );
+  } catch (e) {
+    return '';
+  }
+}
+
+async function safeDeleteRequest(url, label) {
+  const token = getLiveAdminToken();
+  if (!token) {
+    alert('Admin token missing. Please open admin, log in again, then retry.');
+    return false;
+  }
+
+  if (!url || typeof url !== 'string' || !url.startsWith('http')) {
+    alert('Delete failed: invalid delete URL.');
+    console.error('Invalid delete URL:', url);
+    return false;
+  }
+
+  if (!confirm('Delete ' + (label || 'this item') + '?')) return false;
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || data.ok === false) {
+    throw new Error(data.message || data.error || ('Delete failed with status ' + res.status));
+  }
+
+  return true;
+}
+
 </script>
 
 </body>
