@@ -9,7 +9,7 @@
 
   ready(function () {
     var buttons = Array.prototype.slice.call(document.querySelectorAll(".filter"));
-    var items = Array.prototype.slice.call(document.querySelectorAll(".gallery-card"));
+    var items = Array.prototype.slice.call(document.querySelectorAll(".gallery-item"));
 
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
@@ -23,7 +23,8 @@
 
         items.forEach(function (item) {
           var category = item.getAttribute("data-category") || "";
-          item.classList.toggle("is-hidden", filter !== "all" && category.indexOf(filter) === -1);
+          var hide = filter !== "all" && category.indexOf(filter) === -1;
+          item.classList.toggle("is-hidden", hide);
         });
       });
     });
