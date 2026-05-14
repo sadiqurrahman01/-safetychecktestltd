@@ -1,33 +1,11 @@
 (function () {
   function getGalleryData() {
-    const candidates = [
-      window.SCT_GALLERY_DATA,
-      window.GALLERY_DATA,
-      window.galleryData,
-      window.GalleryData,
-      window.sctGalleryData,
-      window.SAFETY_CHECK_GALLERY_DATA,
-      window.SCTGalleryData
-    ];
-
-    for (const item of candidates) {
-      if (item && typeof item === "object") {
-        return {
-          boards: Array.isArray(item.boards) ? item.boards : [],
-          works: Array.isArray(item.works) ? item.works : [],
-          trades: Array.isArray(item.trades) ? item.trades : []
-        };
-      }
+    if (window.SCT_GALLERY_DATA && typeof window.SCT_GALLERY_DATA === "object") {
+      return window.SCT_GALLERY_DATA;
     }
 
     return { boards: [], works: [], trades: [] };
   }
-
-  const data = getGalleryData();
-
-  const boardGrid = document.querySelector("#projectBoards");
-  const workGrid = document.querySelector("#workGallery");
-  const tradeGrid = document.querySelector("#tradeGallery");
 
   function esc(value) {
     return String(value || "").replace(/[&<>"']/g, function (m) {
@@ -41,78 +19,82 @@
     });
   }
 
-  function card(item, big) {
-    const title = esc(item.title || item.name || "Project photo");
-    const label = esc(item.label || item.stage || item.category || "Project");
-    const src = esc(item.src || item.url || "");
-    const category = esc(item.category || "project");
-    const stage = esc(item.stage || "after");
-    const description = esc(item.description || label);
-
+  function makeCard(item, large) {
+    const src = item.src || item.url || "";
     if (!src) return "";
 
+    const title = esc(item.title || "Project photo");
+    const label = esc(item.label || item.stage || item.category || "Project");
+    const desc = esc(item.description || label);
+    const category = esc(item.category || "project");
+    const stage = esc(item.stage || "after");
+
     return `
-      <article class="gallery-card ${big ? "gallery-card-large" : ""}" data-category="${category}" data-stage="${stage}">
-        <button class="gallery-image-btn" type="button" data-src="${src}" data-title="${title}">
-          <img src="${src}" alt="${title}" loading="lazy">
+      <article class="gallery-card ${large ? "gallery-card-large" : ""}" data-category="${category}" data-stage="${stage}">
+        <button class="gallery-image-btn" type="button" data-src="${esc(src)}" data-title="${title}">
+          <img src="${esc(src)}" alt="${title}" loading="lazy">
           <span class="gallery-badge">${label}</span>
         </button>
         <div class="gallery-card-body">
           <h3>${title}</h3>
-          <p>${description}</p>
+          <p>${desc}</p>
         </div>
       </article>
     `;
   }
 
-  function render() {
-    if (boardGrid) {
-      boardGrid.innerHTML = (data.boards || []).map((item) => card(item, true)).join("");
+  function renderGallery() {
+    const data = getGalleryData();
+
+    const boards = document.getElementById("projectBoards");
+    const works = document.getElementById("workGallery");
+    const trades = document.getElementById("tradeGallery");
+
+    if (boards) {
+      boards.innerHTML = (data.boards || []).map(item => makeCard(item, true)).join("");
     }
 
-    if (workGrid) {
-      workGrid.innerHTML = (data.works || []).map((item) => card(item, false)).join("");
+    if (works) {
+      works.innerHTML = (data.works || []).map(item => makeCard(item, false)).join("");
+
+      if (!works.innerHTML.trim()) {
+        works.innerHTML = `
+          <div class="empty-gallery">
+            <h3>No gallery photos found</h3>
+            <p>Gallery data did not load correctly.</p>
+          </div>
+        `;
+      }
     }
 
-    if (tradeGrid) {
-      tradeGrid.innerHTML = (data.trades || []).map((item) => card(item, true)).join("");
+    if (trades) {
+      trades.innerHTML = (data.trades || []).map(item => makeCard(item, true)).join("");
     }
 
-    if (boardGrid && !boardGrid.innerHTML.trim()) {
-      boardGrid.innerHTML = "";
-    }
-
-    if (workGrid && !workGrid.innerHTML.trim()) {
-      workGrid.innerHTML = `
-        <div class="empty-gallery">
-          <h3>No gallery photos found</h3>
-          <p>Gallery data was not loaded. Check gallery-data.js is loading before gallery.js.</p>
-        </div>
-      `;
-    }
-
+    bindFilters();
     bindLightbox();
   }
 
   function bindFilters() {
-    document.querySelectorAll(".filter-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.onclick = function () {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
 
         const filter = btn.dataset.filter || "all";
-        document.querySelectorAll("#workGallery .gallery-card").forEach((cardEl) => {
-          const category = cardEl.dataset.category;
-          const stage = cardEl.dataset.stage;
+
+        document.querySelectorAll("#workGallery .gallery-card").forEach(card => {
+          const category = card.dataset.category;
+          const stage = card.dataset.stage;
           const show = filter === "all" || filter === category || filter === stage;
-          cardEl.style.display = show ? "" : "none";
+          card.style.display = show ? "" : "none";
         });
-      });
+      };
     });
   }
 
   function bindLightbox() {
-    let lightbox = document.querySelector("#galleryLightbox");
+    let lightbox = document.getElementById("galleryLightbox");
 
     if (!lightbox) {
       lightbox = document.createElement("div");
@@ -130,21 +112,27 @@
     const caption = lightbox.querySelector("p");
     const close = lightbox.querySelector(".gallery-lightbox-close");
 
-    document.querySelectorAll(".gallery-image-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
+    document.querySelectorAll(".gallery-image-btn").forEach(btn => {
+      btn.onclick = function () {
         img.src = btn.dataset.src;
         img.alt = btn.dataset.title;
         caption.textContent = btn.dataset.title;
         lightbox.classList.add("open");
-      });
+      };
     });
 
-    close.addEventListener("click", () => lightbox.classList.remove("open"));
-    lightbox.addEventListener("click", (e) => {
+    close.onclick = function () {
+      lightbox.classList.remove("open");
+    };
+
+    lightbox.onclick = function (e) {
       if (e.target === lightbox) lightbox.classList.remove("open");
-    });
+    };
   }
 
-  render();
-  bindFilters();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderGallery);
+  } else {
+    renderGallery();
+  }
 })();
