@@ -5,26 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Our Work Gallery | Safety Check Test Ltd</title>
   <link rel="stylesheet" href="gallery.css" />
+  <link rel="stylesheet" href="gallery-nav.css?v=20260515-nav-only">
 </head>
 <body>
-  <header class="sct-header">
-    <a class="sct-brand" href="index.html#home">
-      <img src="imagesct.jpeg" alt="Safety Check Test Ltd logo" />
+  <header class="sct-home-navbar">
+  <div class="sct-nav-inner">
+    <a class="sct-nav-brand" href="/">
+      <img src="logo.png" alt="Safety Check Test Ltd logo">
       <span>
         <strong>Safety Check Test Ltd</strong>
-        <small>Electrical, Fire, Property & Building Services</small>
+        <small>Electrical • Fire • Gas • Plumbing • Property Maintenance</small>
       </span>
     </a>
 
-    <nav class="sct-nav">
-      <a href="index.html#home">Home</a>
-      <a href="index.html#services">Services</a>
-      <a href="index.html#quote-wizard">Quotes</a>
-      <a href="gallery.html" class="active">Gallery</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#contact">Contact</a>
+    <nav class="sct-nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/#services">Services</a>
+      <a href="/#quote">Get a Quote</a>
+      <a class="active" href="/gallery.html">Gallery</a>
+      <a href="/#contact">Contact</a>
     </nav>
-  </header>
+
+    <a class="sct-nav-cta" href="/#quote">Get a Quote</a>
+  </div>
+</header>
 
   <main class="gallery-page">
     <section class="gallery-hero">

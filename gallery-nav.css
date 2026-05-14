@@ -1,0 +1,121 @@
+.sct-home-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid #dbeafe;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.sct-nav-inner {
+  width: min(1180px, calc(100% - 32px));
+  min-height: 84px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.sct-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #061a38;
+  text-decoration: none;
+  min-width: 260px;
+}
+
+.sct-nav-brand img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  display: block;
+}
+
+.sct-nav-brand strong {
+  display: block;
+  color: #061a38;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.sct-nav-brand small {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.sct-nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sct-nav-links a {
+  padding: 10px 13px;
+  border-radius: 999px;
+  color: #334155;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sct-nav-links a:hover,
+.sct-nav-links a.active {
+  background: #eaf2ff;
+  color: #0b4db8;
+}
+
+.sct-nav-cta {
+  min-height: 48px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0b4db8, #2563eb);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 900;
+  box-shadow: 0 14px 26px rgba(37, 99, 235, 0.24);
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .sct-nav-inner {
+    min-height: auto;
+    padding: 16px 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sct-nav-brand {
+    min-width: 0;
+  }
+
+  .sct-nav-links {
+    justify-content: flex-start;
+  }
+
+  .sct-nav-cta {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .sct-nav-inner {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .sct-nav-brand small {
+    display: none;
+  }
+}
