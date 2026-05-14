@@ -1,64 +1,106 @@
 (function () {
-  if (window.__SCT_GET_IT_MOVING_BUTTON__) return;
-  window.__SCT_GET_IT_MOVING_BUTTON__ = true;
+  if (window.__SCT_GET_IT_MOVING_BUTTON_V2__) return;
+  window.__SCT_GET_IT_MOVING_BUTTON_V2__ = true;
 
   function clean(value) {
     return String(value || "").replace(/\s+/g, " ").trim();
   }
 
-  function makeButton() {
-    var wrap = document.createElement("div");
-    wrap.id = "sct-get-it-moving-partner-button";
-    wrap.style.cssText = [
-      "margin-top:18px",
+  function removeOldWrongButton() {
+    var old = document.getElementById("sct-get-it-moving-partner-button");
+    if (old) old.remove();
+
+    Array.prototype.slice.call(document.querySelectorAll("a")).forEach(function (a) {
+      if (clean(a.textContent) === "Book Removals / Flatbed with Get It Moving") {
+        var parent = a.parentElement;
+        if (parent && parent.id === "sct-get-it-moving-partner-button") {
+          parent.remove();
+        }
+      }
+    });
+  }
+
+  function findWhatsAppButton() {
+    var links = Array.prototype.slice.call(document.querySelectorAll("a, button"));
+    return links.find(function (el) {
+      var text = clean(el.textContent);
+      var href = clean(el.getAttribute && el.getAttribute("href"));
+      return text.toLowerCase().indexOf("message on whatsapp") !== -1 ||
+             href.toLowerCase().indexOf("wa.me") !== -1 ||
+             href.toLowerCase().indexOf("whatsapp") !== -1;
+    });
+  }
+
+  function makeGetItMovingButton(whatsappButton) {
+    var a = document.createElement("a");
+    a.id = "sct-get-it-moving-inline-button";
+    a.href = "https://www.getitmoving.co.uk";
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "Book Removals / Flatbed with Get It Moving";
+
+    if (whatsappButton) {
+      a.className = whatsappButton.className || "";
+      a.style.cssText = whatsappButton.style.cssText || "";
+    }
+
+    a.style.display = "inline-flex";
+    a.style.alignItems = "center";
+    a.style.justifyContent = "center";
+    a.style.textDecoration = "none";
+    a.style.fontWeight = "800";
+
+    if (!a.style.borderRadius) a.style.borderRadius = "999px";
+    if (!a.style.minHeight) a.style.minHeight = "48px";
+    if (!a.style.padding) a.style.padding = "0 20px";
+
+    return a;
+  }
+
+  function makeButtonRow(whatsappButton) {
+    var row = document.createElement("div");
+    row.id = "sct-get-it-moving-button-row";
+    row.style.cssText = [
       "display:flex",
       "flex-wrap:wrap",
-      "gap:10px",
-      "align-items:center"
+      "gap:12px",
+      "align-items:center",
+      "margin-top:14px"
     ].join(";");
 
-    wrap.innerHTML = [
-      '<a href="https://www.getitmoving.co.uk" target="_blank" rel="noopener" style="',
-      'display:inline-flex;align-items:center;justify-content:center;',
-      'min-height:48px;padding:0 20px;border-radius:999px;',
-      'background:linear-gradient(135deg,#0b4db8,#2563eb);',
-      'color:#ffffff;text-decoration:none;font-weight:900;',
-      'box-shadow:0 14px 26px rgba(37,99,235,.24);',
-      '">',
-      'Book Removals / Flatbed with Get It Moving',
-      '</a>',
-      '<span style="font-size:13px;color:#64748b;font-weight:700;">Opens sister company website</span>'
-    ].join("");
-
-    return wrap;
+    return row;
   }
 
   function mount() {
-    if (document.getElementById("sct-get-it-moving-partner-button")) return;
+    removeOldWrongButton();
 
-    var all = Array.prototype.slice.call(document.querySelectorAll("p, div, section, article"));
-    var target = all.find(function (el) {
-      var text = clean(el.innerText || el.textContent || "");
-      return text.indexOf("Need removals, flatbed van support or site logistics?") !== -1 ||
-             text.indexOf("Get It Moving") !== -1 && text.indexOf("flatbed") !== -1;
-    });
+    if (document.getElementById("sct-get-it-moving-inline-button")) return;
 
-    if (!target) return;
+    var whatsappButton = findWhatsAppButton();
+    if (!whatsappButton) return;
 
-    var box = target;
-    for (var i = 0; i < 5 && box.parentElement; i += 1) {
-      var text = clean(box.innerText || "");
-      if (
-        text.indexOf("03306335588") !== -1 ||
-        text.indexOf("info@safetychecktestltd.co.uk") !== -1 ||
-        text.indexOf("Message on WhatsApp") !== -1
-      ) {
-        break;
-      }
-      box = box.parentElement;
+    var parent = whatsappButton.parentElement;
+    if (!parent) return;
+
+    var getMovingButton = makeGetItMovingButton(whatsappButton);
+
+    var row;
+
+    if (
+      parent.id === "sct-get-it-moving-button-row" ||
+      (
+        parent.children.length <= 4 &&
+        clean(parent.innerText).toLowerCase().indexOf("message on whatsapp") !== -1
+      )
+    ) {
+      row = parent;
+    } else {
+      row = makeButtonRow(whatsappButton);
+      parent.insertBefore(row, whatsappButton);
+      row.appendChild(whatsappButton);
     }
 
-    box.appendChild(makeButton());
+    row.appendChild(getMovingButton);
   }
 
   if (document.readyState === "loading") {
@@ -69,4 +111,5 @@
 
   setTimeout(mount, 700);
   setTimeout(mount, 1800);
+  setTimeout(mount, 3000);
 })();
