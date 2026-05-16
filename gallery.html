@@ -487,81 +487,109 @@
     }
   </style>
 
-<style id="sct-gallery-real-home-navbar-final">
-/* FINAL GALLERY NAVBAR - DARK PREMIUM HOME PAGE MATCH */
+<style id="sct-gallery-navbar-final-repair">
+/* FINAL REPAIR: gallery navbar exactly like dark premium home header */
 
-.sct-gallery-navbar {
+.final-gallery-header,
+.final-gallery-header * {
+  box-sizing: border-box !important;
+}
+
+.final-gallery-header {
   position: sticky !important;
   top: 0 !important;
-  z-index: 99999 !important;
+  z-index: 2147483647 !important;
   width: 100% !important;
+  min-height: 96px !important;
+  display: block !important;
   background: rgba(5, 9, 20, 0.98) !important;
   border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-  box-shadow: 0 18px 45px rgba(0,0,0,0.35) !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.38) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
 }
 
-.sct-gallery-navbar-inner {
+.final-gallery-nav-wrap {
   width: min(1180px, calc(100% - 48px)) !important;
-  min-height: 92px !important;
+  min-height: 96px !important;
   margin: 0 auto !important;
+  padding: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 32px !important;
+  gap: 34px !important;
 }
 
-.sct-gallery-brand {
+.final-gallery-brand {
   display: flex !important;
   align-items: center !important;
   gap: 16px !important;
   text-decoration: none !important;
-  min-width: 360px !important;
   flex: 0 0 auto !important;
+  min-width: 390px !important;
+  max-width: 480px !important;
 }
 
-.sct-gallery-brand img {
+.final-gallery-brand img {
+  display: block !important;
   width: 58px !important;
   height: 58px !important;
+  min-width: 58px !important;
   object-fit: contain !important;
-  display: block !important;
   background: transparent !important;
+  border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
 }
 
-.sct-gallery-brand span {
+.final-gallery-brand-copy {
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
   line-height: 1.1 !important;
+  white-space: normal !important;
 }
 
-.sct-gallery-brand strong {
+.final-gallery-brand-copy strong {
+  display: block !important;
+  margin: 0 !important;
   color: #ffffff !important;
-  font-size: 19px !important;
+  font-size: 20px !important;
   font-weight: 950 !important;
+  line-height: 1.05 !important;
   letter-spacing: -0.02em !important;
 }
 
-.sct-gallery-brand small {
+.final-gallery-brand-copy small {
+  display: block !important;
+  margin: 0 !important;
   color: #cbd5e1 !important;
   font-size: 13px !important;
   font-weight: 750 !important;
   line-height: 1.25 !important;
 }
 
-.sct-gallery-nav {
+.final-gallery-nav {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  gap: 28px !important;
+  gap: 30px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 1 1 auto !important;
   flex-wrap: nowrap !important;
-  margin-left: auto !important;
+  background: transparent !important;
 }
 
-.sct-gallery-nav a {
+.final-gallery-nav a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 10px 0 !important;
   color: #ffffff !important;
   background: transparent !important;
   border: 1px solid transparent !important;
@@ -570,35 +598,43 @@
   font-size: 16px !important;
   font-weight: 900 !important;
   line-height: 1 !important;
-  padding: 11px 0 !important;
   white-space: nowrap !important;
   box-shadow: none !important;
 }
 
-.sct-gallery-nav a:hover {
+.final-gallery-nav a:hover {
   color: #f5b301 !important;
 }
 
-.sct-gallery-nav a.active {
+.final-gallery-nav a.active {
+  padding: 12px 18px !important;
   color: #07111f !important;
   background: linear-gradient(135deg, #f5b301, #ffd66b) !important;
   border-color: rgba(245,179,1,0.65) !important;
-  padding: 12px 18px !important;
-  box-shadow: 0 14px 30px rgba(245,179,1,0.28) !important;
+  box-shadow: 0 14px 30px rgba(245,179,1,0.30) !important;
 }
 
-/* Stop old gallery nav styles from interfering */
+/* Kill old navbar classes if they still exist somewhere */
 .site-header,
 .sct-home-navbar,
-.nav-shell,
-.sct-home-navbar-inner,
-.sct-home-links,
-.sct-home-brand {
-  all: unset;
+.sct-gallery-navbar {
+  display: none !important;
 }
 
+/* Push hero cleanly under navbar */
+body > .hero,
+main > .hero,
+.hero {
+  margin-top: 48px !important;
+}
+
+/* Mobile */
 @media (max-width: 980px) {
-  .sct-gallery-navbar-inner {
+  .final-gallery-header {
+    min-height: auto !important;
+  }
+
+  .final-gallery-nav-wrap {
     width: min(100% - 32px, 1180px) !important;
     min-height: auto !important;
     padding: 18px 0 !important;
@@ -607,35 +643,36 @@
     gap: 18px !important;
   }
 
-  .sct-gallery-brand {
+  .final-gallery-brand {
     min-width: 0 !important;
+    max-width: 100% !important;
   }
 
-  .sct-gallery-nav {
+  .final-gallery-nav {
     width: 100% !important;
     justify-content: flex-start !important;
-    gap: 14px !important;
     flex-wrap: wrap !important;
-    margin-left: 0 !important;
+    gap: 14px !important;
   }
 
-  .sct-gallery-nav a {
+  .final-gallery-nav a {
     font-size: 14px !important;
   }
 }
 
 @media (max-width: 560px) {
-  .sct-gallery-brand small {
-    display: none !important;
+  .final-gallery-brand img {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
   }
 
-  .sct-gallery-brand img {
-    width: 46px !important;
-    height: 46px !important;
+  .final-gallery-brand-copy strong {
+    font-size: 17px !important;
   }
 
-  .sct-gallery-brand strong {
-    font-size: 16px !important;
+  .final-gallery-brand-copy small {
+    font-size: 12px !important;
   }
 }
 </style>
@@ -643,21 +680,21 @@
 </head>
 <body>
 
-<header class="sct-gallery-navbar">
-  <div class="sct-gallery-navbar-inner">
-    <a class="sct-gallery-brand" href="/" aria-label="Safety Check Test Ltd home">
+<header class="final-gallery-header">
+  <div class="final-gallery-nav-wrap">
+    <a class="final-gallery-brand" href="/" aria-label="Safety Check Test Ltd home">
       <img src="/logo.png" alt="Safety Check Test Ltd logo">
-      <span>
+      <span class="final-gallery-brand-copy">
         <strong>Safety Check Test Ltd</strong>
         <small>Electrical, Fire, Property &amp; Building Services</small>
       </span>
     </a>
 
-    <nav class="sct-gallery-nav" aria-label="Main navigation">
+    <nav class="final-gallery-nav" aria-label="Main navigation">
       <a href="/">Home</a>
       <a href="/#services">Services</a>
       <a href="/#quote">Quotes</a>
-      <a href="/gallery.html" class="active">Gallery</a>
+      <a class="active" href="/gallery.html">Gallery</a>
       <a href="/#about">About</a>
       <a href="/#contact">Contact</a>
     </nav>
