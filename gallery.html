@@ -1162,6 +1162,86 @@ footer {
 }
 </style>
 
+
+<style id="sct-gallery-full-image-fix">
+/* FINAL FIX: show complete gallery photos, do not crop */
+body main img:not(.logo):not(.brand-logo),
+body .gallery-main img:not(.logo):not(.brand-logo),
+body .gallery-grid img:not(.logo):not(.brand-logo),
+body .gallery-item img:not(.logo):not(.brand-logo),
+body .project-card img:not(.logo):not(.brand-logo),
+body .project-board img:not(.logo):not(.brand-logo),
+body .work-card img:not(.logo):not(.brand-logo),
+body .photo-card img:not(.logo):not(.brand-logo),
+body figure img:not(.logo):not(.brand-logo) {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  background: #020817 !important;
+}
+
+/* Stop image wrappers forcing a crop */
+body main .image-wrap,
+body main .image-wrapper,
+body main .photo-wrap,
+body main .photo-wrapper,
+body main .media,
+body main .thumb,
+body main .thumbnail,
+body main figure,
+body main picture,
+body .gallery-grid .image-wrap,
+body .gallery-grid .media,
+body .gallery-grid figure,
+body .gallery-item .image-wrap,
+body .gallery-item .media,
+body .gallery-item figure,
+body .project-card .image-wrap,
+body .project-card .media,
+body .project-card figure,
+body .work-card .image-wrap,
+body .work-card .media,
+body .work-card figure,
+body .photo-card .image-wrap,
+body .photo-card .media,
+body .photo-card figure {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  overflow: visible !important;
+  background: #020817 !important;
+}
+
+/* Keep cards neat after full-size images */
+body .gallery-item,
+body .project-card,
+body .project-board,
+body .work-card,
+body .photo-card {
+  overflow: hidden !important;
+}
+
+/* Mobile: full image, no crop */
+@media (max-width: 820px) {
+  body main img:not(.logo):not(.brand-logo),
+  body .gallery-grid img:not(.logo):not(.brand-logo),
+  body .gallery-item img:not(.logo):not(.brand-logo),
+  body .project-card img:not(.logo):not(.brand-logo),
+  body .work-card img:not(.logo):not(.brand-logo),
+  body .photo-card img:not(.logo):not(.brand-logo) {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
