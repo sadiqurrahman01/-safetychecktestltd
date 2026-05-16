@@ -2285,5 +2285,226 @@ body .photo-card {
       });
     })();
   </script>
+
+<style id="sct-gallery-home-colour-match-final">
+/* Final gallery colour match: same premium dark/gold system as homepage.
+   Navbar is not changed here. */
+
+html,
+body {
+  background: linear-gradient(135deg, #050914 0%, #0b1220 55%, #111827 100%) !important;
+  color: #ffffff !important;
+}
+
+body {
+  min-height: 100vh !important;
+}
+
+main,
+.gallery-page,
+.gallery-main,
+.gallery-shell,
+.gallery-wrap,
+.gallery-content,
+.sct-gallery-page {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* Hero / top gallery panel */
+main > section:first-of-type,
+.gallery-hero,
+.sct-gallery-hero,
+.hero,
+.hero-card {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(245,179,1,.16), transparent 32%),
+    linear-gradient(135deg, rgba(15,23,42,.96), rgba(5,9,20,.94)) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: 0 28px 80px rgba(0,0,0,.42) !important;
+  color: #ffffff !important;
+}
+
+/* Text colours */
+main h1,
+main h2,
+main h3,
+main h4,
+.gallery-page h1,
+.gallery-page h2,
+.gallery-page h3,
+.gallery-main h1,
+.gallery-main h2,
+.gallery-main h3 {
+  color: #ffffff !important;
+}
+
+main p,
+main li,
+.gallery-page p,
+.gallery-page li,
+.gallery-main p,
+.gallery-main li {
+  color: #d8e1ee !important;
+}
+
+main .eyebrow,
+main .section-label,
+main .kicker,
+main .badge,
+main [class*="label"],
+main [class*="eyebrow"] {
+  color: #f5b301 !important;
+}
+
+/* Gold buttons same as homepage */
+main a[href*="#quote"],
+main a[href*="quote"],
+main button,
+.gallery-page button,
+.gallery-page .btn,
+.gallery-main .btn {
+  border-radius: 999px !important;
+  font-weight: 900 !important;
+}
+
+main a[href*="#quote"],
+main a[href*="quote"],
+.gallery-page .btn.primary,
+.gallery-main .btn.primary,
+main .primary {
+  background: linear-gradient(135deg, #f5b301, #ffd66b) !important;
+  color: #07111f !important;
+  border: 1px solid rgba(245,179,1,.75) !important;
+  box-shadow: 0 16px 34px rgba(245,179,1,.25) !important;
+}
+
+main a[href*="#services"],
+main a[href*="services"],
+.gallery-page .btn:not(.primary),
+.gallery-main .btn:not(.primary) {
+  background: rgba(5,9,20,.72) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+}
+
+/* Feature cards and gallery cards */
+main article,
+main figure,
+.gallery-card,
+.gallery-item,
+.project-card,
+.work-card,
+.photo-card,
+.service-card,
+.stat-card,
+[class*="gallery-card"],
+[class*="project-card"],
+[class*="photo-card"] {
+  background: rgba(15,23,42,.94) !important;
+  border: 1px solid rgba(255,255,255,.11) !important;
+  color: #ffffff !important;
+  box-shadow: 0 22px 55px rgba(0,0,0,.35) !important;
+}
+
+/* Keep full pictures visible, not cropped */
+main img,
+.gallery-card img,
+.gallery-item img,
+.project-card img,
+.work-card img,
+.photo-card img,
+figure img {
+  object-fit: contain !important;
+  background: #050914 !important;
+}
+
+/* Image card captions */
+figcaption,
+.gallery-card figcaption,
+.gallery-item figcaption,
+.project-card figcaption,
+.work-card figcaption,
+.photo-card figcaption,
+[class*="caption"] {
+  background: rgba(15,23,42,.98) !important;
+  color: #ffffff !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* Before / during / after badge colours */
+main .tag,
+main .pill,
+main .badge,
+main [class*="tag"],
+main [class*="pill"],
+main [class*="badge"] {
+  background: linear-gradient(135deg, #f5b301, #ffd66b) !important;
+  color: #07111f !important;
+  border-color: rgba(245,179,1,.55) !important;
+}
+
+/* Filter buttons */
+main .filter,
+main .filters button,
+main [data-filter] {
+  background: rgba(5,9,20,.72) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+}
+
+main .filter.active,
+main .filters button.active,
+main [data-filter].active {
+  background: linear-gradient(135deg, #f5b301, #ffd66b) !important;
+  color: #07111f !important;
+  border-color: rgba(245,179,1,.75) !important;
+}
+
+/* Mobile: same colour, neat spacing */
+@media (max-width: 780px) {
+  html,
+  body {
+    background: linear-gradient(135deg, #050914 0%, #0b1220 55%, #111827 100%) !important;
+  }
+
+  main,
+  .gallery-page,
+  .gallery-main {
+    background: transparent !important;
+  }
+
+  main > section:first-of-type,
+  .gallery-hero,
+  .sct-gallery-hero,
+  .hero,
+  .hero-card {
+    margin: 18px 14px !important;
+    border-radius: 28px !important;
+  }
+
+  main article,
+  main figure,
+  .gallery-card,
+  .gallery-item,
+  .project-card,
+  .work-card,
+  .photo-card {
+    border-radius: 28px !important;
+  }
+
+  main img,
+  .gallery-card img,
+  .gallery-item img,
+  .project-card img,
+  .work-card img,
+  .photo-card img,
+  figure img {
+    object-fit: contain !important;
+    background: #050914 !important;
+  }
+}
+</style>
+
 </body>
 </html>
