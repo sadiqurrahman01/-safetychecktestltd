@@ -1495,6 +1495,36 @@ main > section:first-of-type .category-item small {
 }
 </style>
 
+
+<style id="sct-remove-project-board-gold-pills">
+/* Remove ONLY the yellow/gold overlay pills from the 3 project board images */
+.sct-project-board-card-no-pill .badge,
+.sct-project-board-card-no-pill .tag,
+.sct-project-board-card-no-pill .pill,
+.sct-project-board-card-no-pill .label,
+.sct-project-board-card-no-pill .chip,
+.sct-project-board-card-no-pill .stage,
+.sct-project-board-card-no-pill .photo-badge,
+.sct-project-board-card-no-pill .gallery-badge,
+.sct-project-board-card-no-pill .project-badge,
+.sct-project-board-card-no-pill [class*="badge"],
+.sct-project-board-card-no-pill [class*="Badge"],
+.sct-project-board-card-no-pill [class*="tag"],
+.sct-project-board-card-no-pill [class*="Tag"],
+.sct-project-board-card-no-pill [class*="pill"],
+.sct-project-board-card-no-pill [class*="Pill"],
+.sct-project-board-card-no-pill [class*="label"],
+.sct-project-board-card-no-pill [class*="Label"],
+.sct-project-board-card-no-pill [class*="chip"],
+.sct-project-board-card-no-pill [class*="Chip"] {
+  display: none !important;
+}
+
+.sct-force-hide-board-pill {
+  display: none !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -3078,6 +3108,88 @@ main > section:first-of-type .mini-card * {
 
   setTimeout(applyFix, 400);
   setTimeout(applyFix, 1200);
+})();
+</script>
+
+
+<script id="sct-remove-project-board-gold-pills-js">
+(function () {
+  function cleanText(value) {
+    return String(value || "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+
+  function isGoldLike(el) {
+    try {
+      var bg = window.getComputedStyle(el).backgroundColor || "";
+      var m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+      if (!m) return false;
+      var r = Number(m[1]);
+      var g = Number(m[2]);
+      var b = Number(m[3]);
+      return r > 180 && g > 120 && b < 90;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function isBadgeLike(el) {
+    var cls = String(el.className || "").toLowerCase();
+    return /badge|tag|pill|label|chip|stage/.test(cls);
+  }
+
+  function removePillsFromCard(card) {
+    if (!card) return;
+
+    card.classList.add("sct-project-board-card-no-pill");
+
+    Array.from(card.querySelectorAll("*")).forEach(function (el) {
+      var text = cleanText(el.textContent);
+      var shortBadgeText =
+        text === "before" ||
+        text === "specialist trades" ||
+        text === "project board";
+
+      if (shortBadgeText && (isBadgeLike(el) || isGoldLike(el) || text.length <= 25)) {
+        el.classList.add("sct-force-hide-board-pill");
+      }
+    });
+  }
+
+  function applyFix() {
+    var headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,p,span,strong"));
+    var projectHeading = headings.find(function (el) {
+      var text = cleanText(el.textContent);
+      return (
+        text.indexOf("before, during & after project stories") !== -1 ||
+        text.indexOf("before, during and after project stories") !== -1 ||
+        text.indexOf("before during & after project stories") !== -1 ||
+        text.indexOf("before during and after project stories") !== -1
+      );
+    });
+
+    if (!projectHeading) return;
+
+    var section = projectHeading.closest("section") || projectHeading.parentElement;
+    if (!section) return;
+
+    var cards = Array.from(section.querySelectorAll("article, .card, .gallery-card, .project-card, .board-card, .work-card, .gallery-item, .grid > div, .cards > div"))
+      .filter(function (card) {
+        return card.querySelector("img");
+      })
+      .slice(0, 3);
+
+    cards.forEach(removePillsFromCard);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyFix);
+  } else {
+    applyFix();
+  }
+
+  setTimeout(applyFix, 300);
+  setTimeout(applyFix, 1000);
+  setTimeout(applyFix, 2000);
 })();
 </script>
 
