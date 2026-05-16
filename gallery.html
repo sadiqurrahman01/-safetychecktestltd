@@ -487,216 +487,151 @@
     }
   </style>
 
-<style id="sct-gallery-black-gold-premium">
-/* FINAL PREMIUM BLACK / GOLD GALLERY BRAND LAYER */
-
-:root {
-  --sct-black: #07111f;
-  --sct-black-2: #0f172a;
-  --sct-gold: #d4af37;
-  --sct-gold-2: #f3d77a;
-  --sct-cream: #fff8e6;
-  --sct-white: #ffffff;
-  --sct-text: #334155;
-  --sct-muted: #64748b;
-  --sct-line: rgba(212, 175, 55, .26);
+<style id="sct-gallery-home-navbar-exact">
+/* Exact homepage-style navbar for gallery only */
+.sct-home-navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 99999 !important;
+  width: 100% !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-bottom: 1px solid #dbeafe !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
-/* premium page background */
-body {
-  background:
-    radial-gradient(circle at top left, rgba(212, 175, 55, .16), transparent 30%),
-    radial-gradient(circle at top right, rgba(15, 23, 42, .08), transparent 30%),
-    linear-gradient(180deg, #fffaf0 0%, #ffffff 42%, #fffaf0 100%) !important;
-  color: var(--sct-text) !important;
-}
-
-/* navbar to match premium black/gold */
-.site-header {
-  background: rgba(255, 255, 255, .97) !important;
-  border-bottom: 1px solid rgba(212, 175, 55, .28) !important;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, .08) !important;
-}
-
-.brand strong {
-  color: var(--sct-black) !important;
-}
-
-.brand small {
-  color: #6b5a24 !important;
-}
-
-.nav-links a {
-  color: var(--sct-black-2) !important;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-  background: var(--sct-cream) !important;
-  color: var(--sct-black) !important;
-  border-color: var(--sct-gold) !important;
-}
-
-.nav-links .quote-btn {
-  background: linear-gradient(135deg, var(--sct-gold), var(--sct-gold-2)) !important;
-  color: var(--sct-black) !important;
-  border: 1px solid rgba(15, 23, 42, .12) !important;
-  box-shadow: 0 14px 28px rgba(212, 175, 55, .34) !important;
-}
-
-/* hero premium card */
-.hero {
-  background:
-    radial-gradient(circle at top right, rgba(212, 175, 55, .24), transparent 34%),
-    linear-gradient(135deg, #ffffff 0%, #fff8e6 100%) !important;
-  border: 1px solid rgba(212, 175, 55, .30) !important;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, .12) !important;
-}
-
-.kicker {
-  background: linear-gradient(135deg, rgba(212, 175, 55, .20), rgba(255, 248, 230, .95)) !important;
-  border: 1px solid rgba(212, 175, 55, .42) !important;
-  color: var(--sct-black) !important;
-}
-
-h1,
-h2,
-h3,
-.summary-card strong,
-.card-body h3,
-.trade-card h3 {
-  color: var(--sct-black) !important;
-}
-
-/* main buttons: gold + black */
-.btn.primary,
-.filter.active {
-  background: linear-gradient(135deg, var(--sct-gold), var(--sct-gold-2)) !important;
-  color: var(--sct-black) !important;
-  border: 1px solid rgba(15, 23, 42, .14) !important;
-  box-shadow: 0 16px 30px rgba(212, 175, 55, .34) !important;
-}
-
-.btn.secondary,
-.filter {
-  background: var(--sct-black) !important;
-  color: var(--sct-gold-2) !important;
-  border: 1px solid rgba(212, 175, 55, .55) !important;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, .12) !important;
-}
-
-.btn:hover,
-.filter:hover {
-  transform: translateY(-1px);
-}
-
-/* summary/service cards */
-.summary-card,
-.project-board-card,
-.work-card,
-.trade-card {
-  border: 1px solid rgba(212, 175, 55, .26) !important;
-  box-shadow: 0 16px 38px rgba(15, 23, 42, .09) !important;
-}
-
-.summary-card {
-  background:
-    linear-gradient(180deg, #ffffff 0%, #fffaf0 100%) !important;
-}
-
-/* image labels */
-.image-wrap span {
-  background: linear-gradient(135deg, var(--sct-black), #18243a) !important;
-  color: var(--sct-gold-2) !important;
-  border: 1px solid rgba(212, 175, 55, .55) !important;
-  box-shadow: 0 12px 26px rgba(15, 23, 42, .24) !important;
-}
-
-/* project/card headings cleaner */
-.card-body {
-  background: #ffffff !important;
-}
-
-.card-body p,
-.summary-card span,
-.section-head p,
-.hero p,
-.trade-card p {
-  color: var(--sct-muted) !important;
-}
-
-/* final quote CTA */
-.quote-cta {
-  background:
-    radial-gradient(circle at top right, rgba(212, 175, 55, .28), transparent 34%),
-    linear-gradient(135deg, var(--sct-black), #18243a) !important;
-  border: 1px solid rgba(212, 175, 55, .35) !important;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, .20) !important;
-}
-
-.quote-cta h2 {
-  color: #ffffff !important;
-}
-
-.quote-cta p {
-  color: #f8e7a1 !important;
-}
-
-.quote-cta .btn {
-  background: linear-gradient(135deg, var(--sct-gold), var(--sct-gold-2)) !important;
-  color: var(--sct-black) !important;
-  border: 1px solid rgba(255, 255, 255, .18) !important;
-}
-
-/* footer */
-footer {
-  background: var(--sct-black) !important;
-  border-top: 1px solid rgba(212, 175, 55, .30) !important;
-}
-
-footer p {
-  color: #f8e7a1 !important;
-}
-
-/* make gallery look tighter and more premium */
-section {
-  margin-top: 82px !important;
-  margin-bottom: 82px !important;
-}
-
-.project-grid,
-.work-grid,
-.trade-grid,
-.summary-grid {
+.sct-home-navbar-inner {
+  width: min(1180px, calc(100% - 32px)) !important;
+  min-height: 84px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   gap: 24px !important;
 }
 
-.project-board-card,
-.work-card,
-.trade-card,
-.summary-card {
-  border-radius: 28px !important;
+.sct-home-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-decoration: none !important;
+  min-width: 310px !important;
 }
 
-.image-wrap {
-  background: #f8efd0 !important;
+.sct-home-brand img {
+  width: 58px !important;
+  height: 58px !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
-@media (max-width: 620px) {
-  .hero {
-    margin-top: 24px !important;
+.sct-home-brand strong {
+  display: block !important;
+  color: #061a38 !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.sct-home-brand small {
+  display: block !important;
+  margin-top: 4px !important;
+  color: #64748b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+.sct-home-links {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.sct-home-links a {
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  color: #334155 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.sct-home-links a:hover,
+.sct-home-links a.active {
+  background: #eaf2ff !important;
+  color: #0b4db8 !important;
+  border-color: #dbeafe !important;
+}
+
+@media (max-width: 900px) {
+  .sct-home-navbar-inner {
+    min-height: auto !important;
+    padding: 16px 0 !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
   }
 
-  .nav-links .quote-btn {
-    width: 100%;
+  .sct-home-brand {
+    min-width: 0 !important;
+  }
+
+  .sct-home-links {
+    justify-content: flex-start !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .sct-home-navbar-inner {
+    width: min(100% - 24px, 1180px) !important;
+  }
+
+  .sct-home-brand small {
+    display: none !important;
   }
 }
 </style>
 
 </head>
 <body>
-  <header class="site-header">
-  </header>
+
+<header class="sct-home-navbar">
+  <div class="sct-home-navbar-inner">
+    <a class="sct-home-brand" href="/" aria-label="Safety Check Test Ltd home">
+      <img src="/logo.png" alt="Safety Check Test Ltd logo">
+      <span>
+        <strong>Safety Check Test Ltd</strong>
+        <small>Electrical, Fire, Property &amp; Building Services</small>
+      </span>
+    </a>
+
+    <nav class="sct-home-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/#services">Services</a>
+      <a href="/#quote">Quotes</a>
+      <a href="/gallery.html" class="active">Gallery</a>
+      <a href="/#about">About</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+  
 
   <main>
     <section class="hero wrap">
