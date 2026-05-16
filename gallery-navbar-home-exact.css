@@ -1,0 +1,155 @@
+/* Final gallery navbar fix: match Safety Check Test homepage header */
+.home-match-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 99999 !important;
+  width: 100% !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid #dbeafe !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.home-match-nav {
+  width: min(1180px, calc(100% - 32px)) !important;
+  min-height: 84px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 24px !important;
+}
+
+.home-match-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-decoration: none !important;
+  color: #061a38 !important;
+  flex: 0 0 auto !important;
+  min-width: 310px !important;
+}
+
+.home-match-brand img {
+  width: 58px !important;
+  height: 58px !important;
+  object-fit: contain !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.home-match-brand strong {
+  display: block !important;
+  color: #061a38 !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em !important;
+  margin: 0 !important;
+}
+
+.home-match-brand small {
+  display: block !important;
+  color: #64748b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  margin-top: 4px !important;
+}
+
+.home-match-links {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.home-match-links a {
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  color: #334155 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.home-match-links a:hover,
+.home-match-links a.active {
+  background: #eaf2ff !important;
+  color: #0b4db8 !important;
+  border-color: #dbeafe !important;
+}
+
+.home-match-links a.quote-button {
+  background: linear-gradient(135deg, #0b4db8, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 14px 26px rgba(37, 99, 235, 0.24) !important;
+}
+
+/* Stop old gallery CSS from repainting the header */
+.home-match-header *,
+.home-match-nav *,
+.home-match-brand *,
+.home-match-links * {
+  box-sizing: border-box !important;
+}
+
+/* Keep gallery body in the same blue/white family */
+body {
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 32%),
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 44%, #f8fbff 100%) !important;
+}
+
+/* Mobile */
+@media (max-width: 920px) {
+  .home-match-nav {
+    min-height: auto !important;
+    padding: 16px 0 !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .home-match-brand {
+    min-width: 0 !important;
+  }
+
+  .home-match-links {
+    justify-content: flex-start !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-match-nav {
+    width: min(100% - 24px, 1180px) !important;
+  }
+
+  .home-match-brand small {
+    display: none !important;
+  }
+
+  .home-match-links a {
+    min-height: 38px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+  }
+}
