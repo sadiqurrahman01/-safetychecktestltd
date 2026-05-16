@@ -2506,5 +2506,186 @@ main [data-filter].active {
 }
 </style>
 
+
+<style id="sct-gallery-cta-text-visibility-fix">
+/* CTA / hero readability fix only */
+
+main > section:first-of-type,
+.gallery-hero,
+.sct-gallery-hero,
+.hero,
+.hero-card,
+.gallery-intro,
+.sct-gallery-top-panel {
+  position: relative !important;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(245,179,1,.14), transparent 28%),
+    linear-gradient(135deg, rgba(11,18,32,.96), rgba(5,9,20,.96)) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.38) !important;
+  color: #ffffff !important;
+}
+
+/* heading */
+main > section:first-of-type h1,
+.gallery-hero h1,
+.sct-gallery-hero h1,
+.hero h1,
+.hero-card h1 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,.35) !important;
+}
+
+/* paragraph / CTA supporting copy */
+main > section:first-of-type p,
+main > section:first-of-type .lead,
+.gallery-hero p,
+.gallery-hero .lead,
+.sct-gallery-hero p,
+.hero p,
+.hero-card p,
+.gallery-intro p,
+.sct-gallery-top-panel p {
+  color: #d8e1ee !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* small label above hero */
+main > section:first-of-type .eyebrow,
+main > section:first-of-type .section-label,
+main > section:first-of-type .kicker,
+.gallery-hero .eyebrow,
+.gallery-hero .section-label,
+.sct-gallery-hero .eyebrow,
+.hero .eyebrow,
+.hero-card .eyebrow {
+  color: #f5b301 !important;
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  opacity: 1 !important;
+}
+
+/* buttons */
+main > section:first-of-type a,
+main > section:first-of-type button,
+.gallery-hero a,
+.gallery-hero button,
+.sct-gallery-hero a,
+.hero a,
+.hero button,
+.hero-card a,
+.hero-card button {
+  opacity: 1 !important;
+}
+
+main > section:first-of-type a:first-of-type,
+.gallery-hero a:first-of-type,
+.sct-gallery-hero a:first-of-type,
+.hero a:first-of-type,
+.hero-card a:first-of-type {
+  background: linear-gradient(135deg, #f5b301, #ffd66b) !important;
+  color: #07111f !important;
+  border: 1px solid rgba(245,179,1,.8) !important;
+  box-shadow: 0 14px 34px rgba(245,179,1,.28) !important;
+  font-weight: 900 !important;
+}
+
+main > section:first-of-type a:not(:first-of-type),
+.gallery-hero a:not(:first-of-type),
+.sct-gallery-hero a:not(:first-of-type),
+.hero a:not(:first-of-type),
+.hero-card a:not(:first-of-type) {
+  background: rgba(5,9,20,.72) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  font-weight: 800 !important;
+}
+
+/* the 4 small service cards under CTA */
+main > section:first-of-type article,
+main > section:first-of-type .service-card,
+main > section:first-of-type .feature-card,
+main > section:first-of-type .mini-card,
+.gallery-hero article,
+.gallery-hero .service-card,
+.gallery-hero .feature-card,
+.hero-card article,
+.hero-card .service-card,
+.hero-card .feature-card {
+  background: rgba(15,23,42,.88) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+main > section:first-of-type article h3,
+main > section:first-of-type .service-card h3,
+main > section:first-of-type .feature-card h3,
+main > section:first-of-type .mini-card h3,
+main > section:first-of-type article strong,
+.gallery-hero article h3,
+.gallery-hero .service-card h3,
+.gallery-hero .feature-card h3,
+.hero-card article h3,
+.hero-card .service-card h3,
+.hero-card .feature-card h3 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+main > section:first-of-type article p,
+main > section:first-of-type .service-card p,
+main > section:first-of-type .feature-card p,
+main > section:first-of-type .mini-card p,
+.gallery-hero article p,
+.gallery-hero .service-card p,
+.gallery-hero .feature-card p,
+.hero-card article p,
+.hero-card .service-card p,
+.hero-card .feature-card p {
+  color: #d8e1ee !important;
+  opacity: 1 !important;
+}
+
+/* if any spans/divs inside those cards were dimmed previously */
+main > section:first-of-type article *,
+main > section:first-of-type .service-card *,
+main > section:first-of-type .feature-card *,
+main > section:first-of-type .mini-card * {
+  opacity: 1 !important;
+}
+
+@media (max-width: 780px) {
+  main > section:first-of-type,
+  .gallery-hero,
+  .sct-gallery-hero,
+  .hero,
+  .hero-card,
+  .gallery-intro,
+  .sct-gallery-top-panel {
+    padding: 24px !important;
+  }
+
+  main > section:first-of-type h1,
+  .gallery-hero h1,
+  .sct-gallery-hero h1,
+  .hero h1,
+  .hero-card h1 {
+    line-height: 1.08 !important;
+  }
+
+  main > section:first-of-type p,
+  .gallery-hero p,
+  .sct-gallery-hero p,
+  .hero p,
+  .hero-card p {
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+  }
+}
+</style>
+
 </body>
 </html>
