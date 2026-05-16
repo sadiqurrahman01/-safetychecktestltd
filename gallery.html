@@ -1387,6 +1387,114 @@ main > section:first-of-type .category-item {
 }
 </style>
 
+
+<style id="sct-gallery-final-cta-white">
+/* =========================================================
+   FINAL GALLERY FIX
+   1) make ALL top CTA/service-card writing white
+   2) remove ONLY BEFORE / SPECIALIST TRADES gold pills
+      from the 3 project board cards
+   ========================================================= */
+
+/* hero / intro text */
+main > section:first-of-type h1,
+main > section:first-of-type h2,
+main > section:first-of-type h3,
+main > section:first-of-type h4,
+main > section:first-of-type p,
+main > section:first-of-type li,
+main > section:first-of-type span,
+main > section:first-of-type strong,
+main > section:first-of-type small {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* the 4 mini CTA cards under the buttons */
+main > section:first-of-type article,
+main > section:first-of-type .service-card,
+main > section:first-of-type .feature-card,
+main > section:first-of-type .mini-card,
+main > section:first-of-type .service-box,
+main > section:first-of-type .category-card,
+main > section:first-of-type .category-item {
+  background: rgba(15,23,42,.84) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+}
+
+main > section:first-of-type article h1,
+main > section:first-of-type article h2,
+main > section:first-of-type article h3,
+main > section:first-of-type article h4,
+main > section:first-of-type .service-card h1,
+main > section:first-of-type .service-card h2,
+main > section:first-of-type .service-card h3,
+main > section:first-of-type .service-card h4,
+main > section:first-of-type .feature-card h1,
+main > section:first-of-type .feature-card h2,
+main > section:first-of-type .feature-card h3,
+main > section:first-of-type .feature-card h4,
+main > section:first-of-type .mini-card h1,
+main > section:first-of-type .mini-card h2,
+main > section:first-of-type .mini-card h3,
+main > section:first-of-type .mini-card h4,
+main > section:first-of-type .service-box h1,
+main > section:first-of-type .service-box h2,
+main > section:first-of-type .service-box h3,
+main > section:first-of-type .service-box h4,
+main > section:first-of-type .category-card h1,
+main > section:first-of-type .category-card h2,
+main > section:first-of-type .category-card h3,
+main > section:first-of-type .category-card h4,
+main > section:first-of-type .category-item h1,
+main > section:first-of-type .category-item h2,
+main > section:first-of-type .category-item h3,
+main > section:first-of-type .category-item h4 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+main > section:first-of-type article p,
+main > section:first-of-type article span,
+main > section:first-of-type article strong,
+main > section:first-of-type article small,
+main > section:first-of-type .service-card p,
+main > section:first-of-type .service-card span,
+main > section:first-of-type .service-card strong,
+main > section:first-of-type .service-card small,
+main > section:first-of-type .feature-card p,
+main > section:first-of-type .feature-card span,
+main > section:first-of-type .feature-card strong,
+main > section:first-of-type .feature-card small,
+main > section:first-of-type .mini-card p,
+main > section:first-of-type .mini-card span,
+main > section:first-of-type .mini-card strong,
+main > section:first-of-type .mini-card small,
+main > section:first-of-type .service-box p,
+main > section:first-of-type .service-box span,
+main > section:first-of-type .service-box strong,
+main > section:first-of-type .service-box small,
+main > section:first-of-type .category-card p,
+main > section:first-of-type .category-card span,
+main > section:first-of-type .category-card strong,
+main > section:first-of-type .category-card small,
+main > section:first-of-type .category-item p,
+main > section:first-of-type .category-item span,
+main > section:first-of-type .category-item strong,
+main > section:first-of-type .category-item small {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* hide only badge elements tagged by JS */
+.sct-hide-project-pill {
+  display: none !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -2911,6 +3019,64 @@ main > section:first-of-type .mini-card * {
   }
 
   setTimeout(applyFix, 500);
+  setTimeout(applyFix, 1200);
+})();
+</script>
+
+
+<script id="sct-gallery-final-cta-white-js">
+(function () {
+  function norm(s) {
+    return (s || "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+
+  function hideBadgeTextInCard(card) {
+    if (!card) return;
+
+    Array.from(card.querySelectorAll("*")).forEach(function (el) {
+      var txt = norm(el.textContent || "");
+      if (!txt) return;
+
+      // remove only the gold badge words
+      if ((txt === "before" || txt === "specialist trades") && txt.length <= 20) {
+        el.classList.add("sct-hide-project-pill");
+      }
+    });
+  }
+
+  function applyFix() {
+    // find the section with the 3 project boards
+    var headings = Array.from(document.querySelectorAll("h1,h2,h3,h4"));
+    var boardHeading = headings.find(function (h) {
+      var t = norm(h.textContent);
+      return (
+        t.indexOf("before, during & after project stories") !== -1 ||
+        t.indexOf("before, during and after project stories") !== -1 ||
+        t.indexOf("before during & after project stories") !== -1 ||
+        t.indexOf("before during and after project stories") !== -1
+      );
+    });
+
+    var section = boardHeading ? (boardHeading.closest("section") || boardHeading.parentElement) : null;
+    if (!section) return;
+
+    // get the first 3 image cards only
+    var cards = Array.from(
+      section.querySelectorAll("article, .card, .gallery-card, .project-card, .board-card, .work-card, .grid > div, .cards > div")
+    ).filter(function (el) {
+      return el.querySelector("img");
+    }).slice(0, 3);
+
+    cards.forEach(hideBadgeTextInCard);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyFix);
+  } else {
+    applyFix();
+  }
+
+  setTimeout(applyFix, 400);
   setTimeout(applyFix, 1200);
 })();
 </script>
