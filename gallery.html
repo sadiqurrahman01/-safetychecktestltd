@@ -1,131 +1,1531 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Our Work Gallery | Safety Check Test Ltd</title>
-  <link rel="stylesheet" href="gallery.css" />
-  <link rel="stylesheet" href="gallery-nav.css?v=20260515-nav-only">
-\n  <link rel="stylesheet" href="/gallery-navbar-home-exact.css?v=20260516-real-home-nav">
+  <meta name="description" content="View Safety Check Test Ltd project work, including kitchen improvements, patio works, fencing, garden preparation, building repairs and multi-trade property support.">
+  <style>
+    :root {
+      --blue: #0b4db8;
+      --blue2: #2563eb;
+      --dark: #061a38;
+      --text: #334155;
+      --muted: #64748b;
+      --line: #dbeafe;
+      --soft: #f8fbff;
+      --white: #ffffff;
+      --shadow: 0 18px 50px rgba(15, 23, 42, .10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, .10), transparent 32%),
+        linear-gradient(180deg, #f8fbff 0%, #ffffff 44%, #f8fbff 100%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, .96);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .nav-shell {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 84px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 310px;
+    }
+
+    .brand img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .brand strong {
+      display: block;
+      color: var(--dark);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -.01em;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: var(--text);
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: #eaf2ff;
+      color: var(--blue);
+      border-color: var(--line);
+    }
+
+    .nav-links .quote-btn {
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 14px 26px rgba(37, 99, 235, .24);
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      margin: 42px auto 72px;
+      padding: 46px 34px;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, .16), transparent 35%),
+        linear-gradient(135deg, #ffffff, #f8fbff);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .kicker {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eaf2ff;
+      border: 1px solid var(--line);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--dark);
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: .96;
+      letter-spacing: -.06em;
+    }
+
+    .hero p {
+      max-width: 790px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .btn {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration: none;
+      border: 1px solid var(--line);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 14px 26px rgba(37, 99, 235, .24);
+    }
+
+    .btn.secondary {
+      background: #ffffff;
+      color: var(--blue);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .summary-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, .07);
+    }
+
+    .summary-card strong {
+      display: block;
+      color: var(--dark);
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .summary-card span {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    section {
+      margin: 78px auto;
+    }
+
+    .section-head {
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 12px;
+      color: var(--dark);
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+    }
+
+    .section-head p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .project-board-card,
+    .work-card,
+    .trade-card {
+      overflow: hidden;
+      border-radius: 26px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 34px rgba(15, 23, 42, .08);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .project-board-card:hover,
+    .work-card:hover,
+    .trade-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 50px rgba(15, 23, 42, .13);
+    }
+
+    .image-wrap {
+      position: relative;
+      background: #eaf2ff;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+
+    .project-board-card .image-wrap {
+      aspect-ratio: 16 / 10;
+    }
+
+    .image-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .image-wrap span {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .94);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(219, 234, 254, .95);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .12);
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .card-body h3 {
+      margin: 0 0 8px;
+      color: var(--dark);
+      font-size: 18px;
+      line-height: 1.22;
+      font-weight: 900;
+    }
+
+    .card-body p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 22px 0 28px;
+    }
+
+    .filter {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--blue);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .filter.active {
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 14px 26px rgba(37, 99, 235, .22);
+    }
+
+    .trade-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .trade-card {
+      padding: 22px;
+    }
+
+    .trade-card h3 {
+      margin: 0 0 8px;
+      color: var(--dark);
+      font-size: 18px;
+    }
+
+    .trade-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .quote-cta {
+      padding: 34px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, .18), transparent 32%),
+        linear-gradient(135deg, var(--dark), var(--blue));
+      box-shadow: 0 22px 60px rgba(15, 23, 42, .16);
+      color: #ffffff;
+    }
+
+    .quote-cta h2 {
+      margin: 0 0 10px;
+      color: #ffffff;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+    }
+
+    .quote-cta p {
+      margin: 0 0 22px;
+      color: #dbeafe;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .quote-cta .btn {
+      background: #ffffff;
+      color: var(--blue);
+    }
+
+    footer {
+      margin-top: 80px;
+      padding: 34px 16px;
+      background: var(--dark);
+      color: #dbeafe;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 8px 0;
+      color: #dbeafe;
+    }
+
+    .is-hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1020px) {
+      .nav-shell {
+        min-height: auto;
+        padding: 16px 0;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brand {
+        min-width: 0;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .summary-grid,
+      .project-grid,
+      .trade-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .work-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap,
+      .nav-shell {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .brand small {
+        display: none;
+      }
+
+      .hero {
+        padding: 28px 22px;
+      }
+
+      .summary-grid,
+      .project-grid,
+      .work-grid,
+      .trade-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body\1>\n<header class="home-match-header">
-  <div class="home-match-nav">
-    <a class="home-match-brand" href="/">
-      <img src="/logo.png" alt="Safety Check Test Ltd logo">
-      <span>
-        <strong>Safety Check Test Ltd</strong>
-        <small>Electrical, Fire, Property & Building Services</small>
-      </span>
-    </a>
-
-    <nav class="home-match-links" aria-label="Main navigation">
-      <a href="/">Home</a>
-      <a href="/#services">Services</a>
-      <a href="/#quote">Quotes</a>
-      <a href="/gallery.html" class="active">Gallery</a>
-      <a href="/#about">About</a>
-      <a href="/#contact">Contact</a>
-      <a href="/#quote" class="quote-button">Get a Quote</a>
-    </nav>
-  </div>
-</header>
+<body>
   <header class="site-header">
-  <div class="nav-shell">
-    <a class="brand" href="/">
-      <img src="/logo.png" alt="Safety Check Test Ltd logo">
-      <span>
-        <strong>Safety Check Test Ltd</strong>
-        <small>Electrical, Fire, Property & Building Services</small>
-      </span>
-    </a>
-    <nav class="nav-links">
-      <a href="/">Home</a>
-      <a href="/#services">Services</a>
-      <a href="/#quote">Quotes</a>
-      <a class="active" href="/gallery.html">Gallery</a>
-      <a href="/#about">About</a>
-      <a href="/#contact">Contact</a>
-    </nav>
-  </div>
-</header>
+    <div class="nav-shell">
+      <a class="brand" href="/">
+        <img src="/logo.png" alt="Safety Check Test Ltd logo">
+        <span>
+          <strong>Safety Check Test Ltd</strong>
+          <small>Electrical, Fire, Property & Building Services</small>
+        </span>
+      </a>
 
-  <main class="gallery-page">
-    <section class="gallery-hero">
-      <p class="eyebrow">REAL PROJECT PHOTOS • PROFESSIONAL PRESENTATION • QUALITY FINISH</p>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/#services">Services</a>
+        <a href="/#quote">Quotes</a>
+        <a href="/gallery.html" class="active">Gallery</a>
+        <a href="/#about">About</a>
+        <a href="/#contact">Contact</a>
+        <a href="/#quote" class="quote-btn">Get a Quote</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <span class="kicker">Real Project Photos • Professional Presentation • Quality Finish</span>
       <h1>Our Work Gallery</h1>
-      <p>
-        A customer-facing showcase of Safety Check Test Ltd project work including kitchen improvements,
-        patio works, fencing, garden preparation, building repairs and multi-trade property support.
-      </p>
+      <p>A customer-facing showcase of Safety Check Test Ltd project work including kitchen improvements, patio works, fencing, garden preparation, building repairs and multi-trade property support.</p>
 
-      <div class="gallery-stats">
-        <div><strong>Kitchen</strong><span>Repair, tiling, worktops and finish</span></div>
-        <div><strong>Exterior</strong><span>Patio, fencing and garden works</span></div>
-        <div><strong>Building</strong><span>Refurbishment and structural support</span></div>
-        <div><strong>Multi-Trade</strong><span>Electrical, gas, plumbing and maintenance</span></div>
+      <div class="hero-actions">
+        <a class="btn primary" href="/#quote">Start Quote Wizard</a>
+        <a class="btn secondary" href="/#services">View Services</a>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card"><strong>Kitchen</strong><span>Repair, tiling, worktops and finish</span></div>
+        <div class="summary-card"><strong>Exterior</strong><span>Patio, fencing and garden works</span></div>
+        <div class="summary-card"><strong>Building</strong><span>Refurbishment and structural support</span></div>
+        <div class="summary-card"><strong>Multi-Trade</strong><span>Electrical, gas, plumbing and maintenance</span></div>
       </div>
     </section>
 
-    <section class="gallery-section">
-      <p class="eyebrow">PROJECT BOARDS</p>
-      <h2>Before, During & After Project Stories</h2>
-      <p>Premium boards placed first so customers and business clients immediately see the full transformation.</p>
-      <div id="projectBoards" class="gallery-board-grid"></div>
-    </section>
-
-    <section class="gallery-section">
-      <p class="eyebrow">REAL WORK PHOTOS</p>
-      <h2>Kitchen, Patio, Garden, Fencing & Building Improvements</h2>
-      <p>Ordered as a proper work journey: original condition, preparation, work in progress and finished result.</p>
-
-      <div class="gallery-filters">
-        <button class="filter-btn active" data-filter="all" type="button">All Work</button>
-        <button class="filter-btn" data-filter="kitchen" type="button">Kitchen</button>
-        <button class="filter-btn" data-filter="exterior" type="button">Exterior</button>
-        <button class="filter-btn" data-filter="building" type="button">Building</button>
-        <button class="filter-btn" data-filter="before" type="button">Before</button>
-        <button class="filter-btn" data-filter="during" type="button">During</button>
-        <button class="filter-btn" data-filter="after" type="button">After</button>
-        <button class="filter-btn" data-filter="trades" type="button">Trades</button>
+    <section class="wrap">
+      <div class="section-head">
+        <span class="kicker">Project Boards</span>
+        <h2>Before, During &amp; After Project Stories</h2>
+        <p>Premium boards placed first so customers and business clients immediately see the full transformation.</p>
       </div>
 
-      <div id="workGallery" class="gallery-grid"></div>
+      <div class="project-grid">
+        
+        <article class="project-board-card" data-filter="all kitchen building before during after">
+          <div class="image-wrap">
+            <img src="assets/gallery/project-boards/kitchen-renovation-before-during-and-after-showcase.jpg" alt="Kitchen Renovation Before During And After Showcase" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Renovation Before During And After Showcase</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="project-board-card" data-filter="all kitchen exterior building trades">
+          <div class="image-wrap">
+            <img src="assets/gallery/project-boards/property-renovation-project-kitchen-patio-and-garden-improvements.jpg" alt="Property Renovation Project Kitchen Patio And Garden Improvements" loading="lazy">
+            <span>Specialist Trades</span>
+          </div>
+          <div class="card-body">
+            <h3>Property Renovation Project Kitchen Patio And Garden Improvements</h3>
+            <p>Specialist Trades</p>
+          </div>
+        </article>
+
+        <article class="project-board-card" data-filter="all trades">
+          <div class="image-wrap">
+            <img src="assets/gallery/project-boards/specialist-trades-at-work-board.jpg" alt="Specialist Trades At Work Board" loading="lazy">
+            <span>Specialist Trades</span>
+          </div>
+          <div class="card-body">
+            <h3>Specialist Trades At Work Board</h3>
+            <p>Specialist Trades</p>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <section class="gallery-section">
-      <p class="eyebrow">SPECIALIST TRADES</p>
-      <h2>Qualified Multi-Trade Support</h2>
-      <p>
-        Electrical, fire, plumbing, gas, PAT testing, painting, decorating, building and maintenance support
-        for landlords, agents, businesses and property clients.
-      </p>
-
-      <div class="trade-services">
-        <div><strong>⚡ Electrician</strong><span>EICR, fixed wire testing, fault finding and electrical repairs.</span></div>
-        <div><strong>🔧 Plumber</strong><span>Leaks, pipework, repairs and maintenance support.</span></div>
-        <div><strong>🔥 Gas Engineer</strong><span>Gas and boiler services by Gas Safe registered engineers.</span></div>
-        <div><strong>✅ PAT Testing</strong><span>Portable appliance inspection and testing for managed properties.</span></div>
-        <div><strong>🎨 Painter & Decorator</strong><span>Interior and exterior preparation, painting and finishing.</span></div>
-        <div><strong>🏗️ Builder</strong><span>Repairs, refurbishments, external works and property improvements.</span></div>
+    <section class="wrap" id="real-work">
+      <div class="section-head">
+        <span class="kicker">Real Work Photos</span>
+        <h2>Kitchen, Patio, Garden, Fencing &amp; Building Improvements</h2>
+        <p>Ordered as a proper work journey: original condition, preparation, work in progress and finished result.</p>
       </div>
 
-      <div id="tradeGallery" class="gallery-board-grid trade-photo-grid"></div>
+      <div class="filters" aria-label="Gallery filters">
+        <button class="filter active" type="button" data-filter="all">All Work</button>
+        <button class="filter" type="button" data-filter="kitchen">Kitchen</button>
+        <button class="filter" type="button" data-filter="exterior">Exterior</button>
+        <button class="filter" type="button" data-filter="building">Building</button>
+        <button class="filter" type="button" data-filter="before">Before</button>
+        <button class="filter" type="button" data-filter="during">During</button>
+        <button class="filter" type="button" data-filter="after">After</button>
+        <button class="filter" type="button" data-filter="trades">Trades</button>
+      </div>
+
+      <div class="work-grid" id="workGrid">
+        
+        <article class="work-card" data-filter="all kitchen before">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-before/kitchen-original-condition-1.jpg" alt="Kitchen Original Condition 1" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Original Condition 1</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen before">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-before/kitchen-original-condition-2.jpg" alt="Kitchen Original Condition 2" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Original Condition 2</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen before">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-before/kitchen-original-condition-3.jpg" alt="Kitchen Original Condition 3" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Original Condition 3</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen before">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-before/kitchen-original-condition-4.jpg" alt="Kitchen Original Condition 4" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Original Condition 4</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen before">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-before/kitchen-original-condition-5.jpg" alt="Kitchen Original Condition 5" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Original Condition 5</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen before">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-before/kitchen-original-condition-6.jpg" alt="Kitchen Original Condition 6" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Original Condition 6</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-1.jpg" alt="Kitchen Preparation And Repair 1" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 1</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-2.jpg" alt="Kitchen Preparation And Repair 2" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 2</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-3.jpg" alt="Kitchen Preparation And Repair 3" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 3</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-4.jpg" alt="Kitchen Preparation And Repair 4" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 4</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-5.jpg" alt="Kitchen Preparation And Repair 5" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 5</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-6.jpg" alt="Kitchen Preparation And Repair 6" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 6</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-7.jpg" alt="Kitchen Preparation And Repair 7" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 7</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-8.jpg" alt="Kitchen Preparation And Repair 8" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 8</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen building during">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-during/kitchen-preparation-and-repair-9.jpg" alt="Kitchen Preparation And Repair 9" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Kitchen Preparation And Repair 9</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-1.jpg" alt="Finished Kitchen Reveal 1" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 1</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-2.jpg" alt="Finished Kitchen Reveal 2" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 2</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-3.jpg" alt="Finished Kitchen Reveal 3" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 3</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-4.jpg" alt="Finished Kitchen Reveal 4" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 4</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-5.jpg" alt="Finished Kitchen Reveal 5" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 5</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-6.jpg" alt="Finished Kitchen Reveal 6" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 6</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-7.jpg" alt="Finished Kitchen Reveal 7" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 7</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-8.jpg" alt="Finished Kitchen Reveal 8" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 8</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-9.jpg" alt="Finished Kitchen Reveal 9" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 9</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-10.jpg" alt="Finished Kitchen Reveal 10" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 10</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-11.jpg" alt="Finished Kitchen Reveal 11" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 11</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-12.jpg" alt="Finished Kitchen Reveal 12" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 12</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-13.jpg" alt="Finished Kitchen Reveal 13" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 13</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all kitchen after">
+          <div class="image-wrap">
+            <img src="assets/gallery/kitchen-after/finished-kitchen-reveal-14.jpg" alt="Finished Kitchen Reveal 14" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Kitchen Reveal 14</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior before">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-before/garden-and-exterior-before-works-1.jpg" alt="Garden And Exterior Before Works 1" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Garden And Exterior Before Works 1</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior before">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-before/garden-and-exterior-before-works-2.jpg" alt="Garden And Exterior Before Works 2" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Garden And Exterior Before Works 2</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior before">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-before/garden-and-exterior-before-works-3.jpg" alt="Garden And Exterior Before Works 3" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Garden And Exterior Before Works 3</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior before">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-before/garden-and-exterior-before-works-4.jpg" alt="Garden And Exterior Before Works 4" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Garden And Exterior Before Works 4</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior before">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-before/garden-and-exterior-before-works-5.jpg" alt="Garden And Exterior Before Works 5" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Garden And Exterior Before Works 5</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior before">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-before/garden-and-exterior-before-works-6.jpg" alt="Garden And Exterior Before Works 6" loading="lazy">
+            <span>Before</span>
+          </div>
+          <div class="card-body">
+            <h3>Garden And Exterior Before Works 6</h3>
+            <p>Before</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-1.jpg" alt="Patio And Exterior Preparation 1" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 1</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-2.jpg" alt="Patio And Exterior Preparation 2" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 2</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-3.jpg" alt="Patio And Exterior Preparation 3" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 3</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-4.jpg" alt="Patio And Exterior Preparation 4" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 4</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-5.jpg" alt="Patio And Exterior Preparation 5" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 5</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-6.jpg" alt="Patio And Exterior Preparation 6" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 6</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-7.jpg" alt="Patio And Exterior Preparation 7" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 7</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-8.jpg" alt="Patio And Exterior Preparation 8" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 8</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-9.jpg" alt="Patio And Exterior Preparation 9" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 9</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-10.jpg" alt="Patio And Exterior Preparation 10" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 10</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-11.jpg" alt="Patio And Exterior Preparation 11" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 11</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-12.jpg" alt="Patio And Exterior Preparation 12" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 12</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-13.jpg" alt="Patio And Exterior Preparation 13" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 13</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-14.jpg" alt="Patio And Exterior Preparation 14" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 14</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-15.jpg" alt="Patio And Exterior Preparation 15" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 15</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-16.jpg" alt="Patio And Exterior Preparation 16" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 16</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-17.jpg" alt="Patio And Exterior Preparation 17" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 17</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-18.jpg" alt="Patio And Exterior Preparation 18" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 18</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades during">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-during/patio-and-exterior-preparation-19.jpg" alt="Patio And Exterior Preparation 19" loading="lazy">
+            <span>During</span>
+          </div>
+          <div class="card-body">
+            <h3>Patio And Exterior Preparation 19</h3>
+            <p>During</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-1.jpg" alt="Finished Exterior And Patio Works 1" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 1</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-2.jpg" alt="Finished Exterior And Patio Works 2" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 2</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-3.jpg" alt="Finished Exterior And Patio Works 3" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 3</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-4.jpg" alt="Finished Exterior And Patio Works 4" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 4</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-5.jpg" alt="Finished Exterior And Patio Works 5" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 5</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-6.jpg" alt="Finished Exterior And Patio Works 6" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 6</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-7.jpg" alt="Finished Exterior And Patio Works 7" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 7</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-8.jpg" alt="Finished Exterior And Patio Works 8" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 8</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-9.jpg" alt="Finished Exterior And Patio Works 9" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 9</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-10.jpg" alt="Finished Exterior And Patio Works 10" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 10</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all exterior trades after">
+          <div class="image-wrap">
+            <img src="assets/gallery/exterior-after/finished-exterior-and-patio-works-11.jpg" alt="Finished Exterior And Patio Works 11" loading="lazy">
+            <span>After</span>
+          </div>
+          <div class="card-body">
+            <h3>Finished Exterior And Patio Works 11</h3>
+            <p>After</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-1.jpg" alt="Building Refurbishment Project 1" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 1</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-2.jpg" alt="Building Refurbishment Project 2" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 2</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-3.jpg" alt="Building Refurbishment Project 3" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 3</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-4.jpg" alt="Building Refurbishment Project 4" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 4</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-5.jpg" alt="Building Refurbishment Project 5" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 5</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-6.jpg" alt="Building Refurbishment Project 6" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 6</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-7.jpg" alt="Building Refurbishment Project 7" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 7</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-8.jpg" alt="Building Refurbishment Project 8" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 8</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-9.jpg" alt="Building Refurbishment Project 9" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 9</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-10.jpg" alt="Building Refurbishment Project 10" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 10</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-11.jpg" alt="Building Refurbishment Project 11" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 11</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-12.jpg" alt="Building Refurbishment Project 12" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 12</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-13.jpg" alt="Building Refurbishment Project 13" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 13</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all building">
+          <div class="image-wrap">
+            <img src="assets/gallery/building-refurbishment/building-refurbishment-project-14.jpg" alt="Building Refurbishment Project 14" loading="lazy">
+            <span>Building</span>
+          </div>
+          <div class="card-body">
+            <h3>Building Refurbishment Project 14</h3>
+            <p>Building</p>
+          </div>
+        </article>
+
+        <article class="work-card" data-filter="all trades">
+          <div class="image-wrap">
+            <img src="assets/gallery/trades/specialist-trades-at-work-branded-service-overview.jpg" alt="Specialist Trades At Work Branded Service Overview" loading="lazy">
+            <span>Specialist Trades</span>
+          </div>
+          <div class="card-body">
+            <h3>Specialist Trades At Work Branded Service Overview</h3>
+            <p>Specialist Trades</p>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <section class="gallery-cta">
+    <section class="wrap">
+      <div class="section-head">
+        <span class="kicker">Specialist Trades</span>
+        <h2>Qualified Multi-Trade Support</h2>
+        <p>Electrical, fire, plumbing, gas, PAT testing, painting, decorating, building and maintenance support for landlords, agents, businesses and property clients.</p>
+      </div>
+
+      <div class="trade-grid">
+        <article class="trade-card"><h3>⚡ Electrician</h3><p>EICR, fixed wire testing, fault finding and electrical repairs.</p></article>
+        <article class="trade-card"><h3>🔧 Plumber</h3><p>Leaks, pipework, repairs and maintenance support.</p></article>
+        <article class="trade-card"><h3>🔥 Gas Engineer</h3><p>Gas and boiler services by Gas Safe registered engineers.</p></article>
+        <article class="trade-card"><h3>✅ PAT Testing</h3><p>Portable appliance inspection and testing for managed properties.</p></article>
+        <article class="trade-card"><h3>🎨 Painter &amp; Decorator</h3><p>Interior and exterior preparation, painting and finishing.</p></article>
+        <article class="trade-card"><h3>🏗️ Builder</h3><p>Repairs, refurbishments, external works and property improvements.</p></article>
+      </div>
+    </section>
+
+    <section class="wrap quote-cta">
       <h2>Need a quote for property works?</h2>
       <p>Upload photos through the quote wizard and we will review your job properly.</p>
-      <a href="index.html#quote-wizard">Start Quote Wizard</a>
+      <a class="btn" href="/#quote">Start Quote Wizard</a>
     </section>
   </main>
 
-  <footer class="sct-footer">
+  <footer>
     <p>© 2026 Safety Check Test Ltd. All rights reserved.</p>
-    <p>Electrical Safety • Emergency Call Outs • Gas, Boiler & Plumbing • Fire Compliance • Property Maintenance • Building Works</p>
+    <p>Electrical Safety • Emergency Call Outs • Gas, Boiler &amp; Plumbing • Fire Compliance • Property Maintenance • Building Works</p>
   </footer>
 
-  <script src="gallery-data.js?v=1778780479"></script>
-  <script src="gallery.js?v=1778780479"></script>
+  <script>
+    (function () {
+      var buttons = Array.prototype.slice.call(document.querySelectorAll(".filter"));
+      var cards = Array.prototype.slice.call(document.querySelectorAll(".work-card"));
 
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var filter = button.getAttribute("data-filter") || "all";
+
+          buttons.forEach(function (btn) {
+            btn.classList.remove("active");
+          });
+
+          button.classList.add("active");
+
+          cards.forEach(function (card) {
+            var cats = card.getAttribute("data-filter") || "";
+            card.classList.toggle("is-hidden", filter !== "all" && cats.indexOf(filter) === -1);
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
