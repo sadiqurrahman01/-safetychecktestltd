@@ -18,13 +18,13 @@ function esc(value) {
   });
 }
 
+// HOTFIX: Never remove the current enterprise card inside refresh.
 function removeOldAdditions() {
   [
     'sct-trust-strip',
     'sct-trust-pill',
     'sct-site-legal',
-    'sct-inline-legal',
-    'sct-enterprise-trust'
+    'sct-inline-legal'
   ].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.remove();
