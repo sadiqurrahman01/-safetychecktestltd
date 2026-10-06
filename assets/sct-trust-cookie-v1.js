@@ -32,18 +32,57 @@ function removeOldAdditions() {
 }
 
 function mountEnterpriseTrust() {
-  if (document.getElementById('sct-enterprise-trust')) return;
+  if (
+    document.getElementById('sct-enterprise-trust-wrap') ||
+    document.getElementById('sct-enterprise-trust')
+  ) {
+    return;
+  }
 
   var root = document.getElementById('root');
   if (!root) return;
 
-  var hero = root.querySelector('section');
+  var headings = Array.prototype.slice.call(
+    root.querySelectorAll('h1,h2,h3')
+  );
+
+  var heroHeading = headings.find(function (el) {
+    var text = String(el.textContent || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return (
+      text.indexOf(
+        'Qualified Electrical, Fire, Property & Building Services Across London'
+      ) !== -1
+    );
+  });
+
+  var hero = heroHeading
+    ? heroHeading.closest('section')
+    : null;
 
   if (!hero) {
-    hero = root.firstElementChild;
+    var buttons = Array.prototype.slice.call(
+      root.querySelectorAll('a,button')
+    );
+
+    var explore = buttons.find(function (el) {
+      return String(el.textContent || '')
+        .trim() === 'Explore Services';
+    });
+
+    hero = explore ? explore.closest('section') : null;
   }
 
   if (!hero) return;
+
+  var wrap = document.createElement('section');
+  wrap.id = 'sct-enterprise-trust-wrap';
+  wrap.setAttribute(
+    'aria-label',
+    'SafeContractor accreditation'
+  );
 
   var card = document.createElement('div');
   card.id = 'sct-enterprise-trust';
@@ -54,19 +93,36 @@ function mountEnterpriseTrust() {
       'alt="SafeContractor Approved">' +
 
     '<div class="sct-sc-details">' +
-      '<span class="sct-sc-eyebrow">Independent contractor approval</span>' +
+      '<span class="sct-sc-eyebrow">' +
+        'Accredited Contractor' +
+      '</span>' +
+
       '<strong>SafeContractor Approved</strong>' +
-      '<span class="sct-sc-cert">Certificate MX8819</span>' +
+
+      '<span class="sct-sc-cert">' +
+        'Certificate MX8819' +
+      '</span>' +
+    '</div>' +
+
+    '<div class="sct-sc-status">' +
+      '<span class="sct-sc-dot" aria-hidden="true"></span>' +
+      '<span>Approved</span>' +
     '</div>' +
 
     '<a class="sct-sc-verify" ' +
-      'href="https://www.ssipportal.org.uk/" ' +
-      'target="_blank" rel="noopener noreferrer">' +
-      'Verify accreditation' +
+       'href="https://www.ssipportal.org.uk/" ' +
+       'target="_blank" ' +
+       'rel="noopener noreferrer">' +
+      'Validate on SSIP' +
       '<span aria-hidden="true">↗</span>' +
     '</a>';
 
-  hero.appendChild(card);
+  wrap.appendChild(card);
+
+  hero.insertAdjacentElement(
+    'afterend',
+    wrap
+  );
 }
 
 function findContactSection() {
@@ -91,14 +147,33 @@ function mountAddress() {
   var contact = findContactSection();
   if (!contact) return;
 
+  var actions = contact.querySelector(
+    '.sct-contact-actions'
+  );
+
+  if (!actions) return;
+
   var card = document.createElement('div');
+
   card.id = 'sct-office-address';
+  card.className =
+    'sct-contact-card sct-address-card';
 
   card.innerHTML =
-    '<span class="sct-office-title">Head Office</span>' +
-    '<address>' + esc(ADDRESS) + '</address>';
+    '<span>Head Office</span>' +
+    '<b>' +
+      esc(ADDRESS) +
+    '</b>';
 
-  contact.appendChild(card);
+  var buttons = actions.querySelector(
+    '.sct-contact-buttons'
+  );
+
+  if (buttons) {
+    actions.insertBefore(card, buttons);
+  } else {
+    actions.appendChild(card);
+  }
 }
 
 function findFooter() {
@@ -405,7 +480,6 @@ function refresh() {
 
 function start() {
   wire();
-  refresh();
 
   var consent = readConsent();
 
@@ -415,26 +489,27 @@ function start() {
     createBanner();
   }
 
-  var root = document.getElementById('root');
+  /*
+   * Deliberately use finite render checks rather than
+   * a MutationObserver. This prevents frontend mutation
+   * loops while allowing the React/contact UI to finish.
+   */
+  refresh();
 
-  if (root) {
-    var observer = new MutationObserver(function () {
-      refresh();
-    });
-
-    observer.observe(root, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  setTimeout(refresh, 400);
-  setTimeout(refresh, 1200);
-  setTimeout(refresh, 2500);
+  [
+    250,
+    700,
+    1400,
+    2400,
+    3500
+  ].forEach(function (delay) {
+    setTimeout(refresh, delay);
+  });
 
   window.SCTConsent = {
     get: readConsent,
     open: openSettings,
+
     reset: function () {
       try {
         localStorage.removeItem(KEY);

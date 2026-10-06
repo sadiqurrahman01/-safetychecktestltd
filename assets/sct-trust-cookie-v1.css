@@ -487,3 +487,326 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* SCT ENTERPRISE LAYOUT V2 START */
+
+/*
+ * Accreditation sits BETWEEN the hero and services.
+ * It is no longer injected inside the hero layout.
+ */
+
+#sct-enterprise-trust-wrap {
+  width: 100%;
+  margin: 0;
+  padding: 22px 24px;
+  background: #ffffff;
+  border-top: 1px solid #e7ebef;
+  border-bottom: 1px solid #e7ebef;
+  box-sizing: border-box;
+}
+
+#sct-enterprise-trust-wrap #sct-enterprise-trust {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns:
+    76px
+    minmax(0, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+  gap: 18px;
+
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  color: #0b1726;
+  text-align: left;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-seal {
+  display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-eyebrow {
+  margin: 0 0 4px;
+  color: #697583;
+
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-details strong {
+  margin: 0;
+
+  color: #111d2b;
+
+  font-size: 18px;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-cert {
+  margin-top: 4px;
+
+  color: #65717e;
+
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 11px;
+
+  border: 1px solid #dce4ea;
+  border-radius: 999px;
+
+  background: #f7f9fa;
+
+  color: #334155;
+
+  font-size: 11px;
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 999px;
+
+  background: #26834a;
+  box-shadow:
+    0 0 0 3px rgba(38, 131, 74, .10);
+}
+
+#sct-enterprise-trust-wrap .sct-sc-verify {
+  min-height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 9px 14px;
+
+  border: 1px solid #d8e0e7;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #173f68;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#sct-enterprise-trust-wrap .sct-sc-verify:hover {
+  border-color: #aabac8;
+  background: #f7fafc;
+}
+
+
+/*
+ * Head Office now becomes a native card INSIDE the
+ * existing Call / Email contact-card column.
+ */
+
+body #contact.sct-final-contact-cta-v3
+#sct-office-address.sct-contact-card {
+  margin: 0 !important;
+  padding: 19px 22px !important;
+
+  border:
+    1px solid rgba(245, 179, 1, .30) !important;
+
+  border-radius: 22px !important;
+
+  background:
+    rgba(255, 255, 255, .055) !important;
+
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, .30) !important;
+}
+
+body #contact.sct-final-contact-cta-v3
+#sct-office-address.sct-contact-card span {
+  display: block !important;
+
+  margin-bottom: 8px !important;
+
+  color: #f5b301 !important;
+
+  font-size: 12px !important;
+  font-weight: 950 !important;
+
+  letter-spacing: .15em !important;
+  text-transform: uppercase !important;
+}
+
+body #contact.sct-final-contact-cta-v3
+#sct-office-address.sct-contact-card b {
+  display: block !important;
+
+  color: #ffffff !important;
+
+  font-size: 17px !important;
+  font-weight: 850 !important;
+  line-height: 1.45 !important;
+
+  word-break: normal !important;
+}
+
+
+/*
+ * Keep legal links quiet and integrated.
+ */
+
+#sct-footer-legal {
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+
+/* TABLET */
+
+@media (max-width: 760px) {
+
+  #sct-enterprise-trust-wrap {
+    padding: 18px 18px;
+  }
+
+  #sct-enterprise-trust-wrap
+  #sct-enterprise-trust {
+
+    grid-template-columns:
+      62px
+      minmax(0, 1fr)
+      auto;
+
+    gap: 13px;
+  }
+
+  #sct-enterprise-trust-wrap .sct-sc-seal {
+    width: 58px;
+    height: 58px;
+  }
+
+  #sct-enterprise-trust-wrap .sct-sc-status {
+    display: none;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-details strong {
+    font-size: 15px;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-eyebrow {
+    font-size: 9px;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-cert {
+    font-size: 11px;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-verify {
+    min-height: 36px;
+    padding: 7px 10px;
+    font-size: 10.5px;
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+
+  #sct-enterprise-trust-wrap {
+    padding: 15px 14px;
+  }
+
+  #sct-enterprise-trust-wrap
+  #sct-enterprise-trust {
+
+    grid-template-columns:
+      54px
+      minmax(0, 1fr);
+
+    gap: 11px;
+  }
+
+  #sct-enterprise-trust-wrap .sct-sc-seal {
+    width: 52px;
+    height: 52px;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-eyebrow {
+
+    font-size: 8px;
+    letter-spacing: .08em;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-details strong {
+
+    font-size: 14px;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-cert {
+
+    font-size: 10.5px;
+  }
+
+  #sct-enterprise-trust-wrap
+  .sct-sc-verify {
+
+    grid-column: 1 / -1;
+
+    width: 100%;
+    min-height: 38px;
+
+    margin-top: 2px;
+
+    font-size: 11px;
+  }
+}
+
+/* SCT ENTERPRISE LAYOUT V2 END */
