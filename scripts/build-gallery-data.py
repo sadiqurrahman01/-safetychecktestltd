@@ -1,5 +1,5 @@
 from pathlib import Path
-import json, re
+import json, re, hashlib
 root = Path(__file__).resolve().parents[1]
 folders = [
     ("assets/gallery/project-boards", "boards", "Project Board", "project", "after", "Project Board"),
@@ -14,6 +14,7 @@ folders = [
 ]
 exts={".jpg",".jpeg",".png",".webp",".gif"}
 data={"boards":[],"works":[],"trades":[]}
+seen_hashes=set()
 def nice(stem):
     stem=re.sub(r"^\d+[-_ ]*", "", stem)
     stem=stem.replace("-"," ").replace("_"," ").strip()
@@ -22,6 +23,11 @@ for folder,key,prefix,category,stage,label in folders:
     p=root/folder
     p.mkdir(parents=True, exist_ok=True)
     for img in sorted([x for x in p.iterdir() if x.suffix.lower() in exts]):
+        digest=hashlib.sha256(img.read_bytes()).hexdigest()
+        if digest in seen_hashes:
+            print("Skipping duplicate image:", img.relative_to(root))
+            continue
+        seen_hashes.add(digest)
         data[key].append({
             "src": str(img.relative_to(root)).replace('\\','/'),
             "title": nice(img.stem),

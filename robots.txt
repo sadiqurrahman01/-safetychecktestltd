@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /admin-audits/
+Disallow: /admin-completion/
+Disallow: /admin-employees/
+Disallow: /admin-pat-pricing/
+Disallow: /admin-portal-requests/
+Disallow: /employee/
+Disallow: /reset-password.html
+Disallow: /portal/set-password.html
+
+Sitemap: https://www.safetychecktestltd.co.uk/sitemap.xml
