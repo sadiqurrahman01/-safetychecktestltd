@@ -1,8 +1,8 @@
 (function () {
 'use strict';
 
-var VERSION = '20261006-enterprise-v5';
-var PRIVACY_KEY = 'sct_privacy_v5';
+var VERSION = '20261006-enterprise-v51';
+var PRIVACY_KEY = 'sct_privacy_v51';
 var ADDRESS =
   'Level 18, 40 Bank Street, Canary Wharf, London, E14 5NR';
 
@@ -98,6 +98,10 @@ function improveHeaderLogo() {
   }
 
   if (logo) {
+    logo.src =
+      '/assets/sct-header-logo-tight.png?' +
+      VERSION;
+
     logo.classList.add('sct-header-logo-enterprise');
 
     if (logo.parentElement) {
@@ -166,7 +170,7 @@ function rewriteHero() {
         'aria-label="Validate Safety Check Test Ltd SafeContractor approval">' +
 
         '<img ' +
-          'src="/assets/safecontractor-approved-colour.png?' +
+          'src="/assets/safecontractor-approved-clean.png?' +
           VERSION +
           '" ' +
           'alt="SafeContractor Approved" ' +
@@ -194,13 +198,10 @@ function rewriteHero() {
       text.indexOf('Safety Check Test Ltd supports') !== -1
     ) {
       paragraphs[i].textContent =
-        'Safety Check Test Ltd is a multi-trade contractor delivering ' +
-        'construction, refurbishment, planned and reactive property ' +
-        'maintenance, electrical, fire, gas, plumbing and compliance ' +
-        'services across London. We support landlords, managing agents, ' +
-        'housing providers, commercial organisations and managed property ' +
-        'portfolios with projects ranging from individual works to larger ' +
-        'multi-trade scopes.';
+        'Safety Check Test Ltd delivers construction, refurbishment, planned ' +
+        'and reactive maintenance, electrical, fire, gas, plumbing and ' +
+        'property compliance services for landlords, managing agents, ' +
+        'housing providers and commercial clients across London.';
 
       paragraphs[i].classList.add(
         'sct-hero-intro-v5'
@@ -576,7 +577,7 @@ function readPrivacy() {
       localStorage.getItem(PRIVACY_KEY) || 'null'
     );
 
-    if (value && value.version === 5) {
+    if (value && value.version === 51) {
       return value;
     }
   } catch (e) {}
@@ -586,7 +587,7 @@ function readPrivacy() {
 
 function saveEssentialChoice() {
   var value = {
-    version: 5,
+    version: 51,
     essential: true,
     analytics: false,
     marketing: false,
@@ -642,7 +643,7 @@ function mountCookieBanner() {
       '<button type="button" ' +
         'class="sct-cookie-continue-v5" ' +
         'data-sct-cookie-continue>' +
-        'Continue' +
+        'Accept essential' +
       '</button>' +
 
       '<button type="button" ' +

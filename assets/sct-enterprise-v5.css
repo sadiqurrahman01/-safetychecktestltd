@@ -590,3 +590,239 @@ body #contact.sct-final-contact-cta-v3
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ==========================================================
+   SCT ENTERPRISE VISUAL POLISH V5.1
+   ========================================================== */
+
+/* Header: make the real company crest visible, not tiny */
+
+.sct-header-enterprise {
+  min-height: 94px !important;
+}
+
+.sct-header-logo-wrap {
+  overflow: visible !important;
+}
+
+.sct-header-logo-enterprise {
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  flex: 0 0 72px !important;
+  filter:
+    drop-shadow(0 5px 10px rgba(0,0,0,.22));
+}
+
+/* Give header navigation a stronger corporate scale */
+
+.sct-header-enterprise nav a {
+  font-size: 15px !important;
+  font-weight: 750 !important;
+}
+
+/* Hero: remove the unnecessary empty vertical space */
+
+.sct-enterprise-hero-v5 {
+  min-height: auto !important;
+  padding-top: 82px !important;
+  padding-bottom: 74px !important;
+}
+
+.sct-enterprise-strap-v5 {
+  width: fit-content !important;
+  max-width: calc(100% - 28px) !important;
+  margin:
+    0 auto 34px !important;
+  padding:
+    9px 17px !important;
+  font-size: 12px !important;
+  letter-spacing: .01em !important;
+}
+
+/* Main enterprise headline */
+
+.sct-enterprise-hero-v5 h1 {
+  max-width: 900px !important;
+  margin:
+    0 auto !important;
+  font-size:
+    clamp(46px, 5vw, 66px) !important;
+  line-height: 1.035 !important;
+  letter-spacing: -.045em !important;
+}
+
+/* Official SafeContractor seal:
+   centred on its own line immediately below the H1 */
+
+#sct-hero-safecontractor {
+  width: auto !important;
+  margin:
+    22px auto 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 7px !important;
+}
+
+.sct-hero-sc-link {
+  display: block !important;
+}
+
+.sct-hero-sc-badge {
+  width: 92px !important;
+  height: 92px !important;
+  border-radius: 50% !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  filter:
+    drop-shadow(0 8px 16px rgba(0,0,0,.22)) !important;
+}
+
+.sct-hero-sc-copy {
+  text-align: center !important;
+  align-items: center !important;
+}
+
+.sct-hero-sc-copy strong {
+  font-size: 12.5px !important;
+  line-height: 1.25 !important;
+  font-weight: 850 !important;
+}
+
+.sct-hero-sc-copy span {
+  margin-top: 2px !important;
+  font-size: 10px !important;
+  opacity: .76 !important;
+}
+
+/* Strong, shorter supporting copy */
+
+.sct-hero-intro-v5 {
+  max-width: 820px !important;
+  margin:
+    0 auto !important;
+  font-size: 16.5px !important;
+  line-height: 1.65 !important;
+}
+
+/* Keep CTA area close to the message */
+
+.sct-enterprise-hero-v5
+a,
+.sct-enterprise-hero-v5
+button {
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+.sct-enterprise-hero-v5
+a:hover,
+.sct-enterprise-hero-v5
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Cleaner contractor capability bar */
+
+#sct-contractor-band-v5 {
+  padding:
+    30px 24px !important;
+  background:
+    linear-gradient(
+      135deg,
+      #06121e 0%,
+      #0a2032 58%,
+      #0b2940 100%
+    ) !important;
+}
+
+.sct-contractor-band-shell {
+  max-width: 1180px !important;
+}
+
+/* Cookie notice: compact enterprise treatment */
+
+#sct-cookie-banner-v5 {
+  width:
+    min(860px, calc(100% - 32px)) !important;
+  padding:
+    17px 18px !important;
+  border-radius:
+    12px !important;
+}
+
+.sct-cookie-continue-v5 {
+  min-width: 118px !important;
+}
+
+@media (max-width: 760px) {
+
+  .sct-header-enterprise {
+    min-height: 76px !important;
+  }
+
+  .sct-header-logo-enterprise {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    flex-basis: 56px !important;
+  }
+
+  .sct-enterprise-hero-v5 {
+    padding-top: 62px !important;
+    padding-bottom: 56px !important;
+  }
+
+  .sct-enterprise-strap-v5 {
+    margin-bottom: 26px !important;
+    padding: 8px 12px !important;
+    font-size: 10.5px !important;
+  }
+
+  .sct-enterprise-hero-v5 h1 {
+    max-width: 94% !important;
+    font-size:
+      clamp(36px, 9vw, 50px) !important;
+  }
+
+  .sct-hero-sc-badge {
+    width: 78px !important;
+    height: 78px !important;
+  }
+
+  .sct-hero-intro-v5 {
+    max-width: 92% !important;
+    font-size: 15px !important;
+    line-height: 1.62 !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .sct-enterprise-hero-v5 {
+    padding-top: 48px !important;
+  }
+
+  .sct-enterprise-hero-v5 h1 {
+    font-size:
+      clamp(32px, 9.5vw, 43px) !important;
+  }
+
+  #sct-hero-safecontractor {
+    margin:
+      17px auto 20px !important;
+  }
+
+  .sct-hero-sc-badge {
+    width: 72px !important;
+    height: 72px !important;
+  }
+}
