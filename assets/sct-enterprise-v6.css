@@ -599,3 +599,21 @@
     max-width: 48px !important;
   }
 }
+
+
+/* SCT TASK56B HEADING CONTRAST FIX */
+@media (max-width: 767px) {
+  #services.sct-enterprise-services-v5 h2,
+  #quote-wizard h2,
+  #about.sct-enterprise-about-v5 h2 {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+    background-image: none !important;
+    background-clip: border-box !important;
+    -webkit-background-clip: border-box !important;
+    opacity: 1 !important;
+    filter: none !important;
+    text-shadow: none !important;
+  }
+}
+/* END SCT TASK56B HEADING CONTRAST FIX */
