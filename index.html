@@ -4,6 +4,60 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- SCT TASK41 ENTERPRISE BOOTSTRAP -->
+<style id="sct-task41-bootstrap-style">
+  html.sct-enterprise-booting #root {
+    visibility: hidden !important;
+  }
+</style>
+<script id="sct-task41-bootstrap">
+(function () {
+  var root = document.documentElement;
+  root.classList.add('sct-enterprise-booting');
+
+  var released = false;
+
+  function release() {
+    if (released) return;
+    released = true;
+    root.classList.remove('sct-enterprise-booting');
+  }
+
+  function ready() {
+    return !!(
+      document.querySelector(
+        '.sct-header-enterprise .sct-v6-menu-button'
+      ) &&
+      document.querySelector('.sct-enterprise-hero-v5')
+    );
+  }
+
+  function check() {
+    if (ready()) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(release);
+      });
+      return;
+    }
+
+    if (!released) {
+      setTimeout(check, 40);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', check);
+  } else {
+    check();
+  }
+
+  window.addEventListener('load', check, { once: true });
+
+  setTimeout(release, 1800);
+})();
+</script>
+
     <title>Construction, Property &amp; Compliance Contractor London | Safety Check Test Ltd</title>
     <script>
       (function () {
@@ -459,7 +513,7 @@ body #contact.sct-final-contact-cta-v3 .sct-moving-btn:hover {
 })();
 </script>
     <script src="/assets/sct-enterprise-v5.js?v=20261006-enterprise-v51" defer></script>
-    <link rel="stylesheet" href="/assets/sct-enterprise-v6.css?v=preview1">
-    <script src="/assets/sct-enterprise-v6.js?v=preview1" defer></script>
+    <link rel="stylesheet" href="/assets/sct-enterprise-v6.css?v=20261021-task41">
+    <script src="/assets/sct-enterprise-v6.js?v=20261021-task41" defer></script>
 </body>
 </html>
