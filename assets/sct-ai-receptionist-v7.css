@@ -1,0 +1,703 @@
+
+/* SCT Enterprise V7 AI Receptionist */
+
+.sct-ai-root,
+.sct-ai-root * {
+  box-sizing: border-box;
+}
+
+.sct-ai-root {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 10000;
+  font-family: Arial, sans-serif;
+  color: #102236;
+}
+
+.sct-ai-root [hidden] {
+  display: none !important;
+}
+
+.sct-ai-launcher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #071827;
+  color: #ffffff;
+  border: 2px solid #f5b301;
+  border-radius: 50px;
+  padding: 15px 22px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 35px rgba(0,0,0,.25);
+}
+
+.sct-ai-launcher-icon {
+  color: #f5b301;
+  font-size: 21px;
+}
+
+.sct-ai-panel {
+  width: min(390px, calc(100vw - 28px));
+  height: min(620px, calc(100dvh - 110px));
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+  background: white;
+  border: 1px solid #dce3e9;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 65px rgba(0,0,0,.25);
+}
+
+.sct-ai-header {
+  background: #071827;
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sct-ai-header strong {
+  display: block;
+  font-size: 19px;
+}
+
+.sct-ai-header small {
+  display: block;
+  margin-top: 5px;
+  color: #cad4dd;
+}
+
+.sct-ai-close {
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 29px;
+  cursor: pointer;
+}
+
+.sct-ai-disclaimer {
+  padding: 12px 17px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #455565;
+  background: #fff6db;
+}
+
+.sct-ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+  background: #f3f6f8;
+}
+
+.sct-ai-message {
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  line-height: 1.55;
+  font-size: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sct-ai-notice {
+  background: #e5edf5;
+  color: #25394c;
+}
+
+.sct-ai-customer {
+  background: #071827;
+  color: white;
+  margin-left: 25px;
+}
+
+.sct-ai-assistant {
+  background: white;
+  border: 1px solid #e0e6eb;
+  margin-right: 20px;
+}
+
+.sct-ai-status {
+  background: #edf2f7;
+  color: #526172;
+}
+
+.sct-ai-error {
+  background: #fff0ef;
+  color: #8a2525;
+}
+
+.sct-ai-shortcuts {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: white;
+}
+
+.sct-ai-shortcuts button {
+  border: 1px solid #ced8df;
+  border-radius: 20px;
+  padding: 7px 10px;
+  background: white;
+  color: #102236;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.sct-ai-form {
+  padding: 12px 14px;
+  border-top: 1px solid #e4e9ed;
+}
+
+.sct-ai-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.sct-ai-form textarea {
+  display: block;
+  width: 100%;
+  border: 1px solid #bdcbd5;
+  border-radius: 9px;
+  padding: 11px;
+  resize: vertical;
+  font: inherit;
+  font-size: 14px;
+  color: #102236;
+}
+
+.sct-ai-send {
+  margin-top: 9px;
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f5b301;
+  color: #071827;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sct-ai-send:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.sct-ai-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-top: 1px solid #e4e9ed;
+  font-size: 11px;
+}
+
+.sct-ai-footer a {
+  color: #114d7d;
+  font-weight: 800;
+}
+
+.sct-ai-root button:focus-visible,
+.sct-ai-root textarea:focus-visible,
+.sct-ai-root a:focus-visible {
+  outline: 3px solid #f5b301;
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .sct-ai-root {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .sct-ai-launcher {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .sct-ai-panel {
+    height: min(580px, calc(100dvh - 90px));
+  }
+}
+
+
+/* SCT Official AI Receptionist Branding */
+
+.sct-ai-launcher-icon {
+    display: inline-flex;
+    width: 46px;
+    height: 40px;
+    flex: 0 0 46px;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sct-ai-launcher-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sct-ai-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sct-ai-brand-logo {
+    width: 70px;
+    height: 58px;
+    object-fit: contain;
+    flex: 0 0 70px;
+    background: white;
+    border: 2px solid #f5b301;
+    border-radius: 9px;
+}
+
+@media(max-width:380px) {
+    .sct-ai-brand-logo {
+        width: 52px;
+        height: 46px;
+        flex-basis: 52px;
+    }
+}
+
+
+/* SCT AI Receptionist — Enterprise Professional Design */
+
+.sct-ai-root {
+    right: 20px;
+    bottom: 20px;
+    color: #102236;
+    font-family: -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Arial, sans-serif;
+}
+
+.sct-ai-launcher {
+    background: linear-gradient(
+        145deg,
+        #172b43 0%,
+        #05090f 62%,
+        #000000 100%
+    );
+    border: 2px solid #e9ad18;
+    border-radius: 999px;
+    padding: 9px 17px 9px 10px;
+    min-height: 62px;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 750;
+    letter-spacing: .1px;
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, .24),
+        inset 0 1px rgba(255, 255, 255, .15);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.sct-ai-launcher:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 17px 40px rgba(0,0,0,.3);
+}
+
+.sct-ai-launcher::after {
+    content: "›";
+    color: #f6c344;
+    font-size: 25px;
+    margin-left: 3px;
+}
+
+.sct-ai-launcher-icon {
+    width: 48px;
+    height: 44px;
+    flex: 0 0 48px;
+    border: 1px solid #dca821;
+    border-radius: 10px;
+    background: #030407;
+    overflow: hidden;
+}
+
+.sct-ai-launcher-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.22);
+}
+
+.sct-ai-panel {
+    width: min(430px, calc(100vw - 24px));
+    height: min(675px, calc(100dvh - 110px));
+    margin-bottom: 15px;
+    border: 1px solid #d6a02a;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow:
+        0 24px 80px rgba(3, 15, 31, .28),
+        0 4px 14px rgba(0, 0, 0, .08);
+}
+
+.sct-ai-header {
+    min-height: 104px;
+    padding: 16px 18px;
+    background: linear-gradient(
+        135deg,
+        #071827,
+        #0b3457
+    );
+    border-bottom: 3px solid #e9b638;
+}
+
+.sct-ai-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+
+.sct-ai-brand-logo {
+    width: 70px;
+    height: 65px;
+    flex: 0 0 70px;
+    border: 1px solid #e7b539;
+    border-radius: 11px;
+    background: #030407;
+    object-fit: cover;
+    padding: 0;
+    transform: none;
+}
+
+.sct-ai-brand strong {
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1.3;
+    letter-spacing: -.2px;
+}
+
+.sct-ai-brand small {
+    margin-top: 5px;
+    color: #d6e0ea;
+    font-size: 12px;
+}
+
+.sct-ai-close {
+    align-self: flex-start;
+    width: 35px;
+    height: 35px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 9px;
+    font-size: 25px;
+    line-height: 1;
+}
+
+.sct-ai-close:hover {
+    background: rgba(255,255,255,.12);
+}
+
+.sct-ai-disclaimer {
+    padding: 11px 17px;
+    color: #5a470e;
+    background: #fff9e7;
+    border-bottom: 1px solid #f1e5c5;
+    line-height: 1.5;
+    font-size: 12px;
+}
+
+.sct-ai-messages {
+    background: linear-gradient(
+        180deg,
+        #f6f8fc,
+        #edf2f8
+    );
+    padding: 18px;
+}
+
+.sct-ai-message {
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 13px 15px;
+    margin-bottom: 13px;
+    border-radius: 15px;
+}
+
+.sct-ai-notice {
+    color: #15324c;
+    background: #e5edf9;
+    border: 1px solid #d2deee;
+}
+
+.sct-ai-assistant {
+    color: #153049;
+    background: #ffffff;
+    border: 1px solid #dce4ee;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.sct-ai-customer {
+    background: #0c2d4b;
+    color: #ffffff;
+    border-bottom-right-radius: 5px;
+}
+
+.sct-ai-shortcuts {
+    padding: 11px 14px;
+    gap: 7px;
+    border-top: 1px solid #e7edf4;
+}
+
+.sct-ai-shortcuts button {
+    background: #ffffff;
+    color: #15324c;
+    border: 1px solid #e1b64d;
+    border-radius: 9px;
+    font-size: 12px;
+    padding: 8px 10px;
+    font-weight: 650;
+}
+
+.sct-ai-shortcuts button:hover {
+    background: #fff7e3;
+}
+
+.sct-ai-form {
+    padding: 13px 15px;
+    background: #ffffff;
+}
+
+.sct-ai-form textarea {
+    border: 1px solid #c4d0dd;
+    border-radius: 11px;
+    background: #fbfcfe;
+    font-size: 14px;
+    min-height: 64px;
+    max-height: 125px;
+}
+
+.sct-ai-send {
+    background: linear-gradient(
+        135deg,
+        #f8d66b,
+        #e6a91b
+    );
+    color: #061627;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-weight: 800;
+    transition: filter .2s;
+}
+
+.sct-ai-send:not(:disabled):hover {
+    filter: brightness(1.05);
+}
+
+.sct-ai-footer {
+    background: #f8fafc;
+    color: #657489;
+    padding: 12px 15px;
+}
+
+.sct-ai-footer a {
+    color: #094577;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .sct-ai-root {
+        right: 12px;
+        bottom: 12px;
+    }
+
+    .sct-ai-launcher {
+        font-size: 13px;
+        min-height: 54px;
+        padding: 7px 12px 7px 7px;
+    }
+
+    .sct-ai-launcher-icon {
+        width: 39px;
+        height: 39px;
+        flex-basis: 39px;
+    }
+
+    .sct-ai-panel {
+        width: calc(100vw - 24px);
+        height: min(640px, calc(100dvh - 90px));
+    }
+
+    .sct-ai-header {
+        min-height: 86px;
+        padding: 12px;
+    }
+
+    .sct-ai-brand-logo {
+        width: 54px;
+        height: 52px;
+        flex-basis: 54px;
+    }
+
+    .sct-ai-brand strong {
+        font-size: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sct-ai-launcher,
+    .sct-ai-send {
+        transition: none;
+    }
+
+    .sct-ai-launcher:hover {
+        transform: none;
+    }
+}
+
+
+/* SCT AI Enterprise Service Catalogue */
+
+.sct-ai-quick-actions {
+    display: flex;
+    gap: 7px;
+    padding: 11px 14px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-top: 1px solid #e4e9ef;
+    scrollbar-width: thin;
+}
+
+.sct-ai-quick-actions button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 8px 12px;
+    background: #ffffff;
+    color: #102b45;
+    border: 1px solid #dbaa35;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.sct-ai-quick-actions button:hover {
+    background: #fff5d9;
+}
+
+.sct-ai-catalogue {
+    flex: 0 1 auto;
+    max-height: 210px;
+    overflow-y: auto;
+    padding: 10px 15px;
+    background: #f8fafc;
+    border-top: 1px solid #e4e9ef;
+    font-size: 13px;
+}
+
+.sct-ai-catalogue summary {
+    cursor: pointer;
+    font-weight: 800;
+    color: #103653;
+    padding: 4px 0;
+}
+
+.sct-ai-catalogue-content {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.sct-ai-catalogue-content label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #233a51;
+}
+
+.sct-ai-catalogue-content select {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px;
+    border: 1px solid #c7d3de;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #102236;
+    font-size: 13px;
+}
+
+.sct-ai-service-select {
+    background: #0b2d4d;
+    color: #ffffff;
+    border: 1px solid #d8aa38;
+    border-radius: 8px;
+    padding: 11px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.sct-ai-catalogue-content small {
+    color: #607082;
+    line-height: 1.5;
+}
+
+.sct-ai-messages {
+    min-height: 65px;
+    overflow-y: auto;
+}
+
+.sct-ai-quick-actions button:focus-visible,
+.sct-ai-catalogue summary:focus-visible,
+.sct-ai-catalogue select:focus-visible,
+.sct-ai-service-select:focus-visible {
+    outline: 3px solid #e8b12b;
+    outline-offset: 2px;
+}
+
+
+/* SCT TASK77 MOBILE VIEWPORT PROTECTION */
+
+.sct-ai-root {
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+.sct-ai-panel {
+    max-width: calc(100vw - 40px);
+    overflow-y: auto;
+}
+
+.sct-ai-form,
+.sct-ai-footer,
+.sct-ai-header {
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .sct-ai-root {
+        right: max(12px, env(safe-area-inset-right));
+        bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .sct-ai-panel {
+        max-width: calc(100vw - 24px);
+        max-height: calc(
+            100dvh - 100px - env(safe-area-inset-bottom)
+        );
+    }
+
+    .sct-ai-form textarea {
+        font-size: 16px;
+    }
+}
